@@ -1,0 +1,21 @@
+# data stays local (Zindi and World Bank licence terms)
+/data/
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# jupyter
+.ipynb_checkpoints/
+
+# os / editors
+.DS_Store
+.vscode/
+.idea/
+
+# team-only, not part of the submission repo
+reflections/
+
+# course documents
+/*.pdf
