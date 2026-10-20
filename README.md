@@ -2,6 +2,8 @@
 
 How can a mobile-money lender decide fairly, transparently and sustainably whom to lend to, when its labelled data come from Kenya, defaults are about 1 in 50, and a wrong decision either pushes a family into debt or shuts them out of credit?
 
+**New to the project? Read [`knowledge/README.md`](knowledge/README.md) first.**
+
 We build one feature set and two models on the African Credit Scoring Challenge data: a default classifier (Task 2) and a loan-amount regressor (Task 1). Then we test how the Kenyan model transfers to Ghana, audit it for fairness and Ghanaian regulation, and ship a scorer that returns a probability, a decision and three plain-language reasons.
 
 ## What has to be done now, and who does it
@@ -44,7 +46,7 @@ It also states which column is the target for Task 1 (loan amount) and for Task 
 
 **Where:**
 - the tests go in `notebooks/00_feature_audit.ipynb`;
-- the final table and reasoning go in `docs/02_feature_audit.md`;
+- the final table, results and reasoning go in `learnings/03_feature_audit.md` (use the template in [`learnings/README.md`](learnings/README.md));
 - log each action in `docs/log.md`.
 
 **The principle:** don't decide uncertain columns by opinion. Turn each one into a question, test it, and where the answer is still unclear, keep **both** options as separate feature sets and compare their results.
@@ -97,7 +99,7 @@ Add more sets if the tests suggest them. Borrower history and macro features com
 - [ ] Label defined: what counts as a default, and over what period.
 - [ ] Every one of the 16 columns has a row: available? · role · reason with evidence.
 - [ ] Tables for the four tests, and the feature-set comparison table, each followed by a plain-English "what this means".
-- [ ] A final frozen column list for step 5, plus a 5–10 bullet "what the others need to know" summary at the top of `docs/02_feature_audit.md`.
+- [ ] A final frozen column list for step 5, plus a 5–10 bullet "what the others need to know" summary at the top of `learnings/03_feature_audit.md`.
 - [ ] Notebook runs top to bottom; doc and log updated; committed from your own account; step 3 ticked above.
 
 ## Run it from a fresh clone
@@ -121,7 +123,9 @@ for nb in notebooks/0*.ipynb; do .venv/bin/jupyter nbconvert --to notebook --exe
 | `notebooks/02_classification.ipynb` | Task 2: default probability, validation comparison, calibration, threshold | Germain |
 | `notebooks/03_regression.ipynb` | Task 1: loan amount | Alice |
 | `notebooks/04_transfer_and_fairness.ipynb` | Kenya to Ghana shift; disaggregated fairness, proxies, mitigation | Alice, Liza |
+| `knowledge/` | **Everything you need to know**: the brief, course rules, lecture notes and lecture-recording summaries, derivations, regulation, fairness readings. [Start here](knowledge/README.md). | Everyone |
 | `docs/` | Everything we did and how: dated log, setup, data sources and checks | Everyone |
+| `learnings/` | Each member's full explanation of their step and findings, readable without rerunning anything | Everyone |
 | `src/` | Shared loading and time-safe feature code, and the scorer (added in Phase 2) | Joseph |
 
 ## Data
@@ -138,8 +142,9 @@ data/
 
 1. **Explain everything plainly.** Nobody else will redo your part; they will rely on what you write. Each step needs a markdown cell saying what, why, and what the result means.
 2. **Test every reasonable alternative** for each step and compare them in a table before picking one.
-3. **Document everything in [`docs/`](docs/README.md)**: a line in `docs/log.md` for every action, and a write-up of how you did it and what you found.
-4. Commit your own work from your own account.
+3. **Document everything in [`docs/`](docs/README.md)**: a line in `docs/log.md` for every action, and how you did it.
+4. **Fully explain your work in [`learnings/`](learnings/README.md).** Every step you own ends with a write-up there (results, tables, figures, the options you tried, your decision, Q&A prep), so the others can understand it without rerunning anything. **Use the simplest language possible**: short sentences, everyday words, every term explained, examples where it helps. A step isn't ticked until its learnings file exists.
+5. Commit your own work from your own account.
 
 ## Adding a dependency
 

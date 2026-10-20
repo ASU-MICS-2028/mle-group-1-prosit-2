@@ -8,7 +8,7 @@ Everything we do on Prosit 2, and how we did it, is written down here. If it isn
 | [`00_project_setup.md`](00_project_setup.md) | The brief in plain words, the plan, roles, who waits on whom, the repo and environment |
 | [`01_data.md`](01_data.md) | Where each dataset came from, how we got it, licence terms, and what our checks found |
 
-New topics get their own numbered file (`02_feature_audit.md`, `03_cost_matrix.md`, ...).
+New topics get their own numbered file. Results and what they mean go in [`learnings/`](../learnings/README.md); this folder records what was done and how.
 
 ## How to write in here
 
