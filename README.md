@@ -14,7 +14,7 @@ Work top to bottom. A step can only start when the steps it waits on are ticked.
 |---|---|---|---|---|
 | 1 | [x] Download the Zindi data into `data/zindi/` | Joseph | — | Tue 20 Oct |
 | 2 | [x] Register for and download Findex Ghana into `data/worldbank/` | Joseph | — | Tue 20 Oct |
-| 3 | [ ] Feature audit: every column in Train.csv marked allowed or not, with evidence ([guide below](#step-3-feature-audit-liza)) | Liza | 1 | Wed 21 Oct |
+| 3 | [x] Feature audit: every column in Train.csv marked allowed or not, with evidence ([guide below](#step-3-feature-audit-liza)) | Liza | 1 | Wed 21 Oct |
 | 4 | [ ] Cost matrix in cedis and shillings → the decline threshold | Liza | 1 | Tue 20 Oct |
 | 5 | [ ] Shared features and validation folds in `src/` | Joseph | 3 | Fri 23 Oct |
 | 6 | [ ] Provisional model (plain logistic regression) so others can start building | Germain | 5 | Sat 24 Oct |
@@ -95,12 +95,12 @@ Run each set the same way: logistic regression (`class_weight="balanced"`, scale
 Add more sets if the tests suggest them. Borrower history and macro features come in step 5; this comparison gets rerun then.
 
 ### 3.5 Done when
-- [ ] Timeline drawn, with the decision moment and its closest column.
-- [ ] Label defined: what counts as a default, and over what period.
-- [ ] Every one of the 16 columns has a row: available? · role · reason with evidence.
-- [ ] Tables for the four tests, and the feature-set comparison table, each followed by a plain-English "what this means".
-- [ ] A final frozen column list for step 5, plus a 5–10 bullet "what the others need to know" summary at the top of `learnings/03_feature_audit.md`.
-- [ ] Notebook runs top to bottom; doc and log updated; committed from your own account; step 3 ticked above.
+- [x] Timeline drawn, with the decision moment and its closest column.
+- [x] Label defined: what counts as a default, and over what period.
+- [x] Every one of the 16 columns has a row: available? · role · reason with evidence.
+- [x] Tables for the four tests, and the feature-set comparison table, each followed by a plain-English "what this means".
+- [x] A final frozen column list for step 5, plus a 5–10 bullet "what the others need to know" summary at the top of `learnings/03_feature_audit.md`.
+- [x] Notebook runs top to bottom; doc and log updated; committed from your own account; step 3 ticked above.
 
 ## Run it from a fresh clone
 
@@ -110,6 +110,7 @@ Requires [uv](https://docs.astral.sh/uv/) (`brew install uv`).
 git clone https://github.com/ASU-MICS-2028/mle-group-1-prosit-2.git
 cd mle-group-1-prosit-2
 uv venv --python 3.12 && uv pip install -r requirements.txt
+brew install libomp   # macOS only: LightGBM needs it
 # put the data in data/ (see below), then run the notebooks in order:
 for nb in notebooks/0*.ipynb; do .venv/bin/jupyter nbconvert --to notebook --execute --inplace "$nb"; done
 ```
