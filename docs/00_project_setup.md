@@ -35,7 +35,7 @@ The committee prefers a simple model it can justify over a slightly better black
 ## Who waits on whom
 
 ```
-Zindi data ──► Part A feature audit + cost matrix (Liza + Joseph)
+Zindi data ──► Part A feature audit + cost matrix (Liza)        
                      │                     │
                      ▼                     │
             Shared features + folds        │

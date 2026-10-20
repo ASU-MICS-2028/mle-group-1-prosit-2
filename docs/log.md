@@ -16,3 +16,4 @@ Newest at the bottom. One line per action: date · who · what · where.
 | 20 Oct 2026 | Joseph | Confirmed Zindi still scores late submissions (10/day); added step 7b (Germain) | README |
 | 20 Oct 2026 | Joseph | Registered with the World Bank Microdata Library; downloaded Findex Ghana 2021 to `data/worldbank/micro_gha.csv`; checked it | [01_data.md](01_data.md#findex-ghana-2021) |
 | 20 Oct 2026 | Joseph | Created this `docs/` folder and wrote up everything above | `docs/` |
+| 20 Oct 2026 | Joseph | Handed the feature audit (step 3) fully to Liza; wrote the step-by-step guide in the README; created `notebooks/00_feature_audit.ipynb`; moved its due date to Wed 21 Oct | README § Step 3 |
