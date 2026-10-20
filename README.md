@@ -4,6 +4,32 @@ How can a mobile-money lender decide fairly, transparently and sustainably whom 
 
 We build one feature set and two models on the African Credit Scoring Challenge data: a default classifier (Task 2) and a loan-amount regressor (Task 1). Then we test how the Kenyan model transfers to Ghana, audit it for fairness and Ghanaian regulation, and ship a scorer that returns a probability, a decision and three plain-language reasons.
 
+## What has to be done now, and who does it
+
+Work top to bottom. A step can only start when the steps it waits on are ticked. Tick yours (`[x]`) and push when done.
+
+| # | Step | Who | Waits on | Due |
+|---|---|---|---|---|
+| 1 | [ ] Download the Zindi data into `data/` | Joseph | — | Tue 20 Oct |
+| 2 | [ ] Register for and download Findex Ghana into `data/findex/` | Joseph | — | Tue 20 Oct |
+| 3 | [ ] Feature audit: every column in Train.csv marked allowed or not, with a reason | Liza + Joseph | 1 | Tue 20 Oct |
+| 4 | [ ] Cost matrix in cedis and shillings → the decline threshold | Liza | 1 | Tue 20 Oct |
+| 5 | [ ] Shared features and validation folds in `src/` | Joseph | 3 | Fri 23 Oct |
+| 6 | [ ] Provisional model (plain logistic regression) so others can start building | Germain | 5 | Sat 24 Oct |
+| 7 | [ ] Task 2: final classification model, threshold, saved predictions | Germain | 4, 5 | Tue 27 Oct |
+| 8 | [ ] Reason codes (top 3 reasons per decision) | Germain | 7 | Tue 27 Oct |
+| 9 | [ ] Task 1: loan-amount model | Alice | 5 | Tue 27 Oct |
+| 10 | [ ] Kenya → Ghana transfer study, domain classifier | Alice | 5 | Thu 29 Oct |
+| 11 | [ ] Fairness metrics, proxy analysis, mitigation, Model Card | Liza | 7, 9, 10 | Thu 29 Oct |
+| 12 | [ ] Scoring service | Joseph | 7, 8, 9 | Sat 31 Oct |
+| 13 | [ ] Report, slides, reflections | Everyone | all above | Mon 2 Nov |
+
+**While you wait on a step, do the work that doesn't need it:**
+- **Germain:** logistic regression and gradient boosting derivations.
+- **Alice:** linear regression derivation; Kenya vs Ghana comparisons on the raw data.
+- **Liza:** Findex analysis; read the BoG Directive and Acts 843 and 726; set up the Model Card skeleton.
+- **Joseph:** the scorer's interface and its edge-case tests.
+
 ## Run it from a fresh clone
 
 Requires [uv](https://docs.astral.sh/uv/) (`brew install uv`).
