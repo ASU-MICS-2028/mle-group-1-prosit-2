@@ -51,6 +51,7 @@ for nb in notebooks/0*.ipynb; do .venv/bin/jupyter nbconvert --to notebook --exe
 | `notebooks/02_classification.ipynb` | Task 2: default probability, validation comparison, calibration, threshold | Germain |
 | `notebooks/03_regression.ipynb` | Task 1: loan amount | Alice |
 | `notebooks/04_transfer_and_fairness.ipynb` | Kenya to Ghana shift; disaggregated fairness, proxies, mitigation | Alice, Liza |
+| `docs/` | Everything we did and how: dated log, setup, data sources and checks | Everyone |
 | `src/` | Shared loading and time-safe feature code, and the scorer (added in Phase 2) | Joseph |
 
 ## Data
@@ -67,7 +68,8 @@ data/
 
 1. **Explain everything plainly.** Nobody else will redo your part; they will rely on what you write. Each step needs a markdown cell saying what, why, and what the result means.
 2. **Test every reasonable alternative** for each step and compare them in a table before picking one.
-3. Commit your own work from your own account.
+3. **Document everything in [`docs/`](docs/README.md)**: a line in `docs/log.md` for every action, and a write-up of how you did it and what you found.
+4. Commit your own work from your own account.
 
 ## Adding a dependency
 
