@@ -10,7 +10,7 @@ Work top to bottom. A step can only start when the steps it waits on are ticked.
 
 | # | Step | Who | Waits on | Due |
 |---|---|---|---|---|
-| 1 | [ ] Download the Zindi data into `data/` | Joseph | — | Tue 20 Oct |
+| 1 | [x] Download the Zindi data into `data/zindi/` | Joseph | — | Tue 20 Oct |
 | 2 | [ ] Register for and download Findex Ghana into `data/findex/` | Joseph | — | Tue 20 Oct |
 | 3 | [ ] Feature audit: every column in Train.csv marked allowed or not, with a reason | Liza + Joseph | 1 | Tue 20 Oct |
 | 4 | [ ] Cost matrix in cedis and shillings → the decline threshold | Liza | 1 | Tue 20 Oct |
@@ -58,8 +58,8 @@ for nb in notebooks/0*.ipynb; do .venv/bin/jupyter nbconvert --to notebook --exe
 
 ```
 data/
-  Train.csv  Test.csv  SampleSubmission.csv  economic_indicators.csv  VariableDefinitions.txt
-  findex/    # Global Findex Ghana 2021 microdata
+  zindi/     # Train.csv  Test.csv  SampleSubmission.csv  economic_indicators.csv  VariableDefinitions.txt
+  findex/    # Global Findex Ghana 2021 microdata (each user registers for their own copy, per World Bank terms)
 ```
 
 ## Team rules
