@@ -11,12 +11,13 @@ Work top to bottom. A step can only start when the steps it waits on are ticked.
 | # | Step | Who | Waits on | Due |
 |---|---|---|---|---|
 | 1 | [x] Download the Zindi data into `data/zindi/` | Joseph | — | Tue 20 Oct |
-| 2 | [ ] Register for and download Findex Ghana into `data/findex/` | Joseph | — | Tue 20 Oct |
+| 2 | [x] Register for and download Findex Ghana into `data/worldbank/` | Joseph | — | Tue 20 Oct |
 | 3 | [ ] Feature audit: every column in Train.csv marked allowed or not, with a reason | Liza + Joseph | 1 | Tue 20 Oct |
 | 4 | [ ] Cost matrix in cedis and shillings → the decline threshold | Liza | 1 | Tue 20 Oct |
 | 5 | [ ] Shared features and validation folds in `src/` | Joseph | 3 | Fri 23 Oct |
 | 6 | [ ] Provisional model (plain logistic regression) so others can start building | Germain | 5 | Sat 24 Oct |
 | 7 | [ ] Task 2: final classification model, threshold, saved predictions | Germain | 4, 5 | Tue 27 Oct |
+| 7b | [ ] Zindi late submission of the final model (still scored, 10/day max); log every score in 02 | Germain | 7 | Tue 27 Oct |
 | 8 | [ ] Reason codes (top 3 reasons per decision) | Germain | 7 | Tue 27 Oct |
 | 9 | [ ] Task 1: loan-amount model | Alice | 5 | Tue 27 Oct |
 | 10 | [ ] Kenya → Ghana transfer study, domain classifier | Alice | 5 | Thu 29 Oct |
@@ -59,7 +60,7 @@ for nb in notebooks/0*.ipynb; do .venv/bin/jupyter nbconvert --to notebook --exe
 ```
 data/
   zindi/     # Train.csv  Test.csv  SampleSubmission.csv  economic_indicators.csv  VariableDefinitions.txt
-  findex/    # Global Findex Ghana 2021 microdata (each user registers for their own copy, per World Bank terms)
+  worldbank/ # micro_gha.csv, Global Findex Ghana 2021 microdata (each user registers for their own copy, per World Bank terms)
 ```
 
 ## Team rules
