@@ -136,7 +136,7 @@ The data gives us the money lent and the fee. It doesn't give us the other two, 
 - **Kenya:** 100 + 0.5 × 8 × 100 = **500 KES**
 - **Ghana:** 90 + 0.5 × 8 × 90 = **450 GHS** (assuming Ghanaians return as often as Kenyans)
 
-(Why 8, when customers average 6 loans each? Frequent borrowers have many loans, so a "typical loan" more often belongs to a frequent borrower.)
+(Why 8, when the middle customer has only 6 loans? (The average is 10, pulled up by heavy borrowers.) Frequent borrowers have many loans, so a "typical loan" more often belongs to a frequent borrower.)
 
 **The cost the money doesn't show:** someone turned away goes without credit they may badly need, for school fees, shop stock or an emergency. It isn't NkwaPay's cost, but it's why being too strict is harmful. It comes back in the fairness work (step 11).
 

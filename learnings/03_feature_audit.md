@@ -14,7 +14,8 @@ It runs top to bottom in about a minute. You don't need to run it: every result 
 7. **`lender_id` is not a clue for the model** (it adds nothing). But it **is** one of the groups for the fairness checks, along with `country_id`, `loan_type`, `New_versus_Repeat` and loan size.
 8. **Predicting the loan amount is hard** with these columns: only slightly better than guessing the average. Borrower history (step 5) should help most.
 9. **Joseph, for borrower history:** you only find out whether a past loan was repaid after its `due_date`. So "past default rate" should only count earlier loans whose `due_date` is before the current loan's `disbursement_date`. Also, rows with the same `tbl_loan_id` are one loan split between lenders, not separate past loans.
-10. **On a Mac,** LightGBM needs `brew install libomp`.
+10. **On a Mac,** if `import lightgbm` fails, run `brew install libomp`. Some Macs already have it.
+11. **The calendar clues need testing over time (step 5).** 92% of loans were sent in Jul–Dec 2022, when about 1% defaulted. Every other quarter has 5–15% defaulting. So "month" may partly mean "was this the quiet 2022 period?", which won't hold for future loans. Step 5 must compare the model **with and without** the calendar clues on the older-vs-newer test. Drop them if they only help on the shuffled test.
 
 ## The question
 
@@ -299,6 +300,19 @@ Some columns weren't obvious, so we tested both options. Here is what we asked, 
 - **The lender-funding columns:** the "never 0 for defaulters" pattern might mean they were also changed after the loan. I couldn't prove it. They're dropped anyway, for a different reason (they leak the amount).
 - **Small groups:** only 567 "New" (first-time) loans in training, so any result about first-time borrowers is shaky.
 - **Ghana:** `loan_type` helps in Kenya, but most Ghanaian loan types are unseen, so its help may not carry over.
+- **Calendar clues and time** (added in review, 21 Oct): the default share by quarter swings from about 1% (Jul–Dec 2022, 92% of loans) to 5–15% (everything else). The month and day clues were only tested with customer-grouped splits, which mix all periods. They might be picking up the period, not a real calendar pattern. Step 5 tests this with the older-vs-newer split.
+
+  | Quarter | Loans | Share not paid back |
+  |---|---|---|
+  | 2021 Q4 | 39 | 53.8% |
+  | 2022 Q1 | 585 | 18.3% |
+  | 2022 Q2 | 479 | 14.0% |
+  | 2022 Q3 | 40,554 | 1.0% |
+  | 2022 Q4 | 22,787 | 1.1% |
+  | 2023 Q1–Q4 | 1,240 | 8–15% |
+  | 2024 Q1–Q4 | 2,970 | 5–14% |
+
+  This also means the older-vs-newer test will be hard: the newer loans default 5–10 times more often than the bulk of the training loans.
 - **This was run without borrower history.** Once Joseph adds history and economic features (step 5), this comparison should be run again.
 
 ## Likely Q&A questions and answers

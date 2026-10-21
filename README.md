@@ -16,7 +16,7 @@ Work top to bottom. A step can only start when the steps it waits on are ticked.
 | 2 | [x] Register for and download Findex Ghana into `data/worldbank/` | Joseph | — | Tue 20 Oct |
 | 3 | [x] Feature audit: every column in Train.csv marked allowed or not, with evidence ([guide below](#step-3-feature-audit-liza)) | Liza | 1 | Wed 21 Oct |
 | 4 | [x] Cost matrix in cedis and shillings → the decline threshold | Liza | 1 | Tue 20 Oct |
-| 5 | [ ] Shared features and validation folds in `src/` | Joseph | 3 | Fri 23 Oct |
+| 5 | [ ] Shared features and validation folds in `src/`. Must test calendar clues with vs without on the older-vs-newer split ([why](learnings/03_feature_audit.md#what-im-unsure-of--limits)) | Joseph | 3 | Fri 23 Oct |
 | 6 | [ ] Provisional model (plain logistic regression) so others can start building | Germain | 5 | Sat 24 Oct |
 | 7 | [ ] Task 2: final classification model, threshold, saved predictions | Germain | 4, 5 | Tue 27 Oct |
 | 7b | [ ] Zindi late submission of the final model (still scored, 10/day max); log every score in 02 | Germain | 7 | Tue 27 Oct |
@@ -110,7 +110,7 @@ Requires [uv](https://docs.astral.sh/uv/) (`brew install uv`).
 git clone https://github.com/ASU-MICS-2028/mle-group-1-prosit-2.git
 cd mle-group-1-prosit-2
 uv venv --python 3.12 && uv pip install -r requirements.txt
-brew install libomp   # macOS only: LightGBM needs it
+brew install libomp   # macOS, only if `import lightgbm` fails
 # put the data in data/ (see below), then run the notebooks in order:
 for nb in notebooks/0*.ipynb; do .venv/bin/jupyter nbconvert --to notebook --execute --inplace "$nb"; done
 ```
