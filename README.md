@@ -15,7 +15,7 @@ Work top to bottom. A step can only start when the steps it waits on are ticked.
 | 1 | [x] Download the Zindi data into `data/zindi/` | Joseph | — | Tue 20 Oct |
 | 2 | [x] Register for and download Findex Ghana into `data/worldbank/` | Joseph | — | Tue 20 Oct |
 | 3 | [x] Feature audit: every column in Train.csv marked allowed or not, with evidence ([guide below](#step-3-feature-audit-liza)) | Liza | 1 | Wed 21 Oct |
-| 4 | [ ] Cost matrix in cedis and shillings → the decline threshold | Liza | 1 | Tue 20 Oct |
+| 4 | [x] Cost matrix in cedis and shillings → the decline threshold | Liza | 1 | Tue 20 Oct |
 | 5 | [ ] Shared features and validation folds in `src/` | Joseph | 3 | Fri 23 Oct |
 | 6 | [ ] Provisional model (plain logistic regression) so others can start building | Germain | 5 | Sat 24 Oct |
 | 7 | [ ] Task 2: final classification model, threshold, saved predictions | Germain | 4, 5 | Tue 27 Oct |
@@ -120,6 +120,7 @@ for nb in notebooks/0*.ipynb; do .venv/bin/jupyter nbconvert --to notebook --exe
 | Path | What | Owner |
 |---|---|---|
 | `notebooks/00_feature_audit.ipynb` | Leakage tests and feature-set comparison behind the feature audit | Liza |
+| `notebooks/00b_cost_matrix.ipynb` | Cost of each mistake in KES and GHS, the decline cut-off, and the sensitivity check | Liza |
 | `notebooks/01_eda.ipynb` | Imbalance, missingness, skew, cardinality, overlap, Kenya vs Ghana | Joseph |
 | `notebooks/02_classification.ipynb` | Task 2: default probability, validation comparison, calibration, threshold | Germain |
 | `notebooks/03_regression.ipynb` | Task 1: loan amount | Alice |
