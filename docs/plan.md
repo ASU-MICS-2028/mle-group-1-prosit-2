@@ -1,8 +1,32 @@
-# The full plan
+# The plan
 
-*This is the plan, kept up to date. The original Google Doc ([MLE-GROUP-1-PROSIT-2 Plan](https://docs.google.com/document/d/16AOzssRkISRfICwckw1Q6OZXXJYGGTe4fnw9fxffBx0/edit), Drive: `MLE-GROUP-1 / prosit 2`) holds the **sign-off table**; please still fill in your row there. If the two disagree, this file wins. The live checklist is the step table in the [main README](../README.md#what-has-to-be-done-now-and-who-does-it).*
+*The plan and the progress tracker live here, in the repo. This replaces the old Google Doc, which is no longer used. The README's **Now** box shows only the current step.*
 
 **Due:** debrief and full portfolio on **Tue 3 Nov 2026**.
+
+## Progress tracker
+
+Work top to bottom. A step can only start when the steps it waits on are ticked. Tick yours (`[x]`) and push when done.
+
+| # | Step | Who | Waits on | Due |
+|---|---|---|---|---|
+| 1 | [x] Download the Zindi data into `data/zindi/` | Joseph | — | Tue 20 Oct |
+| 2 | [x] Register for and download Findex Ghana into `data/worldbank/` | Joseph | — | Tue 20 Oct |
+| 3 | [x] Feature audit: every column in Train.csv marked allowed or not, with evidence ([guide](02_feature_audit_guide.md)) | Liza | 1 | Wed 21 Oct |
+| 4 | [x] Cost matrix in cedis and shillings → the decline threshold | Liza | 1 | Tue 20 Oct |
+| 5 | [ ] Shared features and fair tests in `src/` ([progress](../README.md#current-step-in-detail-5--features-and-fair-tests-joseph)) | Joseph | 3 | Fri 23 Oct |
+| 6 | [ ] Provisional model (plain logistic regression) so others can start building | Germain | 5 | Sat 24 Oct |
+| 7 | [ ] Task 2: final classification model, threshold, saved predictions | Germain | 4, 5 | Tue 27 Oct |
+| 7b | [ ] Zindi late submission of the final model (still scored, 10/day max); log every score in 02 | Germain | 7 | Tue 27 Oct |
+| 8 | [ ] Reason codes (top 3 reasons per decision) | Germain | 7 | Tue 27 Oct |
+| 9 | [ ] Task 1: loan-amount model | Alice | 5 | Tue 27 Oct |
+| 10 | [ ] Kenya → Ghana transfer study, domain classifier | Alice | 5 | Thu 29 Oct |
+| 11 | [ ] Fairness metrics, proxy analysis, mitigation, Model Card | Liza | 7, 9, 10 | Thu 29 Oct |
+| 12 | [ ] Scoring service | Joseph | 7, 8, 9 | Sat 31 Oct |
+| 13 | [ ] Report, slides, reflections | Everyone | all above | Mon 2 Nov |
+
+When you finish a step: tick it here, update the **Now** box at the top of the README to the next step and its owner, add your `learnings/` write-up, and log it.
+
 
 ## 1. The rules for everyone
 
@@ -158,3 +182,14 @@ From [`docs/01_data.md`](01_data.md), [`learnings/03`](../learnings/03_feature_a
 - Code that runs top to bottom from a fresh clone.
 - Expect "why did you do this?" questions on every choice.
 - Reflections "are really important".
+
+## Sign-off
+
+Edit your row and commit it from your own account. If you disagree with something, open an issue or change it here and say so in `docs/log.md`.
+
+| Member | Agree with the plan? (Yes / Yes, with changes / No) | Happy with my role? | Comments | Date |
+|---|---|---|---|---|
+| Alice | | | | |
+| Germain | | | | |
+| Joseph | | | | |
+| Liza | | | | |

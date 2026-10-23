@@ -4,9 +4,10 @@ Everything we do on Prosit 2, and how we did it, is written down here. If it isn
 
 | File | What it covers |
 |---|---|
-| [`plan.md`](plan.md) | **The full plan**, kept up to date: rules, roles, timeline, who waits on whom, what each step must test |
+| [`plan.md`](plan.md) | **The plan and progress tracker**: all 13 steps and who owns them, rules, roles, timeline, what each step must test, sign-off |
 | [`log.md`](log.md) | Dated, one-line-per-action record of everything done, by whom |
 | [`00_project_setup.md`](00_project_setup.md) | The brief in plain words, the plan, roles, who waits on whom, the repo and environment |
+| [`02_feature_audit_guide.md`](02_feature_audit_guide.md) | The step-by-step guide used for the feature audit (step 3) |
 | [`01_data.md`](01_data.md) | Where each dataset came from, how we got it, licence terms, and what our checks found |
 
 New topics get their own numbered file. Results and what they mean go in [`learnings/`](../learnings/README.md); this folder records what was done and how.
