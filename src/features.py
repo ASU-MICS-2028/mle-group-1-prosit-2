@@ -104,6 +104,61 @@ def add_macro(rows, macro, lag=1):
     return key.merge(macro, on=["Country", "year"], how="left").drop(columns=["Country", "year"]).set_index(rows.index)
 
 
+BASE = ["loan_type", "duration", "New_versus_Repeat"]  # frozen by the feature audit (learnings/03)
+CALENDAR = ["month", "weekday", "day_of_month"]
+HISTORY = ["n_prev_loans", "n_finished", "n_defaults", "past_default_rate", "no_known_history", "days_since_last_loan"]
+
+
+def build(data_dir, known_when="due", window=None, macro_lag=1):
+    """Train and test tables with every clue, one row per Zindi row. Pick the columns you need from BASE, CALENDAR,
+    HISTORY and MACRO.values(). Train also gets the fold columns (see add_folds)."""
+    p = ["disbursement_date", "due_date"]
+    tr = pd.read_csv(f"{data_dir}/Train.csv", parse_dates=p)
+    te = pd.read_csv(f"{data_dir}/Test.csv", parse_dates=p)
+    # Loans not due when the data was collected: "paid" really means "not unpaid yet" (learnings/03), so not used to train.
+    tr = tr[tr["due_date"] <= tr["disbursement_date"].max()]
+    # History uses train and test loans together, so test customers get their earlier train loans as history.
+    hist = borrower_history(to_loans(pd.concat([tr, te])), known_when, window).set_index("tbl_loan_id")
+    macro = load_macro(f"{data_dir}/economic_indicators.csv")
+    out = []
+    for df in (tr, te):
+        df = df.reset_index(drop=True)
+        df = pd.concat([df, calendar(df), add_macro(df, macro, macro_lag)], axis=1)
+        out.append(df.join(hist, on="tbl_loan_id"))
+    return add_folds(out[0]), out[1]
+
+
+def add_folds(df, k=5, seed=0):
+    """Three ways to split into learning and testing parts. Each column gives every row a fold number 0..k-1.
+
+    fold_shuffled: rows shuffled at random (keeps the default share equal). The naive way: one customer's loans
+                   land on both sides, so the model can partly recognise the customer.
+    fold_customer: all of a customer's loans stay together (StratifiedGroupKFold by customer_id).
+    time_block:    loans cut into k equal-sized blocks by date. Learn from blocks < i, test on block i (newer loans).
+    """
+    from sklearn.model_selection import StratifiedGroupKFold, StratifiedKFold
+    df = df.copy()
+    y, groups = df["target"], df["customer_id"]
+    for name, splitter, g in [("fold_shuffled", StratifiedKFold(k, shuffle=True, random_state=seed), None),
+                              ("fold_customer", StratifiedGroupKFold(k, shuffle=True, random_state=seed), groups)]:
+        for i, (_, test_idx) in enumerate(splitter.split(df, y, g)):
+            df.loc[df.index[test_idx], name] = i
+    order = df["disbursement_date"].rank(method="first")
+    df["time_block"] = np.minimum((order - 1) * k // len(df), k - 1)
+    return df.astype({"fold_shuffled": int, "fold_customer": int, "time_block": int})
+
+
+def splits(df, scheme):
+    """Yield (learn_index, test_index) for a fold column made by add_folds."""
+    f = df[scheme]
+    if scheme == "time_block":  # only ever learn from the past
+        for i in range(1, f.max() + 1):
+            yield df.index[f < i], df.index[f == i]
+    else:
+        for i in range(f.max() + 1):
+            yield df.index[f != i], df.index[f == i]
+
+
 if __name__ == "__main__":
     # Ama: three 7-day loans. Loan C is sent on 10 March, when loan A (due 8 Mar) is finished but B (due 12 Mar) is not.
     d = pd.to_datetime
@@ -134,3 +189,13 @@ if __name__ == "__main__":
     assert add_macro(r, m, lag=0)["inflation"].tolist() == [7.67, 7.67]
     assert calendar(r).loc[0, "month"] == 6
     print("Macro and calendar check passed")
+
+    # Folds: a customer never on both sides of fold_customer; time splits only ever learn from older loans.
+    rng = np.random.default_rng(0)
+    f = pd.DataFrame({"customer_id": rng.integers(0, 40, 400), "target": rng.random(400) < 0.1,
+                      "disbursement_date": pd.Timestamp("2024-01-01") + pd.to_timedelta(rng.integers(0, 365, 400), "D")})
+    f = add_folds(f)
+    assert (f.groupby("customer_id")["fold_customer"].nunique() == 1).all()
+    for learn, test in splits(f, "time_block"):
+        assert f.loc[learn, "disbursement_date"].max() <= f.loc[test, "disbursement_date"].min()
+    print("Folds check passed")

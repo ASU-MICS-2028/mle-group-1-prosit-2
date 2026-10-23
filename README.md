@@ -40,8 +40,8 @@ Work top to bottom. A step can only start when the steps it waits on are ticked.
 | 5.1 | Look at the shape of loan histories | ✅ |
 | 5.2 | Borrower history (`borrower_history` in `src/features.py`), checked on a made-up example and against a slow loop on 2,000 real loans | ✅ |
 | 5.3 | Calendar and macro clues (`calendar`, `add_macro`) | ✅ |
-| 5.4 | Three kinds of test: shuffled, grouped by customer, older-vs-newer | ⏳ next |
-| 5.5 | Compare every option in a table (history safe vs leaky, windows, calendar on/off, macro on/off) | ☐ |
+| 5.4 | Three kinds of test (`add_folds`, `splits`) and `build()`, which gives everyone the full table in one call | ✅ |
+| 5.5 | Compare every option in a table (history safe vs leaky, windows, calendar on/off, macro on/off) | ⏳ next |
 | 5.6 | Write-up in `learnings/05_features.md` | ☐ |
 
 **What the others need to know already:**
@@ -49,6 +49,8 @@ Work top to bottom. A step can only start when the steps it waits on are ticked.
 - **Past default rate is almost useless:** only 12% of defaulters ever borrow again, so there's rarely a past default to learn from (selection bias, to state in the report).
 - **No Ghanaian applicant has any history**, so the model sees all of Ghana as first-timers.
 - **Macro clues only take 4 values in training** (one per year), and Ghana's inflation is far outside Kenya's range.
+- **The shuffled test lies, mostly for complex models:** LightGBM's PR-AUC is 0.31 shuffled vs 0.21 grouped by customer. On newer loans (the most realistic test), logistic regression beats LightGBM (0.11 vs 0.10).
+- **To get the data:** `from features import build; train, test = build('data/zindi')` (run from `src/` or add it to `sys.path`).
 
 Run the checks yourself with `.venv/bin/python src/features.py`.
 
