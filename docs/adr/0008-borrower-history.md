@@ -1,6 +1,6 @@
 # 0008 · How borrower history is built (time-safe)
 
-- **Status:** Accepted (window choice and the extra clues are decided in step 5.5)
+- **Status:** Accepted. Step 5.5 settled the rest in [0012](0012-final-feature-set.md): all past loans, safe version, speed and amounts kept.
 - **Date:** 23 Oct 2026 · **Owner:** Joseph · **Step:** 5.2, 5.4b
 
 ## Context

@@ -1,6 +1,6 @@
 # 0009 · Macro clues (inflation, interest, exchange rate, unemployment)
 
-- **Status:** Accepted for how they're built; **whether to use them is decided in step 5.5**
+- **Status:** Accepted for how they're built. **Not used in the model**, per [0012](0012-final-feature-set.md): they hurt on future loans.
 - **Date:** 23 Oct 2026 · **Owner:** Joseph · **Step:** 5.3
 
 ## Context

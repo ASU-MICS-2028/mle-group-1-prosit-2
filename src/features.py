@@ -114,6 +114,10 @@ def add_macro(rows, macro, lag=1):
 
 BASE = ["loan_type", "duration", "New_versus_Repeat"]  # frozen by the feature audit (learnings/03)
 CALENDAR = ["month", "weekday", "day_of_month"]
+# The final shared clues for both tasks (ADR 0012): base + history + speed + amounts. No calendar, no macro.
+FEATURES = ["loan_type", "duration", "New_versus_Repeat",
+            "n_prev_loans", "n_finished", "n_defaults", "past_default_rate", "no_known_history", "days_since_last_loan",
+            "n_loans_last_7d", "n_loans_last_30d", "mean_prev_amount", "last_amount"]
 HISTORY = ["n_prev_loans", "n_finished", "n_defaults", "past_default_rate", "no_known_history", "days_since_last_loan",
            "n_loans_last_7d", "n_loans_last_30d", "mean_prev_amount", "last_amount"]
 
@@ -219,3 +223,4 @@ if __name__ == "__main__":
     for learn, test in splits(f, "time_new_customers"):
         assert not f.loc[test, "customer_id"].isin(f.loc[learn, "customer_id"]).any()
     print("Folds check passed")
+    assert set(FEATURES) <= set(BASE + HISTORY) and not set(FEATURES) & set(CALENDAR + list(MACRO.values()))

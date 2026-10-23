@@ -32,8 +32,8 @@ Everything else (all 13 steps, who owns them, what's done) is in the [progress t
 | 5.3 | Calendar and macro clues (`calendar`, `add_macro`) | ✅ |
 | 5.4 | Three kinds of test (`add_folds`, `splits`) and `build()`, which gives everyone the full table in one call | ✅ |
 | 5.4b | Extra cases: past loan amounts and borrowing speed (loans in last 7/30 days) as clues; a fourth test, newer loans from never-seen customers (closest stand-in for Ghana) | ✅ |
-| 5.5 | Compare every option in a table: history safe vs leaky, windows, amounts and speed on/off, calendar on/off, macro on/off; all four tests; 3 random seeds to see the noise; separate score for borrowers with no history | ⏳ next |
-| 5.6 | Write-up in `learnings/05_features.md` | ☐ |
+| 5.5 | Compared every option: all 63 combinations of clue groups, each column dropped, leaky vs safe, windows, macro years; both models; seeds + bootstrap. **Result: `FEATURES` = base + history + speed + amounts** ([ADR 0012](docs/adr/0012-final-feature-set.md)) | ✅ |
+| 5.6 | Write-up in `learnings/05_features.md` + experiment in `notebooks/01_eda.ipynb` | ⏳ next |
 
 **What the others need to know already:**
 - **Experience is the strongest clue:** previous loans alone score ROC-AUC 0.76.
@@ -41,6 +41,7 @@ Everything else (all 13 steps, who owns them, what's done) is in the [progress t
 - **No Ghanaian applicant has any history**, so the model sees all of Ghana as first-timers.
 - **Macro clues only take 4 values in training** (one per year), and Ghana's inflation is far outside Kenya's range.
 - **The shuffled test lies, mostly for complex models:** LightGBM's PR-AUC is 0.31 shuffled vs 0.21 grouped by customer. On newer loans (the most realistic test), logistic regression beats LightGBM (0.11 vs 0.10).
+- **Use `FEATURES`** (13 columns) for both tasks: no calendar, no macro, because they hurt on future loans. Past amounts cut Task 1's error from 0.91 to 0.58.
 - **To get the data:** `from features import build; train, test = build('data/zindi')` (run from `src/` or add it to `sys.path`).
 
 Run the checks yourself with `.venv/bin/python src/features.py`.

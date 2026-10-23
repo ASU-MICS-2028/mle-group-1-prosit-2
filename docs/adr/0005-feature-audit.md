@@ -1,6 +1,6 @@
 # 0005 · Which columns the model may use (feature audit)
 
-- **Status:** Accepted
+- **Status:** Accepted; the calendar part is replaced by [0012](0012-final-feature-set.md) (calendar clues dropped)
 - **Date:** 20–21 Oct 2026 · **Owner:** Liza · **Step:** 3
 
 ## Context
