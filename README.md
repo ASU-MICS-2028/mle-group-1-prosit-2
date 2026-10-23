@@ -2,7 +2,7 @@
 
 How can a mobile-money lender decide fairly, transparently and sustainably whom to lend to, when its labelled data come from Kenya, defaults are about 1 in 50, and a wrong decision either pushes a family into debt or shuts them out of credit?
 
-**New to the project? Read [`knowledge/README.md`](knowledge/README.md) first.**
+**New to the project?** Read [`knowledge/README.md`](knowledge/README.md) first. **The full plan** is in [`docs/plan.md`](docs/plan.md).
 
 We build one feature set and two models on the African Credit Scoring Challenge data: a default classifier (Task 2) and a loan-amount regressor (Task 1). Then we test how the Kenyan model transfers to Ghana, audit it for fairness and Ghanaian regulation, and ship a scorer that returns a probability, a decision and three plain-language reasons.
 
@@ -16,7 +16,7 @@ Work top to bottom. A step can only start when the steps it waits on are ticked.
 | 2 | [x] Register for and download Findex Ghana into `data/worldbank/` | Joseph | — | Tue 20 Oct |
 | 3 | [x] Feature audit: every column in Train.csv marked allowed or not, with evidence ([guide below](#step-3-feature-audit-liza)) | Liza | 1 | Wed 21 Oct |
 | 4 | [x] Cost matrix in cedis and shillings → the decline threshold | Liza | 1 | Tue 20 Oct |
-| 5 | [ ] Shared features and validation folds in `src/`. Must test calendar clues with vs without on the older-vs-newer split ([why](learnings/03_feature_audit.md#what-im-unsure-of--limits)) | Joseph | 3 | Fri 23 Oct |
+| 5 | [ ] Shared features and fair tests in `src/` ([progress below](#step-5-features-and-fair-tests-joseph)) | Joseph | 3 | Fri 23 Oct |
 | 6 | [ ] Provisional model (plain logistic regression) so others can start building | Germain | 5 | Sat 24 Oct |
 | 7 | [ ] Task 2: final classification model, threshold, saved predictions | Germain | 4, 5 | Tue 27 Oct |
 | 7b | [ ] Zindi late submission of the final model (still scored, 10/day max); log every score in 02 | Germain | 7 | Tue 27 Oct |
@@ -32,6 +32,25 @@ Work top to bottom. A step can only start when the steps it waits on are ticked.
 - **Alice:** linear regression derivation; Kenya vs Ghana comparisons on the raw data.
 - **Liza:** Findex analysis; read the BoG Directive and Acts 843 and 726; set up the Model Card skeleton.
 - **Joseph:** the scorer's interface and its edge-case tests.
+
+## Step 5: Features and fair tests (Joseph)
+
+| Part | What | Status |
+|---|---|---|
+| 5.1 | Look at the shape of loan histories | ✅ |
+| 5.2 | Borrower history (`borrower_history` in `src/features.py`), checked on a made-up example and against a slow loop on 2,000 real loans | ✅ |
+| 5.3 | Calendar and macro clues (`calendar`, `add_macro`) | ✅ |
+| 5.4 | Three kinds of test: shuffled, grouped by customer, older-vs-newer | ⏳ next |
+| 5.5 | Compare every option in a table (history safe vs leaky, windows, calendar on/off, macro on/off) | ☐ |
+| 5.6 | Write-up in `learnings/05_features.md` | ☐ |
+
+**What the others need to know already:**
+- **Experience is the strongest clue:** previous loans alone score ROC-AUC 0.76.
+- **Past default rate is almost useless:** only 12% of defaulters ever borrow again, so there's rarely a past default to learn from (selection bias, to state in the report).
+- **No Ghanaian applicant has any history**, so the model sees all of Ghana as first-timers.
+- **Macro clues only take 4 values in training** (one per year), and Ghana's inflation is far outside Kenya's range.
+
+Run the checks yourself with `.venv/bin/python src/features.py`.
 
 ## Step 3: Feature audit (Liza)
 
@@ -126,9 +145,9 @@ for nb in notebooks/0*.ipynb; do .venv/bin/jupyter nbconvert --to notebook --exe
 | `notebooks/03_regression.ipynb` | Task 1: loan amount | Alice |
 | `notebooks/04_transfer_and_fairness.ipynb` | Kenya to Ghana shift; disaggregated fairness, proxies, mitigation | Alice, Liza |
 | `knowledge/` | **Everything you need to know**: the brief, course rules, lecture notes and lecture-recording summaries, derivations, regulation, fairness readings. [Start here](knowledge/README.md). | Everyone |
-| `docs/` | Everything we did and how: dated log, setup, data sources and checks | Everyone |
+| `docs/` | The full plan ([`plan.md`](docs/plan.md)), and everything we did and how: dated log, setup, data sources and checks | Everyone |
 | `learnings/` | Each member's full explanation of their step and findings, readable without rerunning anything | Everyone |
-| `src/` | Shared loading and time-safe feature code, and the scorer (added in Phase 2) | Joseph |
+| `src/features.py` | Shared feature code: loans, borrower history, calendar, macro. Every notebook and the scorer import from here. | Joseph |
 
 ## Data
 

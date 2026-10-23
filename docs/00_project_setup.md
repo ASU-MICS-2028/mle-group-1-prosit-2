@@ -1,6 +1,6 @@
 # 00 · Project setup: the brief, the plan, the repo
 
-The full plan, with the scenarios each person must test, is in the Google Doc **[MLE-GROUP-1-PROSIT-2 Plan](https://docs.google.com/document/d/16AOzssRkISRfICwckw1Q6OZXXJYGGTe4fnw9fxffBx0/edit)** (Drive: `MLE-GROUP-1 / prosit 2`). Each member signs off in the table at its end. This file is the short version.
+**The full plan is in [`plan.md`](plan.md)** (kept up to date). The sign-off table is still in the Google Doc **[MLE-GROUP-1-PROSIT-2 Plan](https://docs.google.com/document/d/16AOzssRkISRfICwckw1Q6OZXXJYGGTe4fnw9fxffBx0/edit)** (Drive: `MLE-GROUP-1 / prosit 2`). This file is the short version.
 
 ## The brief in plain words
 

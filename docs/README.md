@@ -4,6 +4,7 @@ Everything we do on Prosit 2, and how we did it, is written down here. If it isn
 
 | File | What it covers |
 |---|---|
+| [`plan.md`](plan.md) | **The full plan**, kept up to date: rules, roles, timeline, who waits on whom, what each step must test |
 | [`log.md`](log.md) | Dated, one-line-per-action record of everything done, by whom |
 | [`00_project_setup.md`](00_project_setup.md) | The brief in plain words, the plan, roles, who waits on whom, the repo and environment |
 | [`01_data.md`](01_data.md) | Where each dataset came from, how we got it, licence terms, and what our checks found |
