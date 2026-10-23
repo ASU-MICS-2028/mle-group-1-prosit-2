@@ -5,7 +5,7 @@ import pandas as pd
 
 def to_loans(rows):
     """One row per loan. A loan split across several lenders appears as several rows with the same tbl_loan_id."""
-    agg = {"customer_id": "first", "disbursement_date": "first", "due_date": "first"}
+    agg = {"customer_id": "first", "disbursement_date": "first", "due_date": "first", "Total_Amount": "first"}
     if "target" in rows:
         agg["target"] = "max"  # NaN for loans without a label (Test.csv)
     return rows.groupby("tbl_loan_id", as_index=False).agg(agg)
@@ -24,15 +24,23 @@ def borrower_history(loans, known_when="due", window=None):
     loans = loans.sort_values("disbursement_date").reset_index(drop=True)
     t = loans[["tbl_loan_id", "customer_id", "disbursement_date"]]
 
-    # 1. How many loans had this customer taken before today, and when was the latest?
-    sent = loans[["customer_id", "disbursement_date"]].copy()
+    # 1. How many loans had this customer taken before today, how big were they, and when was the latest?
+    #    (Past loan amounts are safe: they were fixed when those loans were sent. Today's amount is never used.)
+    sent = loans[["customer_id", "disbursement_date", "Total_Amount"]].rename(columns={"disbursement_date": "known_at"})
     sent["n_prev_loans"] = sent.groupby("customer_id").cumcount() + 1
-    sent["last_sent"] = sent["disbursement_date"]
-    out = pd.merge_asof(t, sent.rename(columns={"disbursement_date": "known_at"}),
-                        left_on="disbursement_date", right_on="known_at", by="customer_id",
-                        allow_exact_matches=False).drop(columns="known_at")
+    sent["mean_prev_amount"] = sent.groupby("customer_id")["Total_Amount"].cumsum() / sent["n_prev_loans"]
+    sent["last_amount"], sent["last_sent"] = sent["Total_Amount"], sent["known_at"]
+    sent = sent.drop(columns="Total_Amount")
+    asof = dict(by="customer_id", right_on="known_at", allow_exact_matches=False)
+    out = pd.merge_asof(t, sent, left_on="disbursement_date", **asof).drop(columns="known_at")
     out["n_prev_loans"] = out["n_prev_loans"].fillna(0)
     out["days_since_last_loan"] = (out["disbursement_date"] - out["last_sent"]).dt.days
+    # Borrowing speed: loans taken in the last 7 and 30 days (a sign of loan stacking / over-borrowing).
+    for days in (7, 30):
+        start = (out["disbursement_date"] - pd.Timedelta(days=days)).rename("start")
+        before = pd.merge_asof(pd.concat([start, out["customer_id"]], axis=1).sort_values("start").reset_index(),
+                               sent[["customer_id", "known_at", "n_prev_loans"]], left_on="start", **asof)
+        out[f"n_loans_last_{days}d"] = out["n_prev_loans"] - before.set_index("index").sort_index()["n_prev_loans"].fillna(0)
     out = out.drop(columns="last_sent")
 
     # 2. Outcomes of past loans, each one "known" from the moment chosen by known_when. Only labelled loans count.
@@ -106,7 +114,8 @@ def add_macro(rows, macro, lag=1):
 
 BASE = ["loan_type", "duration", "New_versus_Repeat"]  # frozen by the feature audit (learnings/03)
 CALENDAR = ["month", "weekday", "day_of_month"]
-HISTORY = ["n_prev_loans", "n_finished", "n_defaults", "past_default_rate", "no_known_history", "days_since_last_loan"]
+HISTORY = ["n_prev_loans", "n_finished", "n_defaults", "past_default_rate", "no_known_history", "days_since_last_loan",
+           "n_loans_last_7d", "n_loans_last_30d", "mean_prev_amount", "last_amount"]
 
 
 def build(data_dir, known_when="due", window=None, macro_lag=1):
@@ -135,6 +144,8 @@ def add_folds(df, k=5, seed=0):
                    land on both sides, so the model can partly recognise the customer.
     fold_customer: all of a customer's loans stay together (StratifiedGroupKFold by customer_id).
     time_block:    loans cut into k equal-sized blocks by date. Learn from blocks < i, test on block i (newer loans).
+    Pass scheme="time_new_customers" to splits() for the hardest test: newer loans from customers never seen while
+    learning. That's the closest Kenyan stand-in for Ghana (new market, new people, no history).
     """
     from sklearn.model_selection import StratifiedGroupKFold, StratifiedKFold
     df = df.copy()
@@ -150,10 +161,13 @@ def add_folds(df, k=5, seed=0):
 
 def splits(df, scheme):
     """Yield (learn_index, test_index) for a fold column made by add_folds."""
-    f = df[scheme]
-    if scheme == "time_block":  # only ever learn from the past
+    f = df["time_block" if scheme == "time_new_customers" else scheme]
+    if scheme.startswith("time"):  # only ever learn from the past
         for i in range(1, f.max() + 1):
-            yield df.index[f < i], df.index[f == i]
+            learn, test = df.index[f < i], df.index[f == i]
+            if scheme == "time_new_customers":
+                test = test[~df.loc[test, "customer_id"].isin(df.loc[learn, "customer_id"])]
+            yield learn, test
     else:
         for i in range(f.max() + 1):
             yield df.index[f != i], df.index[f == i]
@@ -168,6 +182,7 @@ if __name__ == "__main__":
         "disbursement_date": d(["2024-03-01", "2024-03-05", "2024-03-10", "2024-03-10"]),
         "due_date": d(["2024-03-08", "2024-03-12", "2024-03-17", "2024-03-17"]),
         "target": [1, 0, 0, np.nan],  # A defaulted; D has no label (a Test.csv loan)
+        "Total_Amount": [100, 300, 500, 700],
     })
     h = borrower_history(ama).set_index("tbl_loan_id")
     assert h.loc["A", "n_prev_loans"] == 0 and h.loc["A", "no_known_history"] == 1
@@ -175,6 +190,9 @@ if __name__ == "__main__":
     assert h.loc["C", "n_prev_loans"] == 2  # A and B; D was sent the same day, so it doesn't count
     assert h.loc["C", "n_finished"] == 1 and h.loc["C", "past_default_rate"] == 1.0  # only A is known
     assert h.loc["C", "days_since_last_loan"] == 5
+    assert h.loc["C", "mean_prev_amount"] == 200 and h.loc["C", "last_amount"] == 300  # C's own 500 never used
+    assert h.loc["C", "n_loans_last_7d"] == 1 and h.loc["C", "n_loans_last_30d"] == 2  # B (5 Mar) is within 7 days
+    assert np.isnan(h.loc["A", "last_amount"])
     leaky = borrower_history(ama, known_when="sent").set_index("tbl_loan_id")
     assert leaky.loc["C", "n_finished"] == 2  # the leaky version already "knows" B's outcome
     assert borrower_history(ama, window=1).set_index("tbl_loan_id").loc["C", "n_finished"] == 1
@@ -198,4 +216,6 @@ if __name__ == "__main__":
     assert (f.groupby("customer_id")["fold_customer"].nunique() == 1).all()
     for learn, test in splits(f, "time_block"):
         assert f.loc[learn, "disbursement_date"].max() <= f.loc[test, "disbursement_date"].min()
+    for learn, test in splits(f, "time_new_customers"):
+        assert not f.loc[test, "customer_id"].isin(f.loc[learn, "customer_id"]).any()
     print("Folds check passed")

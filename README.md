@@ -31,7 +31,8 @@ Everything else (all 13 steps, who owns them, what's done) is in the [progress t
 | 5.2 | Borrower history (`borrower_history` in `src/features.py`), checked on a made-up example and against a slow loop on 2,000 real loans | ✅ |
 | 5.3 | Calendar and macro clues (`calendar`, `add_macro`) | ✅ |
 | 5.4 | Three kinds of test (`add_folds`, `splits`) and `build()`, which gives everyone the full table in one call | ✅ |
-| 5.5 | Compare every option in a table (history safe vs leaky, windows, calendar on/off, macro on/off) | ⏳ next |
+| 5.4b | Extra cases: past loan amounts and borrowing speed (loans in last 7/30 days) as clues; a fourth test, newer loans from never-seen customers (closest stand-in for Ghana) | ✅ |
+| 5.5 | Compare every option in a table: history safe vs leaky, windows, amounts and speed on/off, calendar on/off, macro on/off; all four tests; 3 random seeds to see the noise; separate score for borrowers with no history | ⏳ next |
 | 5.6 | Write-up in `learnings/05_features.md` | ☐ |
 
 **What the others need to know already:**
