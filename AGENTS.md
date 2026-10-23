@@ -45,7 +45,7 @@ ICS553 Prosit 2 (Ashesi University), MLE Group 1: Alice, Germain, Joseph, Liza.
 
 ## ML rules (to avoid fooling ourselves)
 
-- **Get features only from `src/features.py`:** `train, test = build("data/zindi")`, then choose columns from `BASE`, `CALENDAR`, `HISTORY`, `MACRO.values()`. Never re-derive features in a notebook ([ADR 0004](docs/adr/0004-shared-feature-code.md)).
+- **Get features only from `src/features.py`:** `train, test = build("data/zindi")`. **Use `FEATURES`** (the 13 shared clues, [ADR 0012](docs/adr/0012-final-feature-set.md)) for both tasks, and start every model Pipeline with `preprocessor(FEATURES)`. Never re-derive features or preparation steps in a notebook ([ADR 0004](docs/adr/0004-shared-feature-code.md)). Calendar and macro clues exist but are deliberately not used, because they hurt on future loans.
 - **Never use the dropped columns as clues:** `Total_Amount_to_Repay` and `Lender_portion_to_be_repaid` (they leak post-default penalties), the lender-funding columns, `lender_id`, IDs ([ADR 0005](docs/adr/0005-feature-audit.md)). `Total_Amount` is Task 1's target and is never a clue.
 - **Fit every scaler, encoder, imputer, sampler (SMOTE) and calibrator inside the training fold,** using a scikit-learn `Pipeline`.
 - **Validate with the fold columns from `build()`:** `fold_customer`, `time_block` and `time_new_customers` (via `splits()`). Report `fold_shuffled` only to show how it inflates. Trust older → newer first ([ADR 0010](docs/adr/0010-validation-tests.md)).

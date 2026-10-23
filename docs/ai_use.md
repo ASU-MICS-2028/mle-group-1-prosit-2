@@ -14,3 +14,4 @@ The course requires an AI-use declaration in the report and in each reflection, 
 | 23 Oct 2026 | Joseph | Claude Code | `AGENTS.md`, `CLAUDE.md`, ADRs 0001–0011, this log | Set the rules the files encode |
 | — | Liza | *(please add)* | Steps 3–4 | |
 | 23 Oct 2026 | Joseph | Claude Code | Wrote and ran the step 5.5 comparison grid and bootstrap; drafted ADR 0012 | Asked for every combination to be tested; reviewing results and the decision |
+| 23 Oct 2026 | Joseph | Claude Code | Built and ran `notebooks/01_eda.ipynb`, made the figures, drafted `learnings/05_features.md` and the step 6 handover | Reviewing the write-up; learned each part step by step; needs a teammate review of step 5 (ADR 0011) |

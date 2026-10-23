@@ -10,41 +10,48 @@ We build one feature set and two models on the African Credit Scoring Challenge 
 
 | | |
 |---|---|
-| **Stage** | Step 5 of 13: shared features and fair tests |
-| **Responsible** | **Joseph** |
-| **Due** | Fri 23 Oct |
-| **Waiting on it** | Germain (step 6, provisional model, Sat 24) and Alice (steps 9–10) |
-| **Next after this** | Step 6: Germain's provisional logistic model |
+| **Stage** | Step 6 of 13: provisional default model (plain logistic regression) |
+| **Responsible** | **Germain** |
+| **Due** | Sat 24 Oct |
+| **Waiting on it** | Liza (fairness, step 11) and Joseph (scorer, step 12) can start building against it |
+| **Next after this** | Step 7: Germain's full classification comparison |
 
 Everything else (all 13 steps, who owns them, what's done) is in the [progress tracker](docs/plan.md#progress-tracker).
 
 **While you wait:**
-- **Germain:** logistic regression and gradient boosting derivations ([`knowledge/derivations.md`](knowledge/derivations.md)).
-- **Alice:** linear regression derivation; Kenya vs Ghana comparisons on the raw data.
+- **Alice:** step 9 (loan amount) can start now: it also only needs step 5. Read [`learnings/05_features.md`](learnings/05_features.md) first; past amounts are your key clue.
 - **Liza:** Findex analysis; read the BoG Directive and Acts 843 and 726 ([`knowledge/regulation.md`](knowledge/regulation.md)); set up the Model Card skeleton.
+- **Joseph:** the scorer's interface and its edge-case tests.
 
-## Current step in detail: 5 · Features and fair tests (Joseph)
+## Current step in detail: 6 · Provisional model (Germain)
 
-| Part | What | Status |
-|---|---|---|
-| 5.1 | Look at the shape of loan histories | ✅ |
-| 5.2 | Borrower history (`borrower_history` in `src/features.py`), checked on a made-up example and against a slow loop on 2,000 real loans | ✅ |
-| 5.3 | Calendar and macro clues (`calendar`, `add_macro`) | ✅ |
-| 5.4 | Three kinds of test (`add_folds`, `splits`) and `build()`, which gives everyone the full table in one call | ✅ |
-| 5.4b | Extra cases: past loan amounts and borrowing speed (loans in last 7/30 days) as clues; a fourth test, newer loans from never-seen customers (closest stand-in for Ghana) | ✅ |
-| 5.5 | Compared every option: all 63 combinations of clue groups, each column dropped, leaky vs safe, windows, macro years; both models; seeds + bootstrap. **Result: `FEATURES` = base + history + speed + amounts** ([ADR 0012](docs/adr/0012-final-feature-set.md)) | ✅ |
-| 5.6 | Write-up in `learnings/05_features.md` + experiment in `notebooks/01_eda.ipynb` | ⏳ next |
+**Why this step exists:** a quick, honest first model, so Liza and Joseph can build the fairness checks and the scorer *now*. Your full comparison of models (step 7) can then replace it without anyone redoing work.
 
-**What the others need to know already:**
-- **Experience is the strongest clue:** previous loans alone score ROC-AUC 0.76.
-- **Past default rate is almost useless:** only 12% of defaulters ever borrow again, so there's rarely a past default to learn from (selection bias, to state in the report).
-- **No Ghanaian applicant has any history**, so the model sees all of Ghana as first-timers.
-- **Macro clues only take 4 values in training** (one per year), and Ghana's inflation is far outside Kenya's range.
-- **The shuffled test lies, mostly for complex models:** LightGBM's PR-AUC is 0.31 shuffled vs 0.21 grouped by customer. On newer loans (the most realistic test), logistic regression beats LightGBM (0.11 vs 0.10).
-- **Use `FEATURES`** (13 columns) for both tasks: no calendar, no macro, because they hurt on future loans. Past amounts cut Task 1's error from 0.91 to 0.58.
-- **To get the data:** `from features import build; train, test = build('data/zindi')` (run from `src/` or add it to `sys.path`).
+**Before you start:**
+1. Pull `main` into your branch.
+2. Read [`learnings/05_features.md`](learnings/05_features.md) (about 10 minutes) and [`AGENTS.md`](AGENTS.md).
+3. **Review step 5** ([ADR 0011](docs/adr/0011-git-workflow.md)): rerun `notebooks/01_eda.ipynb` (about 6 min) and check a few numbers against the learnings file.
 
-Run the checks yourself with `.venv/bin/python src/features.py`.
+**Do:**
+1. **Get the data and the recipe.** Use the 13 shared clues and the shared preparation recipe:
+   ```python
+   import sys; sys.path.insert(0, "../src")
+   from features import build, splits, FEATURES, preprocessor
+   from sklearn.pipeline import make_pipeline
+   from sklearn.linear_model import LogisticRegression
+   train, test = build("../data/zindi")
+   model = make_pipeline(preprocessor(FEATURES), LogisticRegression(class_weight="balanced", max_iter=3000))
+   ```
+2. **Score it** on `splits(train, "time_block")` (main) and `"fold_customer"`: PR-AUC, ROC-AUC, lift. Step 5 got a future-loan lift of about 8.1 with this setup, so yours should be close.
+3. **Calibrate it.** Class weights inflate probabilities, and Liza's cut-off (decline above **2.1%**, [ADR 0007](docs/adr/0007-cost-matrix-and-cutoff.md)) only works on honest ones. Try none / Platt / isotonic and compare reliability curves and Brier scores. Calibrate inside the training part only.
+4. **Save for the others** (never commit these: they contain IDs):
+   - `data/predictions/provisional_logistic.csv`: `ID`, the fold scheme, out-of-fold calibrated probability, `target`;
+   - `data/models/provisional_logistic.joblib`: the calibrated pipeline fitted on all training loans.
+5. **Write it up:**
+   - `learnings/06_provisional_model.md` in the simplest words;
+   - an ADR for the calibration choice;
+   - log lines in `docs/log.md` and `docs/ai_use.md`.
+   Then tick step 6 in the tracker and move this **Now** box to step 7.
 
 ## Run it from a fresh clone
 

@@ -14,7 +14,7 @@ Work top to bottom. A step can only start when the steps it waits on are ticked.
 | 2 | [x] Register for and download Findex Ghana into `data/worldbank/` | Joseph | — | Tue 20 Oct |
 | 3 | [x] Feature audit: every column in Train.csv marked allowed or not, with evidence ([guide](02_feature_audit_guide.md)) | Liza | 1 | Wed 21 Oct |
 | 4 | [x] Cost matrix in cedis and shillings → the decline threshold | Liza | 1 | Tue 20 Oct |
-| 5 | [ ] Shared features and fair tests in `src/` ([progress](../README.md#current-step-in-detail-5--features-and-fair-tests-joseph)) | Joseph | 3 | Fri 23 Oct |
+| 5 | [x] Shared features and fair tests in `src/` ([write-up](../learnings/05_features.md), [ADR 0012](adr/0012-final-feature-set.md)) | Joseph | 3 | Fri 23 Oct |
 | 6 | [ ] Provisional model (plain logistic regression) so others can start building | Germain | 5 | Sat 24 Oct |
 | 7 | [ ] Task 2: final classification model, threshold, saved predictions | Germain | 4, 5 | Tue 27 Oct |
 | 7b | [ ] Zindi late submission of the final model (still scored, 10/day max); log every score in 02 | Germain | 7 | Tue 27 Oct |

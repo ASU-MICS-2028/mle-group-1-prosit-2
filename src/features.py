@@ -163,6 +163,28 @@ def add_folds(df, k=5, seed=0):
     return df.astype({"fold_shuffled": int, "fold_customer": int, "time_block": int})
 
 
+CATEGORICAL = ["loan_type", "New_versus_Repeat", "month", "weekday"]
+SKEWED = ["duration", "n_prev_loans", "n_finished", "n_defaults", "days_since_last_loan",
+          "n_loans_last_7d", "n_loans_last_30d", "mean_prev_amount", "last_amount"]
+
+
+def preprocessor(cols):
+    """The shared preparation recipe, to put first in every model Pipeline so it is learned inside the training fold:
+    categories -> one-hot (unseen values ignored); skewed counts and amounts -> fill gaps with the median
+    + a "was missing" flag, log, scale; other numbers -> fill + flag, scale."""
+    from sklearn.compose import make_column_transformer
+    from sklearn.impute import SimpleImputer
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, StandardScaler
+    cat = [c for c in cols if c in CATEGORICAL]
+    skew = [c for c in cols if c in SKEWED]
+    other = [c for c in cols if c not in cat + skew]
+    num = lambda log: make_pipeline(SimpleImputer(strategy="median", add_indicator=True),
+                                    *([FunctionTransformer(np.log1p)] if log else []), StandardScaler())
+    parts = [(OneHotEncoder(handle_unknown="ignore"), cat), (num(True), skew), (num(False), other)]
+    return make_column_transformer(*[p for p in parts if p[1]])
+
+
 def splits(df, scheme):
     """Yield (learn_index, test_index) for a fold column made by add_folds."""
     f = df["time_block" if scheme == "time_new_customers" else scheme]
