@@ -1,20 +1,12 @@
 # Docs
 
-Everything we do on Prosit 2, and how we did it, is written down here. If it isn't in `docs/`, the rest of the group can't rely on it.
+How we work, what we decided, and what we did. Results and what they mean are in [`learnings/`](../learnings/README.md); course material is in [`knowledge/`](../knowledge/README.md); the rules for people and AI agents are in [`AGENTS.md`](../AGENTS.md).
 
-| File | What it covers |
+| File | What it is |
 |---|---|
-| [`plan.md`](plan.md) | **The plan and progress tracker**: all 13 steps and who owns them, rules, roles, timeline, what each step must test, sign-off |
-| [`log.md`](log.md) | Dated, one-line-per-action record of everything done, by whom |
-| [`00_project_setup.md`](00_project_setup.md) | The brief in plain words, the plan, roles, who waits on whom, the repo and environment |
-| [`02_feature_audit_guide.md`](02_feature_audit_guide.md) | The step-by-step guide used for the feature audit (step 3) |
-| [`01_data.md`](01_data.md) | Where each dataset came from, how we got it, licence terms, and what our checks found |
-
-New topics get their own numbered file. Results and what they mean go in [`learnings/`](../learnings/README.md); this folder records what was done and how.
-
-## How to write in here
-
-1. **Add a line to `log.md` every time you do something:** date, who, what, and a link to the file or commit.
-2. **Explain it so someone who wasn't there could redo it:** the steps you took, the commands or code you ran, the numbers you got, and what they mean in plain English.
-3. **Record decisions with their reasons and the options you rejected.** "We chose X because Y; we also tried Z, which gave W."
-4. **No raw data in here.** Column names, counts and aggregates are fine; individual rows are not.
+| [`plan.md`](plan.md) | **The plan and progress tracker:** all 13 steps and owners, roles, timeline, what each step must test, sign-off |
+| [`adr/`](adr/README.md) | **Decisions** (ADRs): what we decided, the options we tested, and why. One file per decision. |
+| [`log.md`](log.md) | One line per action: date · who · what · where |
+| [`ai_use.md`](ai_use.md) | Every use of AI and what the human checked. Becomes the AI declaration. |
+| [`01_data.md`](01_data.md) | Where the data came from, licence terms, the checks we ran |
+| [`02_feature_audit_guide.md`](02_feature_audit_guide.md) | The guide Liza followed for the feature audit (step 3) |

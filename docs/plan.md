@@ -30,11 +30,7 @@ When you finish a step: tick it here, update the **Now** box at the top of the R
 
 ## 1. The rules for everyone
 
-1. **Explain everything as simply as possible.** Nobody redoes anyone else's part. We rely on each other's findings and must defend them in Q&A **without AI**. Every step ends with a plain-language write-up in [`learnings/`](../learnings/README.md).
-2. **Test every reasonable option.** Don't try one thing and move on. Compare the alternatives in a table, and say which wins and why.
-3. **Write down what you did** in [`docs/log.md`](log.md), one line per action.
-4. **Commit your own work from your own account.** "Even contribution" is graded.
-5. **Never paste raw data rows into an AI tool.** That's the course rule. Counts and summaries are fine.
+They're in [`AGENTS.md`](../AGENTS.md) (for people and AI agents alike). In short: one step at a time, explained; test every diverging path; decisions in [`adr/`](adr/README.md); learnings in plain words; the README shows only the current step; log actions and AI use; never paste raw data into AI tools.
 
 ## 2. What we're asked to do
 

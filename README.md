@@ -47,50 +47,18 @@ Run the checks yourself with `.venv/bin/python src/features.py`.
 
 ## Run it from a fresh clone
 
-Requires [uv](https://docs.astral.sh/uv/) (`brew install uv`).
-
 ```sh
-git clone https://github.com/ASU-MICS-2028/mle-group-1-prosit-2.git
-cd mle-group-1-prosit-2
-uv venv --python 3.12 && uv pip install -r requirements.txt
-brew install libomp   # macOS, only if `import lightgbm` fails
-# put the data in data/ (see below), then run the notebooks in order:
+git clone https://github.com/ASU-MICS-2028/mle-group-1-prosit-2.git && cd mle-group-1-prosit-2
+uv venv --python 3.12 && uv pip install -r requirements.txt     # brew install libomp if lightgbm fails on macOS
+# put the data in data/zindi/ (Zindi: African Credit Scoring Challenge) and data/worldbank/micro_gha.csv (Findex Ghana 2021)
+.venv/bin/python src/features.py                               # self-checks
 for nb in notebooks/0*.ipynb; do .venv/bin/jupyter nbconvert --to notebook --execute --inplace "$nb"; done
 ```
 
-## Layout
-
-| Path | What | Owner |
-|---|---|---|
-| `notebooks/00_feature_audit.ipynb` | Leakage tests and feature-set comparison behind the feature audit | Liza |
-| `notebooks/00b_cost_matrix.ipynb` | Cost of each mistake in KES and GHS, the decline cut-off, and the sensitivity check | Liza |
-| `notebooks/01_eda.ipynb` | Imbalance, missingness, skew, cardinality, overlap, Kenya vs Ghana | Joseph |
-| `notebooks/02_classification.ipynb` | Task 2: default probability, validation comparison, calibration, threshold | Germain |
-| `notebooks/03_regression.ipynb` | Task 1: loan amount | Alice |
-| `notebooks/04_transfer_and_fairness.ipynb` | Kenya to Ghana shift; disaggregated fairness, proxies, mitigation | Alice, Liza |
-| `knowledge/` | **Everything you need to know**: the brief, course rules, lecture notes and lecture-recording summaries, derivations, regulation, fairness readings. [Start here](knowledge/README.md). | Everyone |
-| `docs/` | The full plan ([`plan.md`](docs/plan.md)), and everything we did and how: dated log, setup, data sources and checks | Everyone |
-| `learnings/` | Each member's full explanation of their step and findings, readable without rerunning anything | Everyone |
-| `src/features.py` | Shared feature code: loans, borrower history, calendar, macro. Every notebook and the scorer import from here. | Joseph |
-
-## Data
-
-`data/` is **never committed**. Download from [Zindi](https://zindi.africa/competitions/african-credit-scoring-challenge) (free account) and the [Global Findex Ghana 2021](https://microdata.worldbank.org/index.php/catalog/4646) (free registration):
-
-```
-data/
-  zindi/     # Train.csv  Test.csv  SampleSubmission.csv  economic_indicators.csv  VariableDefinitions.txt
-  worldbank/ # micro_gha.csv, Global Findex Ghana 2021 microdata (each user registers for their own copy, per World Bank terms)
-```
-
-## Team rules
-
-1. **Explain everything plainly.** Nobody else will redo your part; they will rely on what you write. Each step needs a markdown cell saying what, why, and what the result means.
-2. **Test every reasonable alternative** for each step and compare them in a table before picking one.
-3. **Document everything in [`docs/`](docs/README.md)**: a line in `docs/log.md` for every action, and how you did it.
-4. **Fully explain your work in [`learnings/`](learnings/README.md).** Every step you own ends with a write-up there (results, tables, figures, the options you tried, your decision, Q&A prep), so the others can understand it without rerunning anything. **Use the simplest language possible**: short sentences, everyday words, every term explained, examples where it helps. A step isn't ticked until its learnings file exists.
-5. Commit your own work from your own account.
-
-## Adding a dependency
-
-`uv pip install <package>`, then add it with its version to `requirements.txt`.
+**Where things are:**
+- Rules for people and AI agents: [`AGENTS.md`](AGENTS.md)
+- Plan and tracker: [`docs/plan.md`](docs/plan.md)
+- Decisions: [`docs/adr/`](docs/adr/README.md)
+- What we learned: [`learnings/`](learnings/README.md)
+- Course material: [`knowledge/`](knowledge/README.md)
+- Data sources: [`docs/01_data.md`](docs/01_data.md)

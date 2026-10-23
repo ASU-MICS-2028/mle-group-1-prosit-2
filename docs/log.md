@@ -5,16 +5,16 @@ Newest at the bottom. One line per action: date · who · what · where.
 | Date | Who | What | Where |
 |---|---|---|---|
 | 16 Oct 2026 | — | Prosit 2 launched (brief: *Prosit 2 - ICS553 MLE.pdf*) | Course page |
-| 18 Oct 2026 | Joseph | Read the brief; drafted the full plan, roles and timeline | [00_project_setup.md](00_project_setup.md) |
+| 18 Oct 2026 | Joseph | Read the brief; drafted the full plan, roles and timeline | [plan.md](plan.md) |
 | 18 Oct 2026 | Joseph | Created the GitHub repo structure: README, pinned `requirements.txt`, `.gitignore` (keeps `data/` out), four notebook skeletons with owner and team rules; checked all four run | commit `Project repository set up` |
 | 18 Oct 2026 | Joseph | Checked Zindi: competition closed 12 Jan 2025; page didn't say whether late submissions are scored | [01_data.md](01_data.md) |
 | 18 Oct 2026 | Joseph | Put the plan in Google Drive (`MLE-GROUP-1 / prosit 2 / MLE-GROUP-1-PROSIT-2 Plan`) for everyone to review and sign off | [Plan doc](https://docs.google.com/document/d/16AOzssRkISRfICwckw1Q6OZXXJYGGTe4fnw9fxffBx0/edit) |
 | 18 Oct 2026 | Joseph | Shared the plan doc with the group | Google Drive |
-| 20 Oct 2026 | Joseph | Mapped which parts depend on which; added the step table to the README | [00_project_setup.md](00_project_setup.md#who-waits-on-whom), README |
+| 20 Oct 2026 | Joseph | Mapped which parts depend on which; added the step table to the README | [plan.md](plan.md#4-who-waits-on-whom), README |
 | 20 Oct 2026 | Joseph | Downloaded the Zindi data to `data/zindi/`; checked it against the brief (all numbers match) | [01_data.md](01_data.md#zindi-checks) |
 | 20 Oct 2026 | Joseph | Found the 920 shared loan IDs are one loan split across lenders, not duplicates; Ghana amounts ~7× Kenya in USD; macro data stops at 2023; only 736 "New" loans | [01_data.md](01_data.md#what-the-checks-found) |
 | 20 Oct 2026 | Joseph | Confirmed Zindi still scores late submissions (10/day); added step 7b (Germain) | README |
-| 20 Oct 2026 | Joseph | Registered with the World Bank Microdata Library; downloaded Findex Ghana 2021 to `data/worldbank/micro_gha.csv`; checked it | [01_data.md](01_data.md#findex-ghana-2021) |
+| 20 Oct 2026 | Joseph | Registered with the World Bank Microdata Library; downloaded Findex Ghana 2021 to `data/worldbank/micro_gha.csv`; checked it | [01_data.md](01_data.md#global-findex-ghana-2021-world-bank) |
 | 20 Oct 2026 | Joseph | Created this `docs/` folder and wrote up everything above | `docs/` |
 | 20 Oct 2026 | Joseph | Handed the feature audit (step 3) fully to Liza; wrote the step-by-step guide in the README; created `notebooks/00_feature_audit.ipynb`; moved its due date to Wed 21 Oct | README § Step 3 |
 | 20 Oct 2026 | Joseph | Added `knowledge/`: the brief and syllabus essentials as markdown, plain-language lecture notes, derivations, book chapter map, regulation (BoG Directive, Acts 843 and 726) and fairness-reading notes, and summaries of the lecture recordings. No original course files committed (repo is public). Written with AI assistance (see AI declaration). | [knowledge/README.md](../knowledge/README.md) |
@@ -31,3 +31,4 @@ Newest at the bottom. One line per action: date · who · what · where.
 | 23 Oct 2026 | Joseph | Step 5.4: `build()` (one call → train/test with every clue; drops the 190 not-yet-due loans from training), `add_folds()` (shuffled, grouped-by-customer, 5 time blocks) and `splits()`, with a self-check. First comparison with BASE+calendar+history: PR-AUC logistic 0.207 / 0.194 / 0.112 and LightGBM 0.310 / 0.209 / 0.099 (shuffled / customer / time). | `src/features.py` |
 | 23 Oct 2026 | Joseph | Google Doc plan retired: the plan, progress tracker and sign-off table now live in `docs/plan.md`. README slimmed to a **Now** box (current step, owner, who's waiting) plus the current step's detail. Step 3 guide moved to `docs/02_feature_audit_guide.md`. | [plan.md](plan.md) |
 | 23 Oct 2026 | Joseph | Step 5.4b: added past-loan amount clues (`mean_prev_amount`, `last_amount`; today's amount never used) and borrowing speed (`n_loans_last_7d`, `n_loans_last_30d`); added the `time_new_customers` test (newer loans from customers never seen while learning: ~7,100 rows, 4–11% default). Self-checks extended and passing. | `src/features.py` |
+| 23 Oct 2026 | Joseph | Added `AGENTS.md` (rules for people and AI agents) and `CLAUDE.md` (imports it + Claude specifics); wrote ADRs 0001–0011 for every decision so far, plus a template and index in `docs/adr/`; started `docs/ai_use.md`; removed `docs/00_project_setup.md` (duplicated plan.md); README trimmed to Now + run instructions + pointers. All internal links checked. | [AGENTS.md](../AGENTS.md), [adr/](adr/README.md) |
