@@ -66,6 +66,44 @@ def borrower_history(loans, known_when="due", window=None):
     return out.drop(columns=["customer_id", "disbursement_date"])
 
 
+def calendar(rows):
+    """Month, weekday (0 = Monday) and day of month the money was sent. No year: the model will only ever meet future years."""
+    d = rows["disbursement_date"]
+    return pd.DataFrame({"month": d.dt.month, "weekday": d.dt.weekday, "day_of_month": d.dt.day}, index=rows.index)
+
+
+# The only indicators that exist for both Kenya and Ghana in 2019-2023. The others are empty for Ghana, or stop in 2021.
+MACRO = {
+    "Inflation, consumer prices (annual %)": "inflation",
+    "Deposit interest rate (%)": "deposit_rate",
+    "Official exchange rate (LCU per US$, period average)": "fx_per_usd",
+    "Unemployment rate": "unemployment",
+}
+
+
+def load_macro(path):
+    """economic_indicators.csv (one column per year) -> one row per country-year."""
+    ec = pd.read_csv(path)
+    ec = ec[ec["Indicator"].isin(MACRO)].melt(id_vars=["Country", "Indicator"], var_name="year")
+    ec["year"] = ec["year"].str[2:].astype(int)
+    ec["Indicator"] = ec["Indicator"].map(MACRO)
+    return ec.pivot_table(index=["Country", "year"], columns="Indicator", values="value").reset_index()
+
+
+def add_macro(rows, macro, lag=1):
+    """Macro clues for each row's country and year.
+
+    lag=1: use last year's figures. Annual statistics for a year are only published after it ends,
+           so on decision day only last year's numbers are actually known (safe; 2024 loans use 2023).
+    lag=0: use the same year's figures (slightly leaky), with 2024 filled by carrying 2023 forward.
+    """
+    key = pd.DataFrame({"Country": rows["country_id"].values,
+                        "year": rows["disbursement_date"].dt.year.values - lag})
+    if lag == 0:
+        key["year"] = key["year"].clip(upper=macro["year"].max())
+    return key.merge(macro, on=["Country", "year"], how="left").drop(columns=["Country", "year"]).set_index(rows.index)
+
+
 if __name__ == "__main__":
     # Ama: three 7-day loans. Loan C is sent on 10 March, when loan A (due 8 Mar) is finished but B (due 12 Mar) is not.
     d = pd.to_datetime
@@ -88,3 +126,11 @@ if __name__ == "__main__":
     assert borrower_history(ama, window="3D").set_index("tbl_loan_id").loc["C", "n_finished"] == 1  # A finished 8 Mar
     assert borrower_history(ama, window="1D").set_index("tbl_loan_id").loc["C", "n_finished"] == 0
     print("Ama check passed")
+
+    # Macro: a 2024 Kenyan loan must get 2023 figures with lag=1, and also with lag=0 (2024 isn't published).
+    m = pd.DataFrame({"Country": ["Kenya"] * 2, "year": [2022, 2023], "inflation": [7.66, 7.67]})
+    r = pd.DataFrame({"country_id": ["Kenya"] * 2, "disbursement_date": d(["2023-06-01", "2024-06-01"])})
+    assert add_macro(r, m, lag=1)["inflation"].tolist() == [7.66, 7.67]
+    assert add_macro(r, m, lag=0)["inflation"].tolist() == [7.67, 7.67]
+    assert calendar(r).loc[0, "month"] == 6
+    print("Macro and calendar check passed")
