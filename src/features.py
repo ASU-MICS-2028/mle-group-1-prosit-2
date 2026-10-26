@@ -11,13 +11,15 @@ def to_loans(rows):
     return rows.groupby("tbl_loan_id", as_index=False).agg(agg)
 
 
-def borrower_history(loans, known_when="due", window=None):
+def borrower_history(loans, known_when="due", window=None, grace_days=0):
     """For each loan, what NkwaPay already knew about this borrower on its disbursement_date.
 
     known_when: "due"  -> a past loan's outcome counts once its due_date has passed (safe).
                 "sent" -> it counts as soon as the loan was sent (LEAKY, only to measure the cheat).
     window:     None = all past loans, an int k = only the last k finished loans,
                 a string like "90D" = only loans that finished in the last 90 days.
+    grace_days: with "due", an outcome only counts grace_days after the due date (the data has no repayment
+                timestamps, so we test 0 / 7 / 30 days; ADR 0015).
 
     Everything is strictly before the day (allow_exact_matches=False): a loan sent the same day can't see the others.
     """
@@ -26,11 +28,15 @@ def borrower_history(loans, known_when="due", window=None):
 
     # 1. How many loans had this customer taken before today, how big were they, and when was the latest?
     #    (Past loan amounts are safe: they were fixed when those loans were sent. Today's amount is never used.)
-    sent = loans[["customer_id", "disbursement_date", "Total_Amount"]].rename(columns={"disbursement_date": "known_at"})
-    sent["n_prev_loans"] = sent.groupby("customer_id").cumcount() + 1
-    sent["mean_prev_amount"] = sent.groupby("customer_id")["Total_Amount"].cumsum() / sent["n_prev_loans"]
-    sent["last_amount"], sent["last_sent"] = sent["Total_Amount"], sent["known_at"]
-    sent = sent.drop(columns="Total_Amount")
+    #    Worked out per day, so several loans on the same day are treated as one step (ADR 0015).
+    sent = (loans.groupby(["customer_id", "disbursement_date"], as_index=False)
+            .agg(n=("Total_Amount", "size"), amount_sum=("Total_Amount", "sum"))
+            .rename(columns={"disbursement_date": "known_at"}).sort_values("known_at", kind="mergesort"))
+    sent["n_prev_loans"] = sent.groupby("customer_id")["n"].cumsum()
+    sent["mean_prev_amount"] = sent.groupby("customer_id")["amount_sum"].cumsum() / sent["n_prev_loans"]
+    sent["last_amount"] = sent["amount_sum"] / sent["n"]  # average of the loans on the most recent earlier day
+    sent["last_sent"] = sent["known_at"]
+    sent = sent.drop(columns=["n", "amount_sum"])
     asof = dict(by="customer_id", right_on="known_at", allow_exact_matches=False)
     out = pd.merge_asof(t, sent, left_on="disbursement_date", **asof).drop(columns="known_at")
     out["n_prev_loans"] = out["n_prev_loans"].fillna(0)
@@ -44,9 +50,10 @@ def borrower_history(loans, known_when="due", window=None):
     out = out.drop(columns="last_sent")
 
     # 2. Outcomes of past loans, each one "known" from the moment chosen by known_when. Only labelled loans count.
-    when = "due_date" if known_when == "due" else "disbursement_date"
-    ev = loans.loc[loans["target"].notna(), ["customer_id", when, "target"]].rename(columns={when: "known_at"})
-    ev = ev.sort_values("known_at")
+    lab = loans[loans["target"].notna()]
+    ev = lab[["tbl_loan_id", "customer_id", "target"]].copy()
+    ev["known_at"] = lab["due_date"] + pd.Timedelta(days=grace_days) if known_when == "due" else lab["disbursement_date"]
+    ev = ev.sort_values(["known_at", "tbl_loan_id"], kind="mergesort")  # ties broken the same way every run
     g = ev.groupby("customer_id")["target"]
     if isinstance(window, int):
         ev["n_finished"] = g.transform(lambda s: s.rolling(window, min_periods=1).count())
@@ -122,16 +129,18 @@ HISTORY = ["n_prev_loans", "n_finished", "n_defaults", "past_default_rate", "no_
            "n_loans_last_7d", "n_loans_last_30d", "mean_prev_amount", "last_amount"]
 
 
-def build(data_dir, known_when="due", window=None, macro_lag=1):
-    """Train and test tables with every clue, one row per Zindi row. Pick the columns you need from BASE, CALENDAR,
-    HISTORY and MACRO.values(). Train also gets the fold columns (see add_folds)."""
+def build(data_dir, known_when="due", window=None, macro_lag=1, grace_days=0):
+    """Train and test tables with every clue, one row per Zindi row. Use FEATURES (or pick from BASE, CALENDAR,
+    HISTORY, MACRO.values()). Train also gets the fold columns (see add_folds) and `outcome_known_at`."""
     p = ["disbursement_date", "due_date"]
     tr = pd.read_csv(f"{data_dir}/Train.csv", parse_dates=p)
     te = pd.read_csv(f"{data_dir}/Test.csv", parse_dates=p)
-    # Loans not due when the data was collected: "paid" really means "not unpaid yet" (learnings/03), so not used to train.
-    tr = tr[tr["due_date"] <= tr["disbursement_date"].max()]
-    # History uses train and test loans together, so test customers get their earlier train loans as history.
-    hist = borrower_history(to_loans(pd.concat([tr, te])), known_when, window).set_index("tbl_loan_id")
+    # History uses every loan, train and test, including ones not yet due: their existence and amount were known,
+    # only their outcome wasn't (and it never counts, because it isn't known before the data ends). ADR 0015.
+    hist = borrower_history(to_loans(pd.concat([tr, te])), known_when, window, grace_days).set_index("tbl_loan_id")
+    # Training targets: only loans whose outcome was final when the data was collected (learnings/03, ADR 0006).
+    tr = tr[tr["due_date"] + pd.Timedelta(days=grace_days) <= tr["disbursement_date"].max()].copy()
+    tr["outcome_known_at"] = tr["due_date"] + pd.Timedelta(days=grace_days)
     macro = load_macro(f"{data_dir}/economic_indicators.csv")
     out = []
     for df in (tr, te):
@@ -196,7 +205,8 @@ def splits(df, scheme):
             test = df.index[f == i]
             start = df.loc[test, "disbursement_date"].min()
             # Learn only from loans whose outcome NkwaPay already knew on the test's first day.
-            learn = df.index[(f < i) & (df["due_date"] < start)]
+            known = df["outcome_known_at"] if "outcome_known_at" in df else df["due_date"]
+            learn = df.index[(f < i) & (known < start)]
             if scheme == "time_new_customers":
                 test = test[~df.loc[test, "customer_id"].isin(df.loc[learn, "customer_id"])]
             yield learn, test
@@ -225,6 +235,14 @@ if __name__ == "__main__":
     assert h.loc["C", "mean_prev_amount"] == 200 and h.loc["C", "last_amount"] == 300  # C's own 500 never used
     assert h.loc["C", "n_loans_last_7d"] == 1 and h.loc["C", "n_loans_last_30d"] == 2  # B (5 Mar) is within 7 days
     assert np.isnan(h.loc["A", "last_amount"])
+    assert borrower_history(ama, grace_days=3).set_index("tbl_loan_id").loc["C", "n_finished"] == 0  # A known 11 Mar
+    # Several loans on the same earlier day: last_amount is their average, whatever order the rows come in.
+    two = pd.DataFrame({"tbl_loan_id": ["P", "Q", "R"], "customer_id": [2, 2, 2], "target": [0, 0, np.nan],
+                        "disbursement_date": d(["2024-05-01", "2024-05-01", "2024-05-02"]),
+                        "due_date": d(["2024-05-08", "2024-05-08", "2024-05-09"]), "Total_Amount": [100, 300, 50]})
+    for order in (two, two.iloc[::-1]):
+        r = borrower_history(order).set_index("tbl_loan_id").loc["R"]
+        assert r["last_amount"] == 200 and r["n_prev_loans"] == 2 and r["mean_prev_amount"] == 200
     leaky = borrower_history(ama, known_when="sent").set_index("tbl_loan_id")
     assert leaky.loc["C", "n_finished"] == 2  # the leaky version already "knows" B's outcome
     assert borrower_history(ama, window=1).set_index("tbl_loan_id").loc["C", "n_finished"] == 1

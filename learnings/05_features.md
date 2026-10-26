@@ -3,6 +3,8 @@
 Code: [`src/features.py`](../src/features.py) (the clues) and [`notebooks/01_eda.ipynb`](../notebooks/01_eda.ipynb) (every experiment; runs in about 6 minutes). You don't need to run anything: every result is pasted below. Decision records: [ADR 0012](../docs/adr/0012-final-feature-set.md), [ADR 0014](../docs/adr/0014-time-test-known-outcomes.md).
 
 > **Updated 26 Oct:** Germain's step 6 work showed the future-loans test was learning from older loans whose outcome wasn't known yet ([ADR 0014](../docs/adr/0014-time-test-known-outcomes.md)). That's fixed, and every number below comes from the corrected test. No decision changed; the case for logistic regression got stronger.
+>
+> **Also 26 Oct ([ADR 0015](../docs/adr/0015-history-fixes-from-review.md)):** after Germain's review, `last_amount` became the average of the borrower's most recent earlier day, history now also counts the 190 not-yet-due loans, a **first-ever-loan** score was added, and a grace-period test was run. Numbers below are from that version.
 
 ## What the others need to know
 
@@ -16,9 +18,9 @@ Code: [`src/features.py`](../src/features.py) (the clues) and [`notebooks/01_eda
 3. **A borrower's history is the best new clue.** A customer's first loan defaults 6.1% of the time, later loans 1.1%.
 4. **Past loan amounts are the key clue for Task 1 (Alice).** The typical error drops from about 2.5× to about 1.8×.
 5. **Calendar and macro looked useful but were fake helpers.** They only helped when old and new loans were mixed; on future loans they made things worse.
-6. **Logistic regression is clearly better than LightGBM on future loans** (lift 8.1 vs 6.1, and the bootstrap difference is entirely below zero).
+6. **Logistic regression is clearly better than LightGBM on future loans** (lift 8.0 vs 5.6, and the bootstrap difference is entirely below zero).
 7. **Scores are noisy.** The same model can move ±0.02–0.03 in PR-AUC just from how customers are randomly split. Only trust gaps bigger than that, or check with a bootstrap.
-8. **Ghana warning (Alice, Liza):** no Ghanaian applicant has any history, so history, speed and amounts are all empty for them. On Kenyan borrowers with no history, the model is about 3.5× better than random, against 8× overall. Expect it to be much weaker in Ghana.
+8. **Ghana warning (Alice, Liza):** no Ghanaian applicant has any history, so history, speed and amounts are all empty for them. On Kenyan **first-ever loans** (no history at all), the model is only about **2.7×** better than random, against 8× overall. Expect it to be much weaker in Ghana.
 9. **Selection bias, for the report:** only 12% of people who defaulted ever got another loan. The lender cuts them off, so our data mostly contains people it kept lending to.
 
 ## Words used in this file
@@ -142,12 +144,12 @@ That's about 1,700 model fits. Full results: [`tables/05_feature_comparison.csv`
 
 | Group | Change in lift (logistic) | Helped in | Change on new customers |
 |---|---|---|---|
-| base | **+4.68** | 31 of 31 | +0.114 |
-| history | +0.68 | 22 of 31 | +0.005 |
-| speed | +0.61 | 24 of 31 | +0.012 |
-| amounts | +0.30 | 23 of 31 | +0.005 |
-| calendar | **−0.40** | 4 of 31 | +0.018 (helps here!) |
-| macro | **−0.09** | 11 of 31 | +0.008 |
+| base | **+4.69** | 31 of 31 | +0.114 |
+| history | +0.74 | 24 of 31 | +0.005 |
+| speed | +0.61 | 24 of 31 | +0.011 |
+| amounts | +0.28 | 23 of 31 | +0.005 |
+| calendar | **−0.39** | 3 of 31 | +0.018 (helps here!) |
+| macro | **−0.09** | 14 of 31 | +0.009 |
 
 **The key lesson.** Calendar and macro *help* on the new-customer test, which mixes all periods, but *hurt* on future loans. So they weren't learning anything real about borrowers. They were learning *which period a loan came from*, which won't carry forward.
 
@@ -155,15 +157,22 @@ That's about 1,700 model fits. Full results: [`tables/05_feature_comparison.csv`
 
 | Variant | Future lift | Lift for no-history borrowers |
 |---|---|---|
-| Safe history (chosen) | 7.58 | **3.54** |
-| Leaky history (outcomes counted as soon as a loan is sent) | 7.86 | **2.95** |
-| Only the last 3 loans | 7.69 | 3.57 |
-| Only the last 5 loans | 7.47 | 3.56 |
-| Only the last 90 days | 7.48 | 3.46 |
+| Safe history (chosen) | 7.54 | **3.58** |
+| Leaky history (outcomes counted as soon as a loan is sent) | 7.85 | **2.90** |
+| Only the last 3 loans | 7.62 | 3.51 |
+| Only the last 5 loans | 7.60 | 3.57 |
+| Only the last 90 days | 7.28 | 3.44 |
 
 **What this means:**
-- **The leak looks slightly better overall** (7.86 vs 7.58). That's what a leak does: it borrows from the future. Yet it makes things worse for borrowers with no history (2.95 vs 3.54), the very people who look like Ghanaians. We use the safe version.
-- **Look-back windows are within noise of using all past loans** (7.47–7.69 vs 7.58), so we keep it simple.
+- **The leak looks slightly better overall** (7.85 vs 7.54). That's what a leak does: it borrows from the future. Yet it makes things worse for borrowers with no history (2.90 vs 3.58), the very people who look like Ghanaians. We use the safe version.
+- **Look-back windows are within noise of using all past loans** (7.28–7.62 vs 7.54), so we keep it simple.
+
+**Two checks added after Germain's review** ([ADR 0015](../docs/adr/0015-history-fixes-from-review.md)), for `FEATURES`:
+
+| Check | Logistic | LightGBM | What it means |
+|---|---|---|---|
+| **First-ever loans** (no history at all; the true stand-in for Ghana): future lift | **2.70** | 1.98 | Much weaker than the 8× overall. The model mostly works by knowing a borrower's past. |
+| **Grace period** (outcome known 0 / 7 / 30 days after the due date): future lift | 7.97 / 8.22 / 8.34 | 5.63 / 6.13 / 5.73 | All within the noise, so the due-date assumption doesn't change any conclusion. We keep 0 days. |
 
 **Most important single columns:** removing `duration` or `loan_type` costs the most for both models. For LightGBM, `last_amount` comes next.
 
@@ -171,12 +180,12 @@ That's about 1,700 model fits. Full results: [`tables/05_feature_comparison.csv`
 
 | Option (logistic unless marked) | Future lift | 95% range | Difference vs `FEATURES` (95% range) |
 |---|---|---|---|
-| base + history + speed | 8.15 | 6.55–10.33 | −0.10 to +0.30 (no real difference) |
-| **`FEATURES` = base + history + speed + amounts** | **8.07** | 6.57–10.22 | — |
-| all clues except macro | 7.58 | 6.08–9.76 | −1.00 to +0.07 (no real difference) |
-| Liza's set (base + calendar) | 6.35 | 4.85–8.63 | **−2.45 to −1.03 (clearly worse)** |
-| LightGBM, all clues except macro | 5.76 | 4.65–7.50 | **−3.47 to −0.87 (clearly worse)** |
-| LightGBM, `FEATURES` | 6.08 | 4.98–7.84 | **−3.01 to −0.86 (clearly worse)** |
+| base + history + speed | 8.15 | 6.55–10.33 | −0.06 to +0.49 (no real difference) |
+| **`FEATURES` = base + history + speed + amounts** | **7.97** | 6.51–10.07 | — |
+| all clues except macro | 7.54 | 6.09–9.68 | −1.04 to +0.05 (no real difference) |
+| Liza's set (base + calendar) | 6.35 | 4.85–8.63 | **−2.36 to −0.97 (clearly worse)** |
+| LightGBM, all clues except macro | 5.74 | 4.80–7.76 | **−3.52 to −0.70 (clearly worse)** |
+| LightGBM, `FEATURES` | 5.63 | 4.70–7.20 | **−3.51 to −1.18 (clearly worse)** |
 
 ### Task 1: does it help predict the loan amount?
 
@@ -187,9 +196,9 @@ The error is measured on the log of the amount; lower is better. An error of 0.5
 | guess the average | — | 0.978 | 0.972 |
 | Liza's set | linear | 0.912 | 0.924 |
 | base + history + speed | linear | 0.910 | 0.921 |
-| **`FEATURES` (+ past amounts)** | linear | **0.598** | **0.635** |
-| **`FEATURES` (+ past amounts)** | LightGBM | **0.579** | **0.583** |
-| all clues except macro | linear | 0.598 | **0.788** (calendar breaks it on future loans) |
+| **`FEATURES` (+ past amounts)** | linear | **0.597** | **0.632** |
+| **`FEATURES` (+ past amounts)** | LightGBM | **0.579** | **0.581** |
+| all clues except macro | linear | 0.596 | **0.782** (calendar breaks it on future loans) |
 
 ## Decision
 
@@ -200,7 +209,7 @@ The error is measured on the log of the amount; lower is better. An error of 0.5
 ## Why
 
 1. **History and speed help on future loans every single time.**
-2. **Past amounts transform Task 1** (error 0.91 → 0.58), and they cost Task 2 nothing measurable (8.15 vs 8.07, inside the noise).
+2. **Past amounts transform Task 1** (error 0.91 → 0.58), and they cost Task 2 nothing measurable (8.15 vs 7.97, inside the noise).
 3. **Calendar and macro only look good on tests that mix time periods,** and real use is always in the future.
 4. **Simple choices won everywhere:** safe history over leaky, all loans over windows, and logistic regression beats LightGBM on future loans.
 
@@ -221,13 +230,13 @@ A: Past outcomes only count after their due date, and same-day loans are exclude
 A: For LightGBM, from 0.20 on new customers to 0.31 shuffled: about 50%. Logistic regression barely moved (0.21 → 0.22).
 
 **Q: Why did you drop the calendar and macro clues the brief asked you to build?**
-A: We built and tested them. They helped only when old and new loans were mixed, and on future loans they didn't help in most combinations (calendar in 27 of 31, macro in 20 of 31), lowering lift on average. With only 4 years of Kenyan data, macro just stands in for the year.
+A: We built and tested them. They helped only when old and new loans were mixed, and on future loans they didn't help in most combinations (calendar in 28 of 31, macro in 17 of 31), lowering lift on average. With only 4 years of Kenyan data, macro just stands in for the year.
 
 **Q: Why use past amounts if they barely help the default model?**
 A: Both tasks must share the same clues, and past amounts cut the loan-amount error from 0.91 to 0.58. Their cost to the default model is inside the noise.
 
 **Q: Isn't LightGBM better? It's what usually wins.**
-A: On the shuffled test it looks better, but that's because it recognises customers. On future loans, logistic regression is clearly better (lift 8.1 vs 6.1), and it's easier to explain to borrowers and the regulator.
+A: On the shuffled test it looks better, but that's because it recognises customers. On future loans, logistic regression is clearly better (lift 8.0 vs 5.6), and it's easier to explain to borrowers and the regulator.
 
 **Q: What does this mean for Ghana?**
-A: Ghanaian applicants have no history, so the model only has the base clues for them. On Kenyan borrowers without history it's about 3.5× better than random, against 8× overall. We expect it to be weaker in Ghana, and we say so.
+A: Ghanaian applicants have no history, so the model only has the base clues for them. On Kenyan first-ever loans it's about 2.7× better than random, against 8× overall. We expect it to be much weaker in Ghana, and we say so.

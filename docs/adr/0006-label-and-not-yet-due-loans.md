@@ -1,6 +1,6 @@
 # 0006 · What "default" means, and the 190 loans that weren't due yet
 
-- **Status:** Accepted
+- **Status:** Accepted; refined by [0015](0015-history-fixes-from-review.md): the 190 loans still count as *history* for later loans, just not as training targets
 - **Date:** 20 Oct 2026 · **Owner:** Liza · **Step:** 3
 
 ## Context

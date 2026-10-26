@@ -1,7 +1,7 @@
 # 0012 · The final feature set (step 5.5)
 
 - **Status:** Accepted. Replaces the calendar part of [0005](0005-feature-audit.md); settles the open questions in [0008](0008-borrower-history.md) (window) and [0009](0009-macro-clues.md) (macro).
-- **Date:** 23 Oct 2026 (numbers updated 26 Oct after the [0014](0014-time-test-known-outcomes.md) test fix) · **Owner:** Joseph · **Step:** 5.5
+- **Date:** 23 Oct 2026 (numbers updated 26 Oct after the [0014](0014-time-test-known-outcomes.md) and [0015](0015-history-fixes-from-review.md) fixes) · **Owner:** Joseph · **Step:** 5.5
 
 ## Context
 Step 5 built six groups of clues:
@@ -30,24 +30,24 @@ About 1,700 model fits; the full table is in `learnings/05_features.md`.
 
 | What we added | Average change in future-loan lift (logistic) | Helped in | Verdict |
 |---|---|---|---|
-| base | +4.68 | 31/31 | essential |
-| history | +0.68 | 22/31 | keep |
+| base | +4.69 | 31/31 | essential |
+| history | +0.74 | 24/31 | keep |
 | speed | +0.61 | 24/31 | keep |
-| amounts | +0.30 | 23/31 | helps Task 2 a little, **huge for Task 1** (below) |
-| calendar | −0.40 | 4/31 | **hurts on future loans** (helps only on the mixed-time test) |
-| macro | −0.09 | 11/31 | **doesn't help**; LightGBM ignores it entirely |
+| amounts | +0.28 | 23/31 | helps Task 2 a little, **huge for Task 1** (below) |
+| calendar | −0.39 | 3/31 | **hurts on future loans** (helps only on the mixed-time test) |
+| macro | −0.09 | 14/31 | **doesn't help** |
 
 | Clues | Task 2 future-loan lift (logistic) [95% CI] | Task 1 error on future loans (log amount, LightGBM / linear) |
 |---|---|---|
 | Liza's set (base + calendar) | 6.35 [4.85, 8.63] | 0.924 / 0.924 |
 | base + history + speed | 8.15 [6.55, 10.33] | 0.952 / 0.921 |
-| **base + history + speed + amounts** | **8.07** [6.57, 10.22] | **0.583 / 0.635** |
-| everything except macro | 7.58 [6.08, 9.76] | 0.576 / **0.788** (calendar breaks the linear model on future loans) |
-| LightGBM, base + history + speed + amounts | 6.08 [4.98, 7.84]: **clearly below logistic** | — |
+| **base + history + speed + amounts** | **7.97** [6.51, 10.07] | **0.581 / 0.632** |
+| everything except macro | 7.54 [6.09, 9.68] | 0.574 / **0.782** (calendar breaks the linear model on future loans) |
+| LightGBM, base + history + speed + amounts | 5.63 [4.70, 7.20]: **clearly below logistic** | — |
 | guess the average | — | 0.972 |
 
 Variants (logistic, full set without macro):
-- **Leaky history:** looks slightly better overall (7.86 vs 7.58), which is the cheat working, but the score for borrowers with no history drops from 3.54 to 2.95. It distorts the borrowers who matter most for Ghana.
+- **Leaky history:** looks slightly better overall (7.85 vs 7.54), which is the cheat working, but the score for borrowers with no history drops from 3.58 to 2.90. It distorts the borrowers who matter most for Ghana.
 - **Look-back windows:** last 3 / last 5 / 90 days are all within ±0.2 of "all past loans", which is noise.
 
 ## Decision
@@ -57,7 +57,7 @@ Variants (logistic, full set without macro):
 
 ## Why
 - **History and speed** help on future loans in every combination tested.
-- **Amounts** cut the Task 1 error from 0.92 to 0.58, meaning a typical guess is off by about 1.8× instead of 2.5×. They cost Task 2 nothing measurable: 8.15 vs 8.07, a paired difference with 95% CI [−0.10, +0.30].
+- **Amounts** cut the Task 1 error from 0.92 to 0.58, meaning a typical guess is off by about 1.8× instead of 2.5×. They cost Task 2 nothing measurable: 8.15 vs 7.97, a paired difference with 95% CI [−0.06, +0.49].
 - **Calendar and macro only look useful** when old and new loans are mixed. On future loans they hurt, because they learn *which period* a loan came from. That confirms the concern in [learnings/03](../../learnings/03_feature_audit.md). Macro also has only 4 training values, and Ghana's inflation is far outside them.
 - **The simplest choices win:** the safe history over the leaky one, all past loans over any window, and **logistic regression clearly beats LightGBM** on future loans.
 
