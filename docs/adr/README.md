@@ -13,6 +13,7 @@ Every real decision gets a short record: what we decided, which options we teste
 | [0007](0007-cost-matrix-and-cutoff.md) | The cost of each mistake and the decline cut-off | Liza | Accepted |
 | [0008](0008-borrower-history.md) | How borrower history is built (time-safe) | Joseph | Accepted |
 | [0009](0009-macro-clues.md) | Macro clues (inflation, interest, exchange rate, unemployment) | Joseph | Accepted; not used in the model (see 0012) |
-| [0010](0010-validation-tests.md) | How we test models fairly (validation) | Joseph | Accepted |
+| [0010](0010-validation-tests.md) | How we test models fairly (validation) | Joseph | Accepted; time test corrected by 0014 |
 | [0011](0011-git-workflow.md) | Git workflow: own branch, review, merge | Group | Accepted |
 | [0012](0012-final-feature-set.md) | The final feature set (step 5.5) | Joseph | Accepted |
+| [0014](0014-time-test-known-outcomes.md) | The future-loans test only learns from finished loans | Joseph | Accepted |

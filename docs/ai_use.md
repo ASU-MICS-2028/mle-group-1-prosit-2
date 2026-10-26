@@ -15,3 +15,4 @@ The course requires an AI-use declaration in the report and in each reflection, 
 | — | Liza | *(please add)* | Steps 3–4 | |
 | 23 Oct 2026 | Joseph | Claude Code | Wrote and ran the step 5.5 comparison grid and bootstrap; drafted ADR 0012 | Asked for every combination to be tested; reviewing results and the decision |
 | 23 Oct 2026 | Joseph | Claude Code | Built and ran `notebooks/01_eda.ipynb`, made the figures, drafted `learnings/05_features.md` and the step 6 handover | Reviewing the write-up; learned each part step by step; needs a teammate review of step 5 (ADR 0011) |
+| 26 Oct 2026 | Joseph | Claude Code | Reviewed Germain's branch; found and fixed the time-split leak; reran step 5 and updated learnings/05 and ADRs 0010, 0012, 0014 | Decided to fix the leak and accept the review changes; Germain's extension set to end of 26 Oct |

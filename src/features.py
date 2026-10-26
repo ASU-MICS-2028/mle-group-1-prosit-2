@@ -147,7 +147,9 @@ def add_folds(df, k=5, seed=0):
     fold_shuffled: rows shuffled at random (keeps the default share equal). The naive way: one customer's loans
                    land on both sides, so the model can partly recognise the customer.
     fold_customer: all of a customer's loans stay together (StratifiedGroupKFold by customer_id).
-    time_block:    loans cut into k equal-sized blocks by date. Learn from blocks < i, test on block i (newer loans).
+    time_block:    loans cut into k roughly equal blocks by date, never splitting a day across two blocks.
+                   Learn from older blocks, test on block i. Only loans whose outcome was already known on the
+                   test's first day (due_date before it) are learned from (ADR 0014).
     Pass scheme="time_new_customers" to splits() for the hardest test: newer loans from customers never seen while
     learning. That's the closest Kenyan stand-in for Ghana (new market, new people, no history).
     """
@@ -159,7 +161,8 @@ def add_folds(df, k=5, seed=0):
         for i, (_, test_idx) in enumerate(splitter.split(df, y, g)):
             df.loc[df.index[test_idx], name] = i
     order = df["disbursement_date"].rank(method="first")
-    df["time_block"] = np.minimum((order - 1) * k // len(df), k - 1)
+    block = np.minimum((order - 1) * k // len(df), k - 1)
+    df["time_block"] = block.groupby(df["disbursement_date"]).transform("min")  # a whole day goes in one block
     return df.astype({"fold_shuffled": int, "fold_customer": int, "time_block": int})
 
 
@@ -190,7 +193,10 @@ def splits(df, scheme):
     f = df["time_block" if scheme == "time_new_customers" else scheme]
     if scheme.startswith("time"):  # only ever learn from the past
         for i in range(1, f.max() + 1):
-            learn, test = df.index[f < i], df.index[f == i]
+            test = df.index[f == i]
+            start = df.loc[test, "disbursement_date"].min()
+            # Learn only from loans whose outcome NkwaPay already knew on the test's first day.
+            learn = df.index[(f < i) & (df["due_date"] < start)]
             if scheme == "time_new_customers":
                 test = test[~df.loc[test, "customer_id"].isin(df.loc[learn, "customer_id"])]
             yield learn, test
@@ -238,10 +244,13 @@ if __name__ == "__main__":
     rng = np.random.default_rng(0)
     f = pd.DataFrame({"customer_id": rng.integers(0, 40, 400), "target": rng.random(400) < 0.1,
                       "disbursement_date": pd.Timestamp("2024-01-01") + pd.to_timedelta(rng.integers(0, 365, 400), "D")})
+    f["due_date"] = f["disbursement_date"] + pd.to_timedelta(rng.choice([7, 30, 90], 400), "D")
     f = add_folds(f)
+    assert (f.groupby("disbursement_date")["time_block"].nunique() == 1).all()  # no day split across blocks
     assert (f.groupby("customer_id")["fold_customer"].nunique() == 1).all()
     for learn, test in splits(f, "time_block"):
-        assert f.loc[learn, "disbursement_date"].max() <= f.loc[test, "disbursement_date"].min()
+        assert f.loc[learn, "disbursement_date"].max() < f.loc[test, "disbursement_date"].min()
+        assert f.loc[learn, "due_date"].max() < f.loc[test, "disbursement_date"].min()  # outcomes already known
     for learn, test in splits(f, "time_new_customers"):
         assert not f.loc[test, "customer_id"].isin(f.loc[learn, "customer_id"]).any()
     print("Folds check passed")

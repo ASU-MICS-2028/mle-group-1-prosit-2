@@ -1,6 +1,6 @@
 # 0010 · How we test models fairly (validation)
 
-- **Status:** Accepted
+- **Status:** Accepted; the `time_block` test was corrected by [0014](0014-time-test-known-outcomes.md) (learn only from finished loans; whole days per block)
 - **Date:** 23 Oct 2026 · **Owner:** Joseph · **Step:** 5.4, 5.4b
 
 ## Context
