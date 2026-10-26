@@ -10,48 +10,52 @@ We build one feature set and two models on the African Credit Scoring Challenge 
 
 | | |
 |---|---|
-| **Stage** | Step 6 of 13: provisional default model (plain logistic regression) |
+| **Stage** | Step 7 of 13: final classification comparison |
 | **Responsible** | **Germain** |
-| **Due** | Sat 24 Oct |
-| **Waiting on it** | Liza (fairness, step 11) and Joseph (scorer, step 12) can start building against it |
-| **Next after this** | Step 7: Germain's full classification comparison |
+| **Due** | Tue 27 Oct 2026 |
+| **Completed** | Step 6 provisional logistic regression and temporal calibration |
+| **Next after this** | Step 7b Zindi submission; Step 8 reason codes |
 
-Everything else (all 13 steps, who owns them, what's done) is in the [progress tracker](docs/plan.md#progress-tracker).
+The full plan and progress tracker are in
+[`docs/plan.md`](docs/plan.md).
 
-**While you wait:**
-- **Alice:** step 9 (loan amount) can start now: it also only needs step 5. Read [`learnings/05_features.md`](learnings/05_features.md) first; past amounts are your key clue.
-- **Liza:** Findex analysis; read the BoG Directive and Acts 843 and 726 ([`knowledge/regulation.md`](knowledge/regulation.md)); set up the Model Card skeleton.
-- **Joseph:** the scorer's interface and its edge-case tests.
+The Step 6 decision and limitations are documented in
+[`ADR 0013`](docs/adr/0013-provisional-logistic-calibration.md).
 
-## Current step in detail: 6 · Provisional model (Germain)
+## Current step in detail: 7 ? Final classification (Germain)
 
-**Why this step exists:** a quick, honest first model, so Liza and Joseph can build the fairness checks and the scorer *now*. Your full comparison of models (step 7) can then replace it without anyone redoing work.
+**Purpose:** Compare candidate classifiers fairly and select
+an explainable model using future-loan performance, uncertainty,
+probability calibration and lending costs.
 
-**Before you start:**
-1. Pull `main` into your branch.
-2. Read [`learnings/05_features.md`](learnings/05_features.md) (about 10 minutes) and [`AGENTS.md`](AGENTS.md).
-3. **Review step 5** ([ADR 0011](docs/adr/0011-git-workflow.md)): rerun `notebooks/01_eda.ipynb` (about 6 min) and check a few numbers against the learnings file.
+**Required work:**
 
-**Do:**
-1. **Get the data and the recipe.** Use the 13 shared clues and the shared preparation recipe:
-   ```python
-   import sys; sys.path.insert(0, "../src")
-   from features import build, splits, FEATURES, preprocessor
-   from sklearn.pipeline import make_pipeline
-   from sklearn.linear_model import LogisticRegression
-   train, test = build("../data/zindi")
-   model = make_pipeline(preprocessor(FEATURES), LogisticRegression(class_weight="balanced", max_iter=3000))
-   ```
-2. **Score it** on `splits(train, "time_block")` (main) and `"fold_customer"`: PR-AUC, ROC-AUC, lift. Step 5 got a future-loan lift of about 8.1 with this setup, so yours should be close.
-3. **Calibrate it.** Class weights inflate probabilities, and Liza's cut-off (decline above **2.1%**, [ADR 0007](docs/adr/0007-cost-matrix-and-cutoff.md)) only works on honest ones. Try none / Platt / isotonic and compare reliability curves and Brier scores. Calibrate inside the training part only.
-4. **Save for the others** (never commit these: they contain IDs):
-   - `data/predictions/provisional_logistic.csv`: `ID`, the fold scheme, out-of-fold calibrated probability, `target`;
-   - `data/models/provisional_logistic.joblib`: the calibrated pipeline fitted on all training loans.
-5. **Write it up:**
-   - `learnings/06_provisional_model.md` in the simplest words;
-   - an ADR for the calibration choice;
-   - log lines in `docs/log.md` and `docs/ai_use.md`.
-   Then tick step 6 in the tracker and move this **Now** box to step 7.
+1. Use the 13 approved features and shared preprocessing from
+   `src/features.py`.
+2. Compare a constant baseline and at least five classifiers:
+   Logistic Regression, k-NN, pruned Decision Tree,
+   Random Forest and LightGBM. Additional models are optional.
+3. Treat chronological validation as primary; include
+   customer-grouped and shuffled comparisons.
+4. Compare imbalance handling and tuning alternatives
+   inside training folds.
+5. Evaluate PR-AUC, ROC-AUC, lift, calibration,
+   Brier score and log loss.
+6. Compare appropriate calibration methods without
+   using the evaluation holdout for calibration fitting.
+7. Evaluate F1, confusion matrices, approval rates
+   and cost-based thresholds using calibrated probabilities.
+8. Calculate bootstrap 95% confidence intervals and
+   compare improvements against the documented noise floor.
+9. Write results into `notebooks/02_classification.ipynb`,
+   `learnings/07_classification.md`, and an ADR.
+10. Save the selected model and predictions locally,
+    excluding private artifacts from Git.
+
+**Important limitations:** The Step 6 model remains provisional.
+The observed future default rate exceeded predicted risk, and
+Ghanaian outcome performance remains unknown. Do not approve
+a lending threshold merely because the model was serialized.
 
 ## Run it from a fresh clone
 

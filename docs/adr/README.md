@@ -16,3 +16,4 @@ Every real decision gets a short record: what we decided, which options we teste
 | [0010](0010-validation-tests.md) | How we test models fairly (validation) | Joseph | Accepted |
 | [0011](0011-git-workflow.md) | Git workflow: own branch, review, merge | Group | Accepted |
 | [0012](0012-final-feature-set.md) | The final feature set (step 5.5) | Joseph | Accepted |
+| [0013](0013-provisional-logistic-calibration.md) | Provisional classification and calibration | Germain | Provisional |
