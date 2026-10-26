@@ -1,4 +1,4 @@
-﻿# 0013 · Provisional Logistic Regression and Calibration
+# 0013 · Provisional Logistic Regression and Calibration
 
 - Status: Provisional
 - Date: 26 Oct 2026

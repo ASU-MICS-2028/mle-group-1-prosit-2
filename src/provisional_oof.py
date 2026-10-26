@@ -1,7 +1,6 @@
-﻿"""Step 6: provisional out-of-fold classification predictions."""
+"""Step 6: provisional out-of-fold classification predictions."""
 
 from pathlib import Path
-import subprocess
 import numpy as np
 import pandas as pd
 
@@ -122,11 +121,6 @@ def partitions(df, scheme, fold_number, holdout):
 
 
 def main():
-    branch = subprocess.check_output(
-        ["git", "branch", "--show-current"],
-        text=True
-    ).strip()
-    assert branch == "feature/germain-classification"
 
     print("=== STEP 6: OUT-OF-FOLD PREDICTIONS ===")
 

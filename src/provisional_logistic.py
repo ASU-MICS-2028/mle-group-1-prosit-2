@@ -1,7 +1,6 @@
-﻿"""Step 6: Reproducible provisional default classifier."""
+"""Step 6: Reproducible provisional default classifier."""
 
 from pathlib import Path
-import subprocess
 import joblib
 import numpy as np
 import pandas as pd
@@ -39,11 +38,6 @@ class ProvisionalCalibratedModel:
 
 
 def main():
-    branch = subprocess.check_output(
-        ["git", "branch", "--show-current"],
-        text=True
-    ).strip()
-    assert branch == "feature/germain-classification"
 
     print("=== STEP 6: PROVISIONAL MODEL ===")
 

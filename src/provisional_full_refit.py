@@ -1,7 +1,6 @@
-﻿"""Step 6: Full-data provisional model with temporal OOF calibration."""
+"""Step 6: Full-data provisional model with temporal OOF calibration."""
 
 from pathlib import Path
-import subprocess
 import joblib
 import numpy as np
 import pandas as pd
@@ -29,11 +28,6 @@ def base_model():
 
 
 def main():
-    branch = subprocess.check_output(
-        ["git", "branch", "--show-current"],
-        text=True
-    ).strip()
-    assert branch == "feature/germain-classification"
 
     print("=== STEP 6: FULL-DATA PROVISIONAL REFIT ===")
 
@@ -115,7 +109,7 @@ def main():
     oof_targets = np.concatenate(oof_targets)
 
     print("\nTemporal OOF records:", len(oof_scores))
-    assert len(oof_scores) == 54771
+    assert len(oof_scores) == len(oof_targets) == sum(len(b) for _, b in splits(train, "time_block"))
 
     # Calibrate using predictions generated without
     # training on their corresponding target labels.

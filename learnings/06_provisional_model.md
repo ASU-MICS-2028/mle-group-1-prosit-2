@@ -1,5 +1,34 @@
 # 06 - Provisional Classification Model (Germain)
 
+> *The two sections below were added in review by Joseph (26 Oct), summarising Germain's results further down, plus two review findings. Germain's own write-up follows unchanged.*
+
+## What the others need to know
+
+1. **A first, simple default model exists.** It's logistic regression on the 13 shared clues (`FEATURES`), then "Platt" calibration (explained below). It's **provisional**: good enough to build the fairness checks and the scorer against, not to make real lending decisions.
+2. **It ranks borrowers well on older loans:** about 8× better than random at finding defaulters. That matches step 5.
+3. **On the newest loans (Jul–Nov 2024) it's weaker:**
+   - ROC-AUC 0.65 (0.5 = coin flip, 1.0 = perfect);
+   - 9.4% of those loans defaulted, but the model predicted only 5.2% on average, so it **underestimates the risk**, because defaults rose over time.
+4. **Class weights ("pay extra attention to defaulters") don't help ranking here, and they inflate the probabilities.** Without weights, plus Platt, gave the most honest probabilities of the six setups tried.
+5. **Files for Liza and Joseph** (on Germain's machine, never committed). Rerun the scripts to make your own copy:
+   - `data/models/provisional_logistic_full.joblib`;
+   - `data/predictions/provisional_logistic_test.csv`;
+   - `data/predictions/provisional_logistic_oof.csv`.
+6. **Review finding: Liza's cut-off doesn't fit the newest loans.** On Jul–Nov 2024, declining above **2.1%** approves almost nobody, 3.2% approves 7%, and 9.6% approves 99%. Step 7 must test cut-offs together with an **approval-rate target** (the brief: "approve at least X% of applicants").
+7. **Review finding: Germain's stricter time test exposed a leak in step 5's test.** It learned from older loans whose outcomes weren't known yet. That's now fixed in `src/features.py` ([ADR 0014](../docs/adr/0014-time-test-known-outcomes.md)).
+
+## Words used in this file
+
+- **Calibration:** making the model's probabilities honest. If it says "5% chance of default" for 100 people, about 5 should default.
+- **Platt scaling:** a simple calibration. It fits a small logistic regression that maps the model's raw score to a corrected probability, using loans the model wasn't trained on.
+- **Isotonic calibration:** a more flexible calibration (a staircase-shaped mapping). It needs more data and can overfit.
+- **Brier score:** the average of (predicted probability − what happened)², where what happened is 1 = defaulted, 0 = repaid. Lower is better; it rewards honest probabilities.
+- **Log loss:** like Brier, but it punishes confident wrong guesses much harder. Lower is better.
+- **Class weights ("balanced"):** telling the model each default counts many times more than a repayment. It helps the model notice rare defaults, but makes its probabilities too high.
+- **Out-of-fold (OOF) predictions:** predictions for each loan from a model that never saw that loan while learning.
+- **Holdout:** a set of loans kept aside and only used for the final check.
+
+
 ## Objective
 Build a Logistic Regression classifier to estimate the
 probability that a loan will default.
@@ -272,7 +301,7 @@ without calibration. Platt improved the unweighted model's
 probability scores in this experiment, but the remaining
 probability mismatch required further investigation.
 
-## Step 6 artifact delivery � 26 October 2026
+## Step 6 artifact delivery — 26 October 2026
 
 I generated and reloaded the provisional Logistic
 Regression model and verified its predictions.
@@ -284,7 +313,7 @@ Customer-grouped ROC-AUC ranged from 0.84665 to
 0.85513. Chronological ROC-AUC ranged from
 0.76530 to 0.82199.
 
-The separate July�November 2024 holdout achieved
+The separate July–November 2024 holdout achieved
 ROC-AUC 0.647583 and PR-AUC 0.157661.
 
 These tests use different periods and populations,

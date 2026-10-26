@@ -12,7 +12,7 @@ We build one feature set and two models on the African Credit Scoring Challenge 
 |---|---|
 | **Stage** | Step 7 of 13: final classification comparison |
 | **Responsible** | **Germain** |
-| **Due** | Tue 27 Oct 2026 |
+| **Due** | **End of Mon 26 Oct 2026** (extended) |
 | **Completed** | Step 6 provisional logistic regression and temporal calibration |
 | **Next after this** | Step 7b Zindi submission; Step 8 reason codes |
 
@@ -22,7 +22,7 @@ The full plan and progress tracker are in
 The Step 6 decision and limitations are documented in
 [`ADR 0013`](docs/adr/0013-provisional-logistic-calibration.md).
 
-## Current step in detail: 7 ? Final classification (Germain)
+## Current step in detail: 7 · Final classification (Germain)
 
 **Purpose:** Compare candidate classifiers fairly and select
 an explainable model using future-loan performance, uncertainty,
@@ -45,6 +45,12 @@ probability calibration and lending costs.
    using the evaluation holdout for calibration fitting.
 7. Evaluate F1, confusion matrices, approval rates
    and cost-based thresholds using calibrated probabilities.
+   **Choose the operating point by testing:** sweep cut-offs
+   and report, for each, the approval rate, the default rate
+   among approved loans and the total cost (Liza's FN/FP costs).
+   Liza's 2.1% approves almost nobody on Jul–Nov 2024 loans,
+   so compare cost-based, approval-rate-target (e.g. approve
+   70% / 80% / 90%) and repeat-business (9.6%) cut-offs.
 8. Calculate bootstrap 95% confidence intervals and
    compare improvements against the documented noise floor.
 9. Write results into `notebooks/02_classification.ipynb`,
