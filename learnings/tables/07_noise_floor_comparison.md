@@ -1,0 +1,1 @@
+LR minus RF pooled chronological PR-AUC = +0.01514. Paired customer-bootstrap 95% interval [+0.00057, +0.03219], 300 valid replicates. Noise floor ±0.0263. Point estimate exceeds noise floor: False. Interval wholly above positive floor: False. The bootstrap describes uncertainty for this validation procedure, not Ghana performance.

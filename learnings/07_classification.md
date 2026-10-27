@@ -1,159 +1,129 @@
-# 07 ? Classification Technical Development Log
+# 07 ? Final loan-default classification (Germain)
 
-**Project:** MLE Group 1 ? Prosit 2
-**Owner:** Germain
-**Date:** 26 October 2026
+## What the others need to know
 
-## Ownership
+- We predict whether a borrower may fail to repay a loan.
+- The evaluation compared six classifier variants and a majority-class baseline.
+- The models used Joseph's shared 13 approved features.
+- Future-loan testing is the main measure because lending decisions concern future applicants.
+- Standard Logistic Regression performed best on future-loan PR-AUC.
+- Platt calibration is the selected approach for producing lending-risk probabilities.
+- The cost-based 2.1% threshold has very different approval rates across periods.
+- Ghana has no observed default labels in the supplied test data.
+- Logistic Regression + Platt is selected for integration, not live deployment.
+- The experiment runner and notebook must remain reproducible.
 
-- Germain: classification experiments, calibration,
-  uncertainty, thresholds and technical evaluation.
-- Joseph: shared features and validation infrastructure.
-- Liza: cost matrix and underlying business assumptions.
+## The question
 
-## Checkpoint 7.0A?7.0C
+NkwaPay needs to estimate the chance that a borrower will default.
+Because defaults are uncommon, an apparently accurate model might simply predict that nobody defaults.
 
-Initial classification experiment setup and validation
-work completed previously.
+We therefore compared different models, checked how their predictions behave on future loans, and studied the cost of lending decisions.
 
-Exact numerical evidence remains in original artifacts.
+## What I did
 
-## Checkpoint 7.1A?7.1C
+1. Used the shared feature-building code prepared by Joseph.
+2. Compared a majority baseline with Logistic Regression, balanced Logistic Regression, k-NN, a pruned decision tree, Random Forest and LightGBM.
+3. Tested the models using shuffled, customer-grouped and chronological validation.
+4. Evaluated precision-recall performance, probability calibration and decision metrics.
+5. Compared lending thresholds using the cost assumptions prepared by Liza.
+6. Investigated uncertainty using customer-grouped bootstrap resampling.
+7. Examined approvals and lending costs separately by time period.
+8. Generated an integration model and predictions for the unlabelled test data.
 
-Model comparison and validation strategy investigated.
+Experiment code: `src/classification_experiments.py`.
 
-## Checkpoint 7.2A
+Notebook: `notebooks/02_classification.ipynb`.
 
-Calibration and class-imbalance comparisons completed.
+## What I tried and what happened
 
-Previously reported Brier scores:
+PR-AUC measures how well the model identifies uncommon defaults while balancing precision and recall. Higher values are better.
 
-- LR Platt: 0.01715
-- RF Platt: 0.01699
+| Model | Shuffled | Customer-grouped | Future loans |
+|---|---:|---:|---:|
+| Majority baseline | 0.0184 | 0.0184 | 0.0182 |
+| Logistic Regression | 0.2211 | 0.2146 | 0.1075 |
+| Logistic balanced | 0.2163 | 0.2095 | 0.1054 |
+| k-NN | 0.1809 | 0.1675 | 0.0635 |
+| Pruned Decision Tree | 0.1261 | 0.1364 | 0.0530 |
+| Random Forest | 0.2225 | 0.2085 | 0.0682 |
+| LightGBM | 0.2381 | 0.1949 | 0.0569 |
 
-## Checkpoint 7.2B
+The more complex models generally looked stronger when loans were shuffled. Their performance dropped on future loans. Standard Logistic Regression gave the highest future-loan PR-AUC in this comparison.
 
-Customer-cluster bootstrap uncertainty evaluation.
+### Does Logistic Regression clearly beat Random Forest?
 
-- LR minus RF PR-AUC: +0.03035
-- 95% interval: [+0.0150, +0.0482]
-- 300 valid replicates
+LR minus RF pooled chronological PR-AUC = +0.01514. Paired customer-bootstrap 95% interval [+0.00057, +0.03219], 300 valid replicates. Noise floor ±0.0263. Point estimate exceeds noise floor: False. Interval wholly above positive floor: False. The bootstrap describes uncertainty for this validation procedure, not Ghana performance.
 
-## Checkpoint 7.3A
+This provides evidence in favour of Logistic Regression, but it does not prove that the advantage exceeds the project's noise floor.
 
-Lending threshold scenarios evaluated on
-54,463 observations.
+### How did the lending threshold behave over time?
 
-Main thresholds:
+The table below combines chronological evaluation rows within each quarter using loan-count weighting.
 
-- Kenya: 2.1%
-- Ghana: 3.2%
+| Quarter | Loans | Approval rate | Cost per loan (KES) |
+|---|---:|---:|---:|
+| 2022Q3 | 27,656 | 98.4% | 50.88 |
+| 2022Q4 | 22,784 | 94.4% | 36.74 |
+| 2023Q1 | 346 | 13.3% | 103.18 |
+| 2023Q2 | 182 | 9.3% | 128.57 |
+| 2023Q3 | 372 | 7.8% | 104.57 |
+| 2023Q4 | 339 | 5.3% | 86.73 |
+| 2024Q1 | 97 | 2.1% | 83.51 |
+| 2024Q2 | 201 | 9.5% | 85.57 |
+| 2024Q3 | 1,665 | 29.2% | 115.38 |
+| 2024Q4 | 821 | 37.5% | 235.81 |
 
-Repeat-business thresholds:
+Approval rates varied considerably. A single overall approval rate would hide the deterioration in later periods.
 
-- Kenya: 9.6%
-- Ghana: 14.2%
+See `learnings/figures/07_reliability_curve.png` and `learnings/figures/07_confusion_matrix.png` for the calibration and decision plots.
 
-## Checkpoint 7.3B.1
+All rows described as applying Ghana's 3.2% threshold were evaluated on Kenyan loans, not Ghanaian default outcomes.
 
-Verified repository, branch and experiment artifacts.
+## Decision
 
-## Checkpoint 7.3B.2
+Use standard Logistic Regression with Platt calibration as the **integration candidate** for the scorer and fairness audit.
 
-Confirmed all 20 reported cost-per-loan divisions.
+This choice prioritizes chronological performance and explanations that are easier to communicate than those of more complex models.
 
-## Checkpoint 7.3B.3
+The selected architecture does not mean the 2.1% threshold is approved for every period, or that the model is safe for real Ghanaian lending.
 
-Independently reconstructed all 20 saved cost totals.
+## What I'm unsure of / limits
 
-Identified that Repeat business decision scenarios
-were still evaluated with main cost assumptions.
+- The historical training and calibration windows need an independent audit.
+- The reliability plot needs interpretation by period, not only in aggregate.
+- The exact performance on Ghanaian borrowers is unknown because outcome labels are unavailable.
+- Performance and approval rates change substantially across periods.
+- The bootstrap improvement does not clearly exceed the noise floor.
+- The full notebook still requires an independent fresh-clone reproduction test.
+- The business cost assumptions are scenarios, not confirmed real-world costs.
 
-Calculated separate repeat-business cost sensitivity.
+## Likely Q&A questions and answers
 
-## Checkpoint 7.3C
+**Why did you choose Logistic Regression?**
 
-Prepared pooled OOF calibration diagnostics from
-existing predictions without retraining.
+It performed best on future loans in our new comparison and is comparatively easy to explain.
 
-These are descriptive calculations, not proof of
-chronological calibration stability.
+**Why not LightGBM?**
 
-## Checkpoint 7.4
+It performed better on shuffled data but much worse on future loans. Future-loan evaluation is closer to the intended use.
 
-Consolidated saved classification evidence into
-the classification notebook.
+**Why calibrate probabilities?**
 
-Notebook execution remains subject to verification.
+A score used with a lending cut-off must represent risk as reliably as possible, not merely rank borrowers.
 
-## Decisions
+**Does the model work in Ghana?**
 
-Model discrimination, probability calibration,
-cost-sensitive utility and temporal robustness
-must be evaluated separately.
+We cannot establish that from this dataset. We have Ghanaian applications without actual default labels.
 
-Neither candidate is approved for deployment.
+**Why not use the 2.1% threshold automatically?**
 
-## Pending
+Its approval rates changed dramatically over time. The operating policy must be reviewed separately from the model architecture.
 
-- Chronological validation audit
-- Evaluation sample reconciliation
-- Full notebook execution
-- Assignment requirements verification
-- ADR acceptance
-- Git commit
+## Model handover
 
+Integration candidate: standard Logistic Regression + Platt. Historical fit rows: 65793; later calibration rows: 2625. Serialized locally to ignored data/experiments/step7_reproducible/lr_platt_integration.joblib. The frozen training/calibration split must be externally validated before deployment. Ghana test probabilities have no observed Ghanaian default labels.
 
-## Checkpoint 7.6B ? Evaluation Population Reconciliation
+## Technical record
 
-Germain inspected Joseph's shared `add_folds()` and `splits()`
-implementations without modifying them.
-
-Processed training population: 68,464 observations.
-
-- Block 0: 14,001 initial historical observations
-- Block 1: 13,850 evaluation observations
-- Block 2: 13,250 evaluation observations
-- Block 3: 13,776 evaluation observations
-- Block 4: 13,587 evaluation observations
-
-Total evaluation population: 54,463 observations.
-
-The temporal splitter trains on earlier blocks and requires
-`outcome_known_at < evaluation_start`. This guards against
-using outcomes unavailable at prediction time.
-
-The OOF experiment produced predictions for 18 configurations,
-with 54,463 unique loans per configuration and no duplicate
-loan predictions within a configuration.
-
-Fold 4 showed 533 defaults in 13,587 loans (3.92%), substantially
-higher than preceding folds. Temporal drift and fold-level
-calibration therefore remain important limitations.
-
-Calibration fitting procedures still require provenance
-verification for the Checkpoint 7.2 experiment.
-
-No modification was made to Joseph's feature pipeline.
-
-
-## Final methodological limitations
-
-The shared temporal splitter was inspected and uses
-only earlier blocks with outcomes known before each
-evaluation period.
-
-However, the exact fitting provenance for all 18
-Checkpoint 7.2 calibration configurations has not
-been independently verified.
-
-The pooled OOF diagnostics are descriptive; they do
-not establish chronological calibration stability.
-
-The final model comparison remains experimental.
-Neither LR nor RF is authorized for production
-deployment.
-
-Further work should independently verify calibration
-fit boundaries, prospective performance, fairness,
-and the assumed business cost matrix.
+The earlier checkpoint-by-checkpoint log is preserved at `docs/07_classification_technical_log.md`.

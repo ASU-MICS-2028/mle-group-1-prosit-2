@@ -1,0 +1,1 @@
+Integration candidate: standard Logistic Regression + Platt. Historical fit rows: 65793; later calibration rows: 2625. Serialized locally to ignored data/experiments/step7_reproducible/lr_platt_integration.joblib. The frozen training/calibration split must be externally validated before deployment. Ghana test probabilities have no observed Ghanaian default labels.
