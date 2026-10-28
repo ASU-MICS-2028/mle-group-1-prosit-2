@@ -10,58 +10,30 @@ We build one feature set and two models on the African Credit Scoring Challenge 
 
 | | |
 |---|---|
-| **Stage** | Step 7 of 13: final classification comparison |
-| **Responsible** | **Germain** |
-| **Due** | **End of Mon 26 Oct 2026** (extended) |
-| **Completed** | Step 6 provisional logistic regression and temporal calibration |
-| **Next after this** | Step 7b Zindi submission; Step 8 reason codes |
+| **Stage** | Steps 8–10 of 13 (two people in parallel) |
+| **Responsible** | **Alice:** step 9 (loan-amount model), then step 10 (Kenya → Ghana transfer) · **Germain:** step 8 (reason codes) and 7b (Zindi submission) |
+| **Due** | Steps 8, 7b and 9: **Thu 29 Oct** · Step 10: **Fri 30 Oct** |
+| **Waiting on these** | Liza (step 11, fairness) needs 9 and 10 · Joseph (step 12, scorer) needs 8 and 9 |
+| **Just finished** | Step 7: logistic regression + Platt, cost cut-off 2.1% Kenya / 3.2% Ghana ([ADR 0016](docs/adr/0016-final-classification.md), [learnings/07](learnings/07_classification.md)) |
 
-The full plan and progress tracker are in
-[`docs/plan.md`](docs/plan.md).
+### Alice · step 9: loan-amount model (Task 1) → `notebooks/03_regression.ipynb`
+1. Use `build()`, `FEATURES` and `preprocessor()` from `src/features.py`; target is `Total_Amount`. Step 5 already found log amount works best: future-loan error 0.58 (LightGBM) / 0.63 (linear) vs 0.97 for "guess the average".
+2. Models: mean baseline, OLS, Ridge, Lasso, k-NN, tree / random forest / LightGBM, SVR (on a sample if slow).
+3. Test: raw vs log target; local currency vs USD; all three tests (`splits(df, "fold_shuffled" / "fold_customer" / "time_block")`), future loans as the main one.
+4. Report RMSE and MAE on log and original scales, a residual plot, and how a predicted amount becomes a loan limit.
+5. Save predictions locally under `data/` (never committed). Write `learnings/09_regression.md` and an ADR.
 
-The Step 6 decision and limitations are documented in
-[`ADR 0013`](docs/adr/0013-provisional-logistic-calibration.md).
+### Alice · step 10: Kenya → Ghana transfer → `notebooks/04_transfer_and_fairness.ipynb`
+1. Compare Kenya (train) and Ghana (test) on loan types, durations, lenders, amounts and new vs repeat. **Remember:** no Ghanaian applicant has borrowing history, so history, speed and amounts are empty for all of them.
+2. Domain classifier: can the clues tell Ghana from Kenya? Turn it into importance weights.
+3. Test: different clue sets; with and without currency conversion; with and without weights; weight-clipping levels; unseen loan types and lenders.
+4. Say what NkwaPay would need to see before trusting the model in Ghana. Benchmark: borrowers with no history get lift ~2.7, against ~8 overall ([ADR 0015](docs/adr/0015-history-fixes-from-review.md)).
+5. Write `learnings/10_transfer.md` and an ADR.
 
-## Current step in detail: 7 · Final classification (Germain)
-
-**Purpose:** Compare candidate classifiers fairly and select
-an explainable model using future-loan performance, uncertainty,
-probability calibration and lending costs.
-
-**Required work:**
-
-1. Use the 13 approved features and shared preprocessing from
-   `src/features.py`.
-2. Compare a constant baseline and at least five classifiers:
-   Logistic Regression, k-NN, pruned Decision Tree,
-   Random Forest and LightGBM. Additional models are optional.
-3. Treat chronological validation as primary; include
-   customer-grouped and shuffled comparisons.
-4. Compare imbalance handling and tuning alternatives
-   inside training folds.
-5. Evaluate PR-AUC, ROC-AUC, lift, calibration,
-   Brier score and log loss.
-6. Compare appropriate calibration methods without
-   using the evaluation holdout for calibration fitting.
-7. Evaluate F1, confusion matrices, approval rates
-   and cost-based thresholds using calibrated probabilities.
-   **Choose the operating point by testing:** sweep cut-offs
-   and report, for each, the approval rate, the default rate
-   among approved loans and the total cost (Liza's FN/FP costs).
-   Liza's 2.1% approves almost nobody on Jul–Nov 2024 loans,
-   so compare cost-based, approval-rate-target (e.g. approve
-   70% / 80% / 90%) and repeat-business (9.6%) cut-offs.
-8. Calculate bootstrap 95% confidence intervals and
-   compare improvements against the documented noise floor.
-9. Write results into `notebooks/02_classification.ipynb`,
-   `learnings/07_classification.md`, and an ADR.
-10. Save the selected model and predictions locally,
-    excluding private artifacts from Git.
-
-**Important limitations:** The Step 6 model remains provisional.
-The observed future default rate exceeded predicted risk, and
-Ghanaian outcome performance remains unknown. Do not approve
-a lending threshold merely because the model was serialized.
+### Germain · step 8: reason codes, and 7b: Zindi
+1. **Step 8:** a function giving the top 3 reasons behind each decision from the step 7 model (`fit_integration_model` in `src/classification_experiments.py`). Compare coefficient × value against SHAP; write each reason in words a borrower understands. Joseph's scorer will call it.
+2. **Step 7b:** submit the step 7 model to Zindi (late submissions are still scored, 10 a day max) and log every score in `02_classification`.
+3. Write `learnings/08_reason_codes.md` and update ADR 0016 or add a new one.
 
 ## Run it from a fresh clone
 

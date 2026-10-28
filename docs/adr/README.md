@@ -16,8 +16,8 @@ Every real decision gets a short record: what we decided, which options we teste
 | [0010](0010-validation-tests.md) | How we test models fairly (validation) | Joseph | Accepted; time test corrected by 0014 |
 | [0011](0011-git-workflow.md) | Git workflow: own branch, review, merge | Group | Accepted |
 | [0012](0012-final-feature-set.md) | The final feature set (step 5.5) | Joseph | Accepted |
-| [0013](0013-provisional-logistic-calibration.md) | Provisional classification and calibration | Germain | Provisional |
+| [0013](0013-provisional-logistic-calibration.md) | Provisional classification and calibration | Germain | Replaced by 0016 |
 | [0014](0014-time-test-known-outcomes.md) | The future-loans test only learns from finished loans | Joseph | Accepted |
 | [0015](0015-history-fixes-from-review.md) | Borrower-history fixes from Germain's review | Joseph | Accepted |
+| [0016](0016-final-classification.md) | Final classification: logistic regression + Platt, 2.1% / 3.2% cost cut-off | Germain, Joseph | Accepted |
 
-| [0016](0016-final-classification.md) | Logistic Regression + Platt integration candidate | Germain | Integration candidate; not production approved |

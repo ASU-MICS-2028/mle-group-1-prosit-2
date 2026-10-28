@@ -146,6 +146,25 @@ def fit_integration_model(train, test):
         'Ghana test probabilities have no observed Ghanaian default labels.\n',encoding='utf-8')
     print('SAVED: local integration scorer and unlabelled predictions',flush=True)
 
+def operating_points(chosen):
+    """Compare cut-off policies per future-loan block. Approval targets use only the block's own
+    scores (no labels), which NkwaPay could do on the day; costs from learnings/04 (KES)."""
+    rows=[]
+    for fold,g in chosen.groupby('fold'):
+        y=g.target.to_numpy(); p=g.probability.to_numpy()
+        policies={'Approve everyone (no model)':np.inf,'Cost cut-off 2.1%':.021,'Repeat-business cut-off 9.6%':.096}
+        for share in (.7,.8,.9): policies[f'Approve {share:.0%} (lowest risk)']=np.quantile(p,share)
+        for name,t in policies.items():
+            a=p<=t
+            rows.append(dict(fold=fold,period=f'{g.date.min():%d %b %Y} – {g.date.max():%d %b %Y}',n=len(y),
+                default_rate=float(y.mean()),policy=name,threshold=float(t),approval_rate=float(a.mean()),
+                approved_default_rate=float(y[a].mean()) if a.any() else np.nan,
+                defaulters_caught=float((~a & (y==1)).sum()/max(y.sum(),1)),
+                cost_main_KES=float(((a&(y==1)).sum()*4700+((~a)&(y==0)).sum()*100)/len(y)),
+                cost_repeat_KES=float(((a&(y==1)).sum()*4700+((~a)&(y==0)).sum()*500)/len(y))))
+    pd.DataFrame(rows).to_csv(TABLES/'07_operating_points.csv',index=False)
+
+
 def run():
     for p in (TABLES,FIGURES,LOCAL): p.mkdir(parents=True,exist_ok=True)
     train, unlabelled_test = build(str(ROOT/'data'/'zindi'))
@@ -195,6 +214,7 @@ def run():
                 approval_rate=float(a.mean()),approved_default_rate=float(y[a].mean()) if a.any() else np.nan,
                 cost_per_loan=float(((a & (y==1)).sum()*bad + ((~a)&(y==0)).sum()*good)/len(y))))
     pd.DataFrame(periods).to_csv(TABLES/'07_approval_by_period.csv',index=False)
+    operating_points(chosen)
     plt.figure(figsize=(9,5))
     y=chosen.target.to_numpy(); p=chosen.probability.to_numpy()
     frac,mean=calibration_curve(y,p,n_bins=10,strategy='quantile')
@@ -224,6 +244,9 @@ def run():
         diffs.append(float(average_precision_score(sample.target,sample.p_lr)-average_precision_score(sample.target,sample.p_rf)))
     assert len(diffs)>=250
     ci=np.quantile(diffs,[.025,.975])
+    # Pooling mixes blocks with different default rates (2022 dominates), so also compare block by block.
+    tb=metrics[metrics.scheme=='time_block'].pivot(index='fold',columns='model',values='pr_auc')
+    fold_delta=(tb['Logistic Regression']-tb['Random Forest']).to_numpy()
     pd.DataFrame({'bootstrap_pr_auc_lr_minus_rf':diffs}).to_csv(TABLES/'07_bootstrap_differences.csv',index=False)
     (TABLES/'07_noise_floor_comparison.md').write_text(
         f'LR minus RF pooled chronological PR-AUC = {delta:+.5f}. '
@@ -231,6 +254,8 @@ def run():
         f'{len(diffs)} valid replicates. Noise floor ±{NOISE_FLOOR:.4f}. '
         f'Point estimate exceeds noise floor: {abs(delta)>NOISE_FLOOR}. '
         f'Interval wholly above positive floor: {ci[0]>NOISE_FLOOR}. '
+        f'Per time block (each scored on its own), LR minus RF = {", ".join(f"{d:+.4f}" for d in fold_delta)}; '
+        f'mean {fold_delta.mean():+.4f}, LR ahead in {(fold_delta>0).sum()}/{len(fold_delta)} blocks. '
         'The bootstrap describes uncertainty for this validation procedure, not Ghana performance.\n',encoding='utf-8')
     # Fixed policy and F1 sweep; sweeps on evaluated rows are diagnostic, not unbiased policy selection.
     yy=chosen.target.to_numpy(); pp=chosen.probability.to_numpy()

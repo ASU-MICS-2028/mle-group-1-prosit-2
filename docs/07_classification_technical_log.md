@@ -1,6 +1,6 @@
-# 07 ? Classification Technical Development Log
+# 07 · Classification Technical Development Log
 
-**Project:** MLE Group 1 ? Prosit 2
+**Project:** MLE Group 1 · Prosit 2
 **Owner:** Germain
 **Date:** 26 October 2026
 
@@ -104,7 +104,7 @@ Neither candidate is approved for deployment.
 - Git commit
 
 
-## Checkpoint 7.6B ? Evaluation Population Reconciliation
+## Checkpoint 7.6B · Evaluation Population Reconciliation
 
 Germain inspected Joseph's shared `add_folds()` and `splits()`
 implementations without modifying them.

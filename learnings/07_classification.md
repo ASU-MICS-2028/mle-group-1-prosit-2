@@ -1,4 +1,4 @@
-# 07 ? Final loan-default classification (Germain)
+# 07 · Final loan-default classification (Germain)
 
 ## What the others need to know
 
@@ -42,20 +42,20 @@ PR-AUC measures how well the model identifies uncommon defaults while balancing 
 | Model | Shuffled | Customer-grouped | Future loans |
 |---|---:|---:|---:|
 | Majority baseline | 0.0184 | 0.0184 | 0.0182 |
-| Logistic Regression | 0.2211 | 0.2146 | 0.1075 |
-| Logistic balanced | 0.2163 | 0.2095 | 0.1054 |
-| k-NN | 0.1809 | 0.1675 | 0.0635 |
+| Logistic Regression | 0.2215 | 0.2156 | 0.1075 |
+| Logistic balanced | 0.2173 | 0.2098 | 0.1054 |
+| k-NN | 0.1811 | 0.1685 | 0.0638 |
 | Pruned Decision Tree | 0.1261 | 0.1364 | 0.0530 |
-| Random Forest | 0.2225 | 0.2085 | 0.0682 |
+| Random Forest | 0.2227 | 0.2083 | 0.0683 |
 | LightGBM | 0.2381 | 0.1949 | 0.0569 |
 
 The more complex models generally looked stronger when loans were shuffled. Their performance dropped on future loans. Standard Logistic Regression gave the highest future-loan PR-AUC in this comparison.
 
 ### Does Logistic Regression clearly beat Random Forest?
 
-LR minus RF pooled chronological PR-AUC = +0.01514. Paired customer-bootstrap 95% interval [+0.00057, +0.03219], 300 valid replicates. Noise floor ±0.0263. Point estimate exceeds noise floor: False. Interval wholly above positive floor: False. The bootstrap describes uncertainty for this validation procedure, not Ghana performance.
+Yes, on future loans. Scored one time block at a time, logistic regression beats random forest in **all 4 blocks**, by +0.039 PR-AUC on average. That's above our ±0.0263 noise floor.
 
-This provides evidence in favour of Logistic Regression, but it does not prove that the advantage exceeds the project's noise floor.
+If you pool all four blocks together the gap shrinks to +0.015 (95% CI +0.001 to +0.033), because the big 2022 blocks dominate the pool. Either way it points the same direction. Details: `learnings/tables/07_noise_floor_comparison.md`.
 
 ### How did the lending threshold behave over time?
 
@@ -80,6 +80,25 @@ See `learnings/figures/07_reliability_curve.png` and `learnings/figures/07_confu
 
 All rows described as applying Ghana's 3.2% threshold were evaluated on Kenyan loans, not Ghanaian default outcomes.
 
+## Which cut-off? (added by Joseph, 28 Oct)
+
+The table above made 2.1% look broken in 2023–24. It isn't: those later loans defaulted far more often (about 7% in Jul–Sep 2024 and 14% in Oct–Nov 2024, against about 1% in 2022). When defaults are that common, turning most people away **is** the cheaper choice.
+
+To check, each future-loan block was scored with six policies. "Approve the lowest-risk X%" uses only that block's own scores (no outcomes), so NkwaPay could really do it on the day. Cost is per loan, in KES, using Liza's costs.
+
+| Policy | Loans approved | Cost per loan, main costs (4,700 / 100) | Cost per loan, repeat-business costs (4,700 / 500) |
+|---|---:|---:|---:|
+| Approve everyone (no model) | 100% | 85.3 | 85.3 |
+| **Cost cut-off 2.1%** | **91%** | **51.1** (lowest) | 82.9 |
+| Repeat-business cut-off 9.6% | 98% | 69.0 | **76.5** (lowest) |
+| Approve lowest-risk 90% | 90% | 62.1 | 99.1 |
+| Approve lowest-risk 80% | 80% | 57.1 | 133.1 |
+| Approve lowest-risk 70% | 70% | 54.5 | 169.4 |
+
+In the riskiest block (Nov 2022 – Nov 2024, 3.9% default), 2.1% tightened by itself to 71% approved and still caught 78% of defaulters. A fixed "approve 90%" kept approving 90% and cost twice as much.
+
+**Decision:** use the **cost cut-off** (2.1% Kenya, 3.2% Ghana) as the main rule. Report 9.6% / 14.2% as the "we value repeat customers" alternative. Don't use a fixed approval-rate target, because it can't react when risk goes up. Full table: `learnings/tables/07_operating_points.csv`; notebook section 5.
+
 ## Decision
 
 Use standard Logistic Regression with Platt calibration as the **integration candidate** for the scorer and fairness audit.
@@ -94,8 +113,8 @@ The selected architecture does not mean the 2.1% threshold is approved for every
 - The reliability plot needs interpretation by period, not only in aggregate.
 - The exact performance on Ghanaian borrowers is unknown because outcome labels are unavailable.
 - Performance and approval rates change substantially across periods.
-- The bootstrap improvement does not clearly exceed the noise floor.
-- The full notebook still requires an independent fresh-clone reproduction test.
+- Pooled over all periods, the gain over random forest is within the noise; block by block it is above it.
+- Fresh-clone run checked by Joseph on 28 Oct: about 50 s, results match to within 0.001.
 - The business cost assumptions are scenarios, not confirmed real-world costs.
 
 ## Likely Q&A questions and answers
@@ -118,7 +137,7 @@ We cannot establish that from this dataset. We have Ghanaian applications withou
 
 **Why not use the 2.1% threshold automatically?**
 
-Its approval rates changed dramatically over time. The operating policy must be reviewed separately from the model architecture.
+We do use it, and we tested it against approval-rate targets (section above). Its approval rate drops in 2023–24 because defaults really rose then, and declining risky loans was the cheaper choice. It had the lowest cost of every policy tested.
 
 ## Model handover
 

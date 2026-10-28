@@ -1,6 +1,6 @@
 # 0013 · Provisional Logistic Regression and Calibration
 
-- Status: Provisional
+- Status: Replaced by [0016](0016-final-classification.md)
 - Date: 26 Oct 2026
 - Owner: Germain
 - Step: 6
