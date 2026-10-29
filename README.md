@@ -10,11 +10,11 @@ We build one feature set and two models on the African Credit Scoring Challenge 
 
 | | |
 |---|---|
-| **Stage** | Steps 7b, 9 and 10 of 13 (two people in parallel) |
-| **Responsible** | **Alice:** step 9 (loan-amount model), then step 10 (Kenya → Ghana transfer) · **Joseph:** step 7b (Zindi submission; took over from Germain) |
-| **Due** | Steps 7b and 9: **Thu 29 Oct** · Step 10: **Fri 30 Oct** |
+| **Stage** | Steps 9 and 10 of 13 |
+| **Responsible** | **Alice:** step 9 (loan-amount model), then step 10 (Kenya → Ghana transfer) |
+| **Due** | Step 9: **Thu 29 Oct** · Step 10: **Fri 30 Oct** |
 | **Waiting on these** | Liza (step 11, fairness) needs 9 and 10 · Joseph (step 12, scorer) needs 9 |
-| **Just finished** | Step 8: reason codes ([ADR 0017](docs/adr/0017-reason-codes.md)), which also fixed the final model's calibration · Step 7: logistic regression + Platt, cost cut-off 2.1% Kenya / 3.2% Ghana ([ADR 0016](docs/adr/0016-final-classification.md), [learnings/07](learnings/07_classification.md)) |
+| **Just finished** | Step 7b: Zindi private F1 0.393 (LR) vs 0.396 (LightGBM), a tie ([learnings/07](learnings/07_classification.md)) · Step 8: reason codes ([ADR 0017](docs/adr/0017-reason-codes.md)), which also fixed the final model's calibration · Step 7: logistic regression + Platt, cost cut-off 2.1% Kenya / 3.2% Ghana ([ADR 0016](docs/adr/0016-final-classification.md), [learnings/07](learnings/07_classification.md)) |
 
 ### Alice · step 9: loan-amount model (Task 1) → `notebooks/03_regression.ipynb`
 1. Use `build()`, `FEATURES` and `preprocessor()` from `src/features.py`; target is `Total_Amount`. Step 5 already found log amount works best: future-loan error 0.58 (LightGBM) / 0.63 (linear) vs 0.97 for "guess the average".
@@ -29,9 +29,6 @@ We build one feature set and two models on the African Credit Scoring Challenge 
 3. Test: different clue sets; with and without currency conversion; with and without weights; weight-clipping levels; unseen loan types and lenders.
 4. Say what NkwaPay would need to see before trusting the model in Ghana. Benchmarks on Kenyan lookalikes: first-ever loans lift 2.7; earlier loans but no known outcomes lift 9.0 (only 69 defaults, very noisy); all loans 7.6 ([learnings/05](learnings/05_features.md), point 8).
 5. Write `learnings/10_transfer.md` and an ADR.
-
-### Joseph · step 7b: Zindi (took over from Germain)
-Submit the final model to Zindi (late submissions are still scored, 10 a day max) and log every score. Step 8 (reason codes) is done: [learnings/08](learnings/08_reason_codes.md).
 
 ## Run it from a fresh clone
 

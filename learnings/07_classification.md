@@ -139,6 +139,20 @@ We cannot establish that from this dataset. We have Ghanaian applications withou
 
 We do use it, and we tested it against approval-rate targets (section above). Its approval rate drops in 2023–24 because defaults really rose then, and declining risky loans was the cheaper choice. It had the lowest cost of every policy tested.
 
+## Zindi scores (step 7b, Joseph, 29 Oct)
+
+Zindi scores **F1** on yes/no predictions (1 = will default). F1 rewards a balance between catching defaulters and avoiding false alarms. That isn't our business goal: our cost cut-off accepts many false alarms, because one missed defaulter costs as much as turning away 47 good borrowers. So we submitted three files (`src/zindi_submissions.py`):
+
+| File | Model | Cut-off | F1, our customer-fold test | Zindi public | Zindi private |
+|---|---|---|---:|---:|---:|
+| A | LR + Platt | our decision: 2.1% Kenya / 3.2% Ghana | 0.124 | 0.210 | 0.201 |
+| B | LR + Platt | best F1 (0.119) | 0.261 | 0.376 | 0.393 |
+| C | LightGBM | best F1 (0.134) | 0.251 | 0.401 | 0.396 |
+
+**What it means:**
+- **LR vs LightGBM is a tie.** On the private board the gap is 0.003, far inside the ±0.0263 noise floor at leaderboard size. Even the public gap (0.025) is inside it. Zindi's test loans are mostly from 2022, like a shuffled test, which is LightGBM's best case, and it still doesn't beat the simple model. That backs the choice of logistic regression.
+- **Our real decision scores low on F1 (0.20), as expected.** It's tuned to cost, not F1. If someone asks why we don't use the 0.12 cut-off that scores better on Zindi: it would approve far more defaulters, and on Liza's costs that loses money.
+
 ## Model handover
 
 **Updated 29 Oct (Joseph, [ADR 0017](../docs/adr/0017-reason-codes.md)).** The first saved model was calibrated on May–Nov 2024 loans only (9% default), so it declined 89% of Kenyan test applicants. It's now fitted on all 68,464 labelled loans, with Platt fitted on out-of-fold scores from 5 customer folds: it declines 19% of Kenyan and 47% of Ghanaian test applicants. Saved locally (never committed) to `data/experiments/step7_reproducible/lr_platt_integration.joblib`. Ghana has no default labels, so its predictions can't be checked.

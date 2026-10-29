@@ -1,4 +1,4 @@
 file,model,rule,threshold,oof_f1_customer_folds,flagged_kenya,flagged_ghana,zindi_public,zindi_private
-A_lr_cost_cutoff.csv,LR + Platt,cost cut-off 2.1% Kenya / 3.2% Ghana (our decision),0.032,0.1239,0.192,0.4743,,
-B_lr_best_f1.csv,LR + Platt,best F1 on customer folds,0.11910187489898556,0.2612,0.0165,0.1373,,
-C_lgbm_best_f1.csv,LightGBM,best F1 on customer folds,0.1340246824314232,0.2514,0.0215,0.1657,,
+A_lr_cost_cutoff.csv,LR + Platt,cost cut-off 2.1% Kenya / 3.2% Ghana (our decision),0.032,0.1239,0.192,0.4743,0.209977661,0.200760456
+B_lr_best_f1.csv,LR + Platt,best F1 on customer folds,0.11910187489898556,0.2612,0.0165,0.1373,0.376404494,0.393442622
+C_lgbm_best_f1.csv,LightGBM,best F1 on customer folds,0.1340246824314232,0.2514,0.0215,0.1657,0.400990099,0.396411092

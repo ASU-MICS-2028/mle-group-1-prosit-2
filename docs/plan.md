@@ -17,7 +17,7 @@ Work top to bottom. A step can only start when the steps it waits on are ticked.
 | 5 | [x] Shared features and fair tests in `src/` ([write-up](../learnings/05_features.md), [ADR 0012](adr/0012-final-feature-set.md)) | Joseph | 3 | Fri 23 Oct |
 | 6 | [x] Provisional model (plain logistic regression) so others can start building | Germain | 5 | Sat 24 Oct |
 | 7 | [x] Task 2: final classification model, threshold (tested with approval-rate targets), saved predictions ([write-up](../learnings/07_classification.md), [ADR 0016](adr/0016-final-classification.md)) | Germain | 4, 5 | Tue 27 Oct |
-| 7b | [ ] Zindi late submission of the final model (still scored, 10/day max); log every score in 02 | Joseph (took over) | 7 | **Thu 29 Oct** |
+| 7b | [x] Zindi late submission of the final model; scores in [learnings/07](../learnings/07_classification.md) | Joseph (took over) | 7 | Thu 29 Oct |
 | 8 | [x] Reason codes (top 3 reasons per decision) ([write-up](../learnings/08_reason_codes.md), [ADR 0017](adr/0017-reason-codes.md)) | Joseph (took over) | 7 | Thu 29 Oct |
 | 9 | [ ] Task 1: loan-amount model | Alice | 5 | **Thu 29 Oct** |
 | 10 | [ ] Kenya → Ghana transfer study, domain classifier | Alice | 5 | **Fri 30 Oct** |
