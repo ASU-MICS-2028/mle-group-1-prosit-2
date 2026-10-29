@@ -249,7 +249,7 @@ The last column is the rough check from Step 4. Ordinary 7-day loans default 1.2
 - **The free Kenyan loans:** we don't know how NkwaPay earns on them. If they really earn nothing, the Kenyan cut-off is far too high.
 - **Currencies are assumed** (KES and GHS). If Ghana's amounts aren't in cedis, the Ghanaian money figures change, but the cut-off barely does, because it depends mostly on percentages.
 - **Repeat business:** "half of declined customers leave" is a guess. The 8 future loans only counts loans inside the data window, so it may be an underestimate.
-- **Ghana's repeat behaviour** is assumed to match Kenya's, since Ghana has no history in the data.
+- **Ghana's repeat behaviour** is assumed to match Kenya's, since Ghana's repayment outcomes aren't in the data (Ghanaian borrowers do have a median of 5 earlier loans, so how often they return could be checked).
 - **The cut-off assumes calibrated probabilities.** If Germain's model isn't calibrated, 2.1% means nothing.
 
 ## Likely Q&A questions and answers

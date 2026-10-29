@@ -20,7 +20,7 @@ Code: [`src/features.py`](../src/features.py) (the clues) and [`notebooks/01_eda
 5. **Calendar and macro looked useful but were fake helpers.** They only helped when old and new loans were mixed; on future loans they made things worse.
 6. **Logistic regression is clearly better than LightGBM on future loans** (lift 8.0 vs 5.6, and the bootstrap difference is entirely below zero).
 7. **Scores are noisy.** The same model can move ±0.02–0.03 in PR-AUC just from how customers are randomly split. Only trust gaps bigger than that, or check with a bootstrap.
-8. **Ghana warning (Alice, Liza):** no Ghanaian applicant has any history, so history, speed and amounts are all empty for them. On Kenyan **first-ever loans** (no history at all), the model is only about **2.7×** better than random, against 8× overall. Expect it to be much weaker in Ghana.
+8. **Ghana warning (Alice, Liza).** **Corrected 29 Oct:** an earlier version said Ghanaians have no history; that was wrong. **81% of Ghanaian applicants have earlier loans** (median 5), so counts, speed and amounts exist. What they never have is **outcomes** (Ghana has no labels), so `n_finished = 0` and `no_known_history = 1` for all of them. Kenyan lookalikes: first-ever loans (19% of Ghana) get lift **2.7**; loans with earlier loans but no known outcomes (81% of Ghana) get **9.0**, but that rests on only 69 defaults. The bigger gap: **87% of Ghanaian loans are `Type_3`, a loan type never seen in Kenya**, so the model's strongest clue is blank for them.
 9. **Selection bias, for the report:** only 12% of people who defaulted ever got another loan. The lender cuts them off, so our data mostly contains people it kept lending to.
 
 ## Words used in this file
@@ -171,7 +171,7 @@ That's about 1,700 model fits. Full results: [`tables/05_feature_comparison.csv`
 
 | Check | Logistic | LightGBM | What it means |
 |---|---|---|---|
-| **First-ever loans** (no history at all; the true stand-in for Ghana): future lift | **2.70** | 1.98 | Much weaker than the 8× overall. The model mostly works by knowing a borrower's past. |
+| **First-ever loans** (no history at all; the stand-in for Ghana's 19% first-timers): future lift | **2.70** | 1.98 | Much weaker than the 8× overall. The model mostly works by knowing a borrower's past. |
 | **Grace period** (outcome known 0 / 7 / 30 days after the due date): future lift | 7.97 / 8.22 / 8.34 | 5.63 / 6.13 / 5.73 | All within the noise, so the due-date assumption doesn't change any conclusion. We keep 0 days. |
 
 **Most important single columns:** removing `duration` or `loan_type` costs the most for both models. For LightGBM, `last_amount` comes next.
@@ -217,7 +217,7 @@ The error is measured on the log of the amount; lower is better. An error of 0.5
 
 - **Selection bias:** we only see borrowers the lender kept lending to. People it refused or cut off are mostly missing, so the model learns from a filtered group.
 - **The future-loans test leans on the last time block:** Nov 2022 – Nov 2024, which defaults about 4% of the time. More years of data would make it steadier.
-- **Ghana:** none of the history clues exist for Ghanaian applicants, and their loan types and lenders are mostly unseen. Nothing here proves the model works in Ghana. That's Alice's and Liza's steps.
+- **Ghana:** Ghanaian applicants have loan counts, speed and amounts, but no repayment outcomes, and their loan types and lenders are mostly unseen (corrected 29 Oct). Nothing here proves the model works in Ghana. That's Alice's and Liza's steps.
 - **Amounts are in local currency.** For Kenyan training this doesn't matter, but any Ghana comparison must convert to USD.
 - **Calendar or macro might help with many more years of data.** With 4 years, they can't.
 
@@ -239,4 +239,4 @@ A: Both tasks must share the same clues, and past amounts cut the loan-amount er
 A: On the shuffled test it looks better, but that's because it recognises customers. On future loans, logistic regression is clearly better (lift 8.0 vs 5.6), and it's easier to explain to borrowers and the regulator.
 
 **Q: What does this mean for Ghana?**
-A: Ghanaian applicants have no history, so the model only has the base clues for them. On Kenyan first-ever loans it's about 2.7× better than random, against 8× overall. We expect it to be much weaker in Ghana, and we say so.
+A: Ghanaian applicants have earlier loans but no known repayment outcomes, and 87% use a loan type the model never saw. On Kenyan first-ever loans the model is about 2.7× better than random, against about 8× overall. We can't measure it in Ghana, and we say so.

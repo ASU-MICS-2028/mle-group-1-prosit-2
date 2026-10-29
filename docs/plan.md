@@ -111,7 +111,7 @@ From [`docs/01_data.md`](01_data.md), [`learnings/03`](../learnings/03_feature_a
 3. **Cut-off:** decline above **2.1% (Kenya)** / **3.2% (Ghana)**, on *calibrated* probabilities.
 4. **Experience is the strongest clue:** the number of previous loans alone scores ROC-AUC 0.76. A customer's first loan defaults 6.1% of the time, later ones 1.1%.
 5. **Defaulters get cut off.** Only 12% of defaulters ever borrow again, so "past default rate" is almost always 0 or unknown. Our data only contains people the lender kept lending to (**selection bias**), which must be stated as a limit.
-6. **No Ghanaian applicant has any history** in the data, so the model sees all of Ghana as first-timers. This is a key fairness issue.
+6. **Ghanaian applicants have no repayment outcomes** in the data (81% have earlier loans, but none with a known result), and 87% use a loan type never seen in Kenya. This is a key transfer and fairness issue. (Corrected 29 Oct; an earlier version said they had no history at all.)
 7. **`loan_type` and `lender_id` perfectly reveal the country**, and most Ghanaian loan types and lenders never appear in training.
 8. **Macro clues are the year in disguise** (4 values in training), and Ghana's inflation (10–31%) is far outside Kenya's (5–8%). Default: left out, but tested.
 9. **Time matters.** 92% of loans are from Jul–Dec 2022 at about 1% default; everything else runs at 5–15%. The older-vs-newer test will be hard, and calendar clues may only be standing in for the period.

@@ -34,7 +34,7 @@ Germain's review of `src/features.py` raised eight points. I tested each one aga
 **No decision in [0012](0012-final-feature-set.md) changes.**
 
 ## Consequences
-- **For Ghana:** borrowers with *no history at all* get a lift of only about 2.7, against about 8 overall. That's the honest stand-in for every Ghanaian applicant, and it should drive the transfer and fairness work (steps 10–11).
+- **For Ghana:** borrowers with *no history at all* get a lift of only about 2.7, against about 8 overall. That's the stand-in for Ghana's 19% first-timers. **Corrected 29 Oct:** the other 81% have earlier loans but no known outcomes; Kenyan lookalikes get lift about 9.0, from only 69 defaults. Both should drive steps 10–11.
 - **For Germain:** step 6 and step 7 numbers shift slightly. Rerun after pulling `main`.
 - **The new option:** `grace_days` is available in `build()` for anyone who wants to test it further. The time tests read `outcome_known_at` (due date + grace) from `build()`, so they automatically match.
 

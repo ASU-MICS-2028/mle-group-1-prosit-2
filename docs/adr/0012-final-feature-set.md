@@ -63,7 +63,7 @@ Variants (logistic, full set without macro):
 
 ## Consequences
 - **Germain and Alice start from `FEATURES`.** Germain may report Task 2 with and without amounts, since the difference is within noise.
-- **For Ghana:** history, speed and amounts are all empty for every Ghanaian applicant, so the model has only base clues for them. In this test, borrowers with no history score lift 3.5 against 8+ overall. That's the main fairness and transfer problem for steps 10–11.
+- **For Ghana:** **Corrected 29 Oct:** Ghanaian applicants *do* have counts, speed and amounts (81% have earlier loans), but no repayment outcomes, and 87% use a loan type never seen in Kenya. In this test, borrowers with no history score lift 3.5 against 8+ overall. That's the main fairness and transfer problem for steps 10–11.
 - **What would change this:** a future-loan test where calendar or macro helps beyond the noise, for example with more years of data.
 
 ## Links

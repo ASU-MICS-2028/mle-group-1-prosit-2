@@ -24,10 +24,10 @@ We build one feature set and two models on the African Credit Scoring Challenge 
 5. Save predictions locally under `data/` (never committed). Write `learnings/09_regression.md` and an ADR.
 
 ### Alice · step 10: Kenya → Ghana transfer → `notebooks/04_transfer_and_fairness.ipynb`
-1. Compare Kenya (train) and Ghana (test) on loan types, durations, lenders, amounts and new vs repeat. **Remember:** no Ghanaian applicant has borrowing history, so history, speed and amounts are empty for all of them.
+1. Compare Kenya (train) and Ghana (test) on loan types, durations, lenders, amounts and new vs repeat. **Remember:** 81% of Ghanaian applicants have earlier loans (so counts, speed and amounts exist) but **none has a known repayment outcome**, and **87% use loan type `Type_3`, never seen in Kenya**.
 2. Domain classifier: can the clues tell Ghana from Kenya? Turn it into importance weights.
 3. Test: different clue sets; with and without currency conversion; with and without weights; weight-clipping levels; unseen loan types and lenders.
-4. Say what NkwaPay would need to see before trusting the model in Ghana. Benchmark: borrowers with no history get lift ~2.7, against ~8 overall ([ADR 0015](docs/adr/0015-history-fixes-from-review.md)).
+4. Say what NkwaPay would need to see before trusting the model in Ghana. Benchmarks on Kenyan lookalikes: first-ever loans lift 2.7; earlier loans but no known outcomes lift 9.0 (only 69 defaults, very noisy); all loans 7.6 ([learnings/05](learnings/05_features.md), point 8).
 5. Write `learnings/10_transfer.md` and an ADR.
 
 ### Germain · step 8: reason codes, and 7b: Zindi

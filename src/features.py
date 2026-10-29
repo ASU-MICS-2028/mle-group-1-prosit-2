@@ -192,7 +192,7 @@ def preprocessor(cols):
     skew = [c for c in cols if c in SKEWED]
     other = [c for c in cols if c not in cat + skew]
     num = lambda log: make_pipeline(SimpleImputer(strategy="median", add_indicator=True),
-                                    *([FunctionTransformer(np.log1p)] if log else []), StandardScaler())
+                                    *([FunctionTransformer(np.log1p, feature_names_out="one-to-one")] if log else []), StandardScaler())
     parts = [(OneHotEncoder(handle_unknown="ignore"), cat), (num(True), skew), (num(False), other)]
     return make_column_transformer(*[p for p in parts if p[1]])
 

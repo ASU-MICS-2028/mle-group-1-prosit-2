@@ -22,7 +22,7 @@ Past behaviour is the best clue about a borrower, but only what NkwaPay knew **o
 ## Consequences
 - **Experience is the strongest clue** (previous loans alone: ROC-AUC 0.76).
 - **Only 12% of defaulters ever borrow again,** so past default rate is nearly useless. That's **selection bias** (the lender cuts defaulters off), and it must be stated in the report.
-- **No Ghanaian applicant has any history,** so the model treats all of Ghana as first-timers. This is a fairness issue for step 11.
+- **Ghanaian applicants have no known repayment outcomes** (`no_known_history = 1` for all), although 81% have earlier loans, so counts, speed and amounts exist. **Corrected 29 Oct:** this line first said they had no history at all.
 
 ## Links
 [`src/features.py`](../../src/features.py) · `learnings/05_features.md` (step 5.6)
