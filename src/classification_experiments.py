@@ -21,7 +21,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split, GroupShuffleSplit
+from sklearn.model_selection import train_test_split, GroupShuffleSplit, StratifiedGroupKFold, cross_val_predict
 from sklearn.pipeline import make_pipeline
 from sklearn.metrics import (
     average_precision_score, roc_auc_score, brier_score_loss, log_loss,
@@ -118,31 +118,29 @@ class PlattCalibratedModel:
         p=self.calibrator.predict_proba(logit(raw).reshape(-1,1))[:,1]
         return np.column_stack([1-p,p])
 
+def final_model(train):
+    """LR on every labelled loan; Platt fitted on out-of-fold LR scores from 5 customer-grouped folds, so the
+    calibration sees all periods (ADR 0017). The first version calibrated on the newest 20% of dates, which on the
+    full data is May-Nov 2024 only (9% default): it then priced 2022-like loans at about 4x their real risk."""
+    X, y = train[FEATURES], train['target'].astype(int)
+    folds = StratifiedGroupKFold(5, shuffle=True, random_state=SEED).split(X, y, train['customer_id'])
+    base = make_pipeline(preprocessor(FEATURES), LogisticRegression(max_iter=2000))
+    oof = cross_val_predict(base, X, y, cv=list(folds), method='predict_proba')[:, 1]
+    calibrator = LogisticRegression(max_iter=1000, random_state=SEED).fit(logit(oof).reshape(-1, 1), y)
+    return PlattCalibratedModel(base.fit(X, y), calibrator)
+
+
 def fit_integration_model(train, test):
-    """Fit LR then Platt on later labels; no final-data performance claim."""
-    ordered=train.sort_values('disbursement_date',kind='mergesort')
-    dates=np.sort(ordered.disbursement_date.unique())
-    boundary=pd.Timestamp(dates[int(.8*(len(dates)-1))])
-    fit=ordered.index[(ordered.disbursement_date < boundary)&(ordered.outcome_known_at < boundary)]
-    cal=ordered.index[ordered.disbursement_date >= boundary]
-    assert len(fit)>0 and len(cal)>0
-    assert train.loc[fit,'target'].nunique()==2 and train.loc[cal,'target'].nunique()==2
-    assert train.loc[fit,'outcome_known_at'].max() < train.loc[cal,'disbursement_date'].min()
-    base=make_pipeline(preprocessor(FEATURES),LogisticRegression(max_iter=2000))
-    base.fit(train.loc[fit,FEATURES],train.loc[fit,'target'])
-    cal_scores=logit(base.predict_proba(train.loc[cal,FEATURES])[:,1])
-    calibrator=LogisticRegression(max_iter=1000,random_state=SEED)
-    calibrator.fit(cal_scores.reshape(-1,1),train.loc[cal,'target'])
-    chosen=PlattCalibratedModel(base,calibrator)
+    """Fit and save the final scorer; unlabelled test predictions stay local."""
+    chosen = final_model(train)
     joblib.dump(chosen, LOCAL/'lr_platt_integration.joblib')
     prob=chosen.predict_proba(test[FEATURES])[:,1]
     # Unlabelled test predictions stay on local laptop, never in public repo.
     pd.DataFrame({'ID':test.ID,'probability':prob}).to_csv(LOCAL/'unlabelled_predictions.csv',index=False)
     (TABLES/'07_model_handover.md').write_text(
-        'Integration candidate: standard Logistic Regression + Platt. '
-        f'Historical fit rows: {len(fit)}; later calibration rows: {len(cal)}. '
+        'Final scorer: standard Logistic Regression + Platt, fitted on all '
+        f'{len(train)} labelled loans; Platt fitted on out-of-fold scores from 5 customer-grouped folds (ADR 0017). '
         'Serialized locally to ignored data/experiments/step7_reproducible/lr_platt_integration.joblib. '
-        'The frozen training/calibration split must be externally validated before deployment. '
         'Ghana test probabilities have no observed Ghanaian default labels.\n',encoding='utf-8')
     print('SAVED: local integration scorer and unlabelled predictions',flush=True)
 

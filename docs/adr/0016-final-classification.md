@@ -55,6 +55,8 @@ Tables and figures: `learnings/tables/` and `learnings/figures/`.
 
 The saved model and individual loan predictions remain in ignored local storage.
 
+**Update 29 Oct ([ADR 0017](0017-reason-codes.md)):** the first saved model was calibrated on the newest 20% of dates, which on the full data is May–Nov 2024 only (9% default), so it declined 89% of Kenyan test applicants. The final model now fits Platt on out-of-fold scores from all loans (`final_model()`): Kenya 19% declined, 2022 loans priced at 1.3% (actual 1.3%). The model choice and cut-off are unchanged.
+
 ## Remaining acceptance conditions
 
 - Verify the final training/calibration boundaries.

@@ -1,0 +1,4 @@
+reference,same_top_reason_as_average,same_top3_as_average,mean_reasons,most_common_top_reason,its_share
+average,1.0,1.0,1.8668418747262374,borrowing history,0.6992991677617171
+approved,0.967586508979413,0.986640385457731,1.8771353482260185,borrowing history,0.731712658782304
+best,0.14148050810337276,0.11498028909329829,3.0,loan product,1.0

@@ -141,7 +141,7 @@ We do use it, and we tested it against approval-rate targets (section above). It
 
 ## Model handover
 
-Integration candidate: standard Logistic Regression + Platt. Historical fit rows: 65793; later calibration rows: 2625. Serialized locally to ignored data/experiments/step7_reproducible/lr_platt_integration.joblib. The frozen training/calibration split must be externally validated before deployment. Ghana test probabilities have no observed Ghanaian default labels.
+**Updated 29 Oct (Joseph, [ADR 0017](../docs/adr/0017-reason-codes.md)).** The first saved model was calibrated on May–Nov 2024 loans only (9% default), so it declined 89% of Kenyan test applicants. It's now fitted on all 68,464 labelled loans, with Platt fitted on out-of-fold scores from 5 customer folds: it declines 19% of Kenyan and 47% of Ghanaian test applicants. Saved locally (never committed) to `data/experiments/step7_reproducible/lr_platt_integration.joblib`. Ghana has no default labels, so its predictions can't be checked.
 
 ## Technical record
 
