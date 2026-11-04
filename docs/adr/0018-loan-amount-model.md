@@ -1,6 +1,6 @@
 # 0018 · Loan-amount model (Task 1) and the loan limit
 
-- **Status:** Proposed (Alice to confirm in the step 9 walkthrough)
+- **Status:** Accepted (reviewed and rerun from a fresh clone by Joseph, 4 Nov 2026)
 - **Date:** 4 Nov 2026 · **Owner:** Alice · **Step:** 9
 
 ## Context

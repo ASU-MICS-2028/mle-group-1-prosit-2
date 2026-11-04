@@ -1,6 +1,6 @@
 # 0019 · Using the Kenyan models in Ghana
 
-- **Status:** Proposed (Alice to confirm in the step 10 walkthrough; affects Liza's step 11 and Joseph's step 12)
+- **Status:** Accepted (reviewed and rerun from a fresh clone by Joseph, 4 Nov 2026; affects Liza's step 11 and Joseph's step 12)
 - **Date:** 4 Nov 2026 · **Owner:** Alice · **Step:** 10
 
 ## Context

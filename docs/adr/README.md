@@ -21,5 +21,5 @@ Every real decision gets a short record: what we decided, which options we teste
 | [0015](0015-history-fixes-from-review.md) | Borrower-history fixes from Germain's review | Joseph | Accepted |
 | [0016](0016-final-classification.md) | Final classification: logistic regression + Platt, 2.1% / 3.2% cost cut-off | Germain, Joseph | Accepted |
 | [0017](0017-reason-codes.md) | Reason codes (5 themes, push ≥ 0.2) and the final model's calibration fix | Joseph | Accepted |
-| [0018](0018-loan-amount-model.md) | Loan-amount model: LightGBM on log amount; limit = 75% level | Alice | Proposed |
-| [0019](0019-kenya-to-ghana-transfer.md) | Using the Kenyan models in Ghana: no weighting, no auto-decline yet, trust gates | Alice | Proposed |
+| [0018](0018-loan-amount-model.md) | Loan-amount model: LightGBM on log amount; limit = 75% level | Alice | Accepted |
+| [0019](0019-kenya-to-ghana-transfer.md) | Using the Kenyan models in Ghana: no weighting, no auto-decline yet, trust gates | Alice | Accepted |

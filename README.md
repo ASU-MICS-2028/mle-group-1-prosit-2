@@ -14,7 +14,7 @@ We build one feature set and two models on the African Credit Scoring Challenge 
 | **Responsible** | **Liza:** step 11 (fairness, Model Card) · **Joseph:** step 12 (scoring service) |
 | **Due** | Was Sat 31 Oct: **overdue, new date to agree** |
 | **Waiting on these** | Everyone (step 13: report, slides, reflections) |
-| **Just finished** | Step 9: loan-amount model, LightGBM on log amount, limit = 75% level ([ADR 0018](docs/adr/0018-loan-amount-model.md), [learnings/09](learnings/09_regression.md)) · Step 10: Kenya → Ghana transfer, no weighting, no auto-decline in Ghana yet ([ADR 0019](docs/adr/0019-kenya-to-ghana-transfer.md), [learnings/10](learnings/10_transfer.md)). Both ADRs are *Proposed* until Alice's walkthrough. |
+| **Just finished** | Step 9: loan-amount model, LightGBM on log amount, limit = 75% level ([ADR 0018](docs/adr/0018-loan-amount-model.md), [learnings/09](learnings/09_regression.md)) · Step 10: Kenya → Ghana transfer, no weighting, no auto-decline in Ghana yet ([ADR 0019](docs/adr/0019-kenya-to-ghana-transfer.md), [learnings/10](learnings/10_transfer.md)). Both ADRs reviewed and accepted. |
 
 ### Liza · step 11: fairness → `notebooks/04_transfer_and_fairness.ipynb`, Part 2
 1. PR-AUC, F1 and selection rates by country, `loan_type`, `lender_id`, tenure (new vs repeat) and loan-size band (brief Part D.2).
