@@ -1,0 +1,11 @@
+file,flagged,zindi_public,zindi_private
+G0_everyone.csv,18594,0.07494824,0.074692806
+G1_ghana_all.csv,3525,0.217391304,0.208215741
+G2_ghana_first_loans.csv,662,0.343839541,0.280193236
+G3_ghana_earlier_loans.csv,2863,0.123595505,0.13877551
+G4_ghana_type_3.csv,3039,0.113490364,0.113194198
+G5_ghana_type_2.csv,449,0.401337792,0.380733944
+G6_ghana_over_90_days.csv,479,0.397350993,0.380422691
+G7_ghana_13_clues_flagged.csv,1672,0.319467554,0.288901282
+G8_ghana_no_type_flagged.csv,997,0.374407582,0.319198149
+G9_ghana_final_flagged.csv,781,0.38069705,0.338053097

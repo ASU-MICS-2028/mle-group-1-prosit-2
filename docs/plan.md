@@ -21,7 +21,7 @@ Work top to bottom. A step can only start when the steps it waits on are ticked.
 | 8 | [x] Reason codes (top 3 reasons per decision) ([write-up](../learnings/08_reason_codes.md), [ADR 0017](adr/0017-reason-codes.md)) | Joseph (took over) | 7 | Thu 29 Oct |
 | 9 | [x] Task 1: loan-amount model ([write-up](../learnings/09_regression.md), [ADR 0018](adr/0018-loan-amount-model.md)) | Alice | 5 | **Thu 29 Oct** |
 | 10 | [x] Kenya → Ghana transfer study, domain classifier ([write-up](../learnings/10_transfer.md), [ADR 0019](adr/0019-kenya-to-ghana-transfer.md)) | Alice | 5 | **Fri 30 Oct** |
-| 11 | [ ] Fairness metrics, proxy analysis, mitigation, Model Card | Liza | 7, 9, 10 | **Sat 31 Oct** |
+| 11 | [x] Fairness metrics, proxy analysis, mitigation, Model Card ([write-up](../learnings/11_fairness.md), [ADR 0020](adr/0020-fairness-mitigation.md), [Model Card](model_card.md), [datasheet](datasheet.md), [compliance](compliance.md)) | Joseph (took over) | 7, 9, 10 | **Sat 31 Oct** |
 | 12 | [ ] Scoring service | Joseph | 7, 8, 9 | Sat 31 Oct |
 | 13 | [ ] Report, slides, reflections | Everyone | all above | Mon 2 Nov |
 

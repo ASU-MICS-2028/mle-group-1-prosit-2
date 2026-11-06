@@ -125,6 +125,10 @@ CALENDAR = ["month", "weekday", "day_of_month"]
 FEATURES = ["loan_type", "duration", "New_versus_Repeat",
             "n_prev_loans", "n_finished", "n_defaults", "past_default_rate", "no_known_history", "days_since_last_loan",
             "n_loans_last_7d", "n_loans_last_30d", "mean_prev_amount", "last_amount"]
+# The default model leaves these out (ADR 0020): they cost nothing on future loans, and using them tells people to borrow more often to get approved.
+BORROW_OFTEN = ["n_loans_last_7d", "n_loans_last_30d", "days_since_last_loan"]
+DEFAULT_CLUES = [c for c in FEATURES if c not in BORROW_OFTEN]
+GHANA_CLUES = [c for c in DEFAULT_CLUES if c != "loan_type"]  # 87% of Ghanaian loans use a type Kenya never had (ADR 0019)
 HISTORY = ["n_prev_loans", "n_finished", "n_defaults", "past_default_rate", "no_known_history", "days_since_last_loan",
            "n_loans_last_7d", "n_loans_last_30d", "mean_prev_amount", "last_amount"]
 

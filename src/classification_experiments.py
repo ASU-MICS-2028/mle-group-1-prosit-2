@@ -118,13 +118,13 @@ class PlattCalibratedModel:
         p=self.calibrator.predict_proba(logit(raw).reshape(-1,1))[:,1]
         return np.column_stack([1-p,p])
 
-def final_model(train):
+def final_model(train, clues=FEATURES):
     """LR on every labelled loan; Platt fitted on out-of-fold LR scores from 5 customer-grouped folds, so the
     calibration sees all periods (ADR 0017). The first version calibrated on the newest 20% of dates, which on the
     full data is May-Nov 2024 only (9% default): it then priced 2022-like loans at about 4x their real risk."""
-    X, y = train[FEATURES], train['target'].astype(int)
+    X, y = train[clues], train['target'].astype(int)
     folds = StratifiedGroupKFold(5, shuffle=True, random_state=SEED).split(X, y, train['customer_id'])
-    base = make_pipeline(preprocessor(FEATURES), LogisticRegression(max_iter=2000))
+    base = make_pipeline(preprocessor(clues), LogisticRegression(max_iter=2000))
     oof = cross_val_predict(base, X, y, cv=list(folds), method='predict_proba')[:, 1]
     calibrator = LogisticRegression(max_iter=1000, random_state=SEED).fit(logit(oof).reshape(-1, 1), y)
     return PlattCalibratedModel(base.fit(X, y), calibrator)

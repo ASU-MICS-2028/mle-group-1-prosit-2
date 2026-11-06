@@ -8,7 +8,7 @@
 - **A reason is only shown if it matters:** it must raise the odds of default by at least about 22%. With that rule, the same person gets the same reasons in 94% of refits of the model.
 - **Bug found and fixed in step 7's saved model:** it was calibrated on 2024 loans only, so it turned away 89% of Kenyan applicants. Fixed, it turns away 19% (it approves 85% of 2022 loans, whose real default rate is 1.3%).
 - **Plain logistic regression already gives honest chances.** Platt calibration changes almost nothing (slope 0.99).
-- **For Liza (fairness):** the most common reason is "you haven't borrowed recently". The model rewards frequent borrowing. That could push people to borrow more just to get approved, which is a responsible-lending question.
+- **For fairness (step 11):** "you haven't borrowed recently" was the top reason for 13% of declined Kenyans and appeared somewhere in 31% of reason lists. The model rewarded frequent borrowing, which could push people to borrow more just to get approved. *(Corrected 5 Nov: this line first called it the most common reason. The most common theme is borrowing history, but within it "first loan" leads, at 44%. Step 11 then removed those clues: [ADR 0020](../docs/adr/0020-fairness-mitigation.md). The numbers in this file describe the 13-clue model.)*
 - **For Alice (transfer):** 47% of Ghanaian test applicants are declined, against 19% of Kenyans. Their most common reasons are borrowing history, loan length, and "we have no record for this kind of loan" (`Type_3`).
 
 ## The question
@@ -138,4 +138,4 @@ Recorded in [ADR 0017](../docs/adr/0017-reason-codes.md).
 
 **Why might someone get only one reason?** Because their other themes barely matter (push under 0.2). Listing weak reasons would make the list change every time the model is retrained.
 
-**Isn't "borrow more often" a bad message?** It's honestly what the model learned, and it's a fair concern. We flag it for the fairness and regulation review (step 11) rather than hiding it.
+**Isn't "borrow more often" a bad message?** Yes, and it's gone. Step 11 found those clues cost almost nothing to remove, so the final model doesn't use them ([ADR 0020](../docs/adr/0020-fairness-mitigation.md)).

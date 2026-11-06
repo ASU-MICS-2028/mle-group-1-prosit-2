@@ -119,13 +119,13 @@ def reasons(model, X, ref, k=3, known_types=None, min_push=MIN_PUSH):
     themes, clues = pushes(model, X, ref, "theme"), pushes(model, X, ref, "clue")
     dev = _prepared(model, X) - ref
     main = {c: next(col for col in dev.columns if clue_of(col) == c and "missingindicator" not in col)
-            for c in FEATURES if c not in ("loan_type", "New_versus_Repeat")}
+            for c in clues.columns if c not in ("loan_type", "New_versus_Repeat")}
     out = []
     for i in X.index:
         t = themes.loc[i]
         top = t[t >= min_push].sort_values(ascending=False).index[:k]
         high = {c: dev.loc[i, col] > 0 for c, col in main.items()}
-        out.append([sentence(th, X.loc[i], clues.loc[i, [c for c in FEATURES if THEMES[c] == th]], high, known_types)
+        out.append([sentence(th, X.loc[i], clues.loc[i, [c for c in clues.columns if THEMES[c] == th]], high, known_types)
                     for th in top])
     return out
 
@@ -156,4 +156,7 @@ if __name__ == "__main__":
     assert all(len(x) <= 3 and all("nan" not in s for s in x) for x in r)
     first = pd.Series([x[0] if x else "" for x in r])[(y == 1).to_numpy()]
     assert first.str.contains("in the last 7 days; regular borrowers").mean() > .8, first.value_counts().head()
+    fewer = [c for c in FEATURES if c not in ("loan_type", "n_loans_last_7d", "n_loans_last_30d", "days_since_last_loan")]
+    small = make_pipeline(preprocessor(fewer), LogisticRegression(max_iter=2000)).fit(X[fewer], y)  # a model on fewer clues still gets reasons
+    assert all(len(x) <= 3 for x in reasons(small, X, reference(small, X)))
     print("Reasons check passed")

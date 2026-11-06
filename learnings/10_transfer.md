@@ -1,5 +1,7 @@
 # 10 · Kenya → Ghana transfer (Alice)
 
+> **Update, 6 Nov (Joseph):** this file says Ghana's outcomes can't be known. Zindi's scores turned out to reveal default rates by group: about 13% overall, and about 50% for Type_2. Some conclusions below change, especially "Type_2's risk comes from just 74 loans" and dropping `loan_type`. See [learnings/11](11_fairness.md) §10.
+
 ## What the others need to know
 - **Ghana is not "Kenya in another currency".** A model that guesses "Ghana or Kenya?" from the clues gets it right almost every time (ROC-AUC **1.00**). The same model can't tell Kenya's training loans from Kenya's test loans (0.50), which shows the test works.
 - **What gives Ghana away:**

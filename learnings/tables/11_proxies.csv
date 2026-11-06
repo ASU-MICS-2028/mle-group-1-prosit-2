@@ -1,0 +1,15 @@
+group,clues used,logistic,LightGBM
+Ghana vs Kenya,all 13 clues,0.9999590570143816,0.9999768310187143
+Ghana vs Kenya,without loan_type,0.9910013421144664,0.9937478204624598
+Ghana vs Kenya,without loan_type and outcome clues,0.9001249214786381,0.9427542662582727
+first loan,all 13 clues,1.0,1.0
+first loan,loan details only (no history),0.6141816921698657,0.6164268800777898
+first loan,loan_type and duration only,0.5896816915207428,0.593403733723376
+'New Loan' flag,without the flag,0.9714325437439052,0.9715415203453693
+'New Loan' flag,history clues only,0.9571352195618308,0.9571034997726271
+Lender A vs others,all 13 clues,0.9836940388300496,0.9838618557148227
+Lender A vs others,without loan_type,0.9131629382117434,0.9499002686978273
+Lender A vs others,loan_type only,0.9830544599431585,0.9828912483777827
+largest quarter of loans,all 13 clues,0.9201826259942217,0.9271983682390615
+largest quarter of loans,without the two amount clues,0.6273182330838737,0.6482258405693783
+largest quarter of loans,the two amount clues only,0.9138733225027277,0.9167429598833399

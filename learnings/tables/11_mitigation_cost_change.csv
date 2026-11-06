@@ -1,0 +1,23 @@
+option,costs,cost change (KES per loan),95% low,95% high
+"first loans: starter loan, 10% of a typical loan",main costs,2.2047995887116016,1.8201780004347852,2.633414706248539
+"first loans: starter loan, 10% of a typical loan",with repeat business,-6.513045553862256,-7.29285504424841,-5.8064084889590095
+"first loans: starter loan, 25% of a typical loan",main costs,4.393808640728565,3.61060109846387,5.261933801889166
+"first loans: starter loan, 25% of a typical loan",with repeat business,-4.324036501845285,-5.342756484956555,-3.290830339557938
+"first loans: starter loan, 50% of a typical loan",main costs,8.042157060756843,6.599692724079025,9.645802123583453
+"first loans: starter loan, 50% of a typical loan",with repeat business,-0.6756880818170146,-2.2951171413806915,1.0209671618853797
+"first loans: own cut-off, equal wrongly declined",main costs,4.335053155353172,2.6923374579423696,5.965071833187651
+"first loans: own cut-off, equal wrongly declined",with repeat business,0.9639571819400317,-0.7413511785954573,2.6779819644444913
+"first loans: own cut-off, equal approval",main costs,4.744505444062945,3.1289749640591222,6.56945655393261
+"first loans: own cut-off, equal approval",with repeat business,0.5948992894258538,-1.0795565392181916,2.4597206175472603
+drop the 'borrow often' clues,main costs,-0.5875548537539217,-1.9864081529477484,0.7486732657430096
+drop the 'borrow often' clues,with repeat business,-1.5570203624479007,-3.288133297302224,0.054203569402974223
+"hide tenure (no New_versus_Repeat, n_prev_loans, no_known_history)",main costs,-0.18177478288011883,-1.2817628757555815,0.9033787943316679
+"hide tenure (no New_versus_Repeat, n_prev_loans, no_known_history)",with repeat business,1.8526338982428427,0.6715009118491062,3.129311048397917
+"reweigh tenure and outcome, honest Platt",main costs,4.024750748214387,1.933285131290988,6.185410120721983
+"reweigh tenure and outcome, honest Platt",with repeat business,13.565172686043738,11.12380593634342,16.13605852163248
+"reweigh tenure and outcome, weighted Platt",main costs,4.373611442630775,2.299566415899914,6.545954754573368
+"reweigh tenure and outcome, weighted Platt",with repeat business,15.654664634706137,13.128830589652152,18.30218966800261
+drop loan_type (ADR 0019's Ghana model),main costs,3.8595009455960962,1.407605892011026,6.402127887287801
+drop loan_type (ADR 0019's Ghana model),with repeat business,19.6426932045609,16.58727577923453,22.815445542065806
+CHOSEN: drop 'borrow often' + starter loan at 10%,main costs,1.5792372803554713,0.1422713232293369,3.0176373360351207
+CHOSEN: drop 'borrow often' + starter loan at 10%,with repeat business,-7.718818280300383,-9.548278033946573,-5.991850483977222

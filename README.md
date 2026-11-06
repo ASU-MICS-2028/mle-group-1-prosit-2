@@ -10,24 +10,18 @@ We build one feature set and two models on the African Credit Scoring Challenge 
 
 | | |
 |---|---|
-| **Stage** | Steps 11 and 12 of 13 (in parallel) |
-| **Responsible** | **Liza:** step 11 (fairness, Model Card) · **Joseph:** step 12 (scoring service) |
+| **Stage** | Step 12 of 13 |
+| **Responsible** | **Joseph:** step 12 (scoring service) |
 | **Due** | Was Sat 31 Oct: **overdue, new date to agree** |
 | **Waiting on these** | Everyone (step 13: report, slides, reflections) |
-| **Just finished** | Step 9: loan-amount model, LightGBM on log amount, limit = 75% level ([ADR 0018](docs/adr/0018-loan-amount-model.md), [learnings/09](learnings/09_regression.md)) · Step 10: Kenya → Ghana transfer, no weighting, no auto-decline in Ghana yet ([ADR 0019](docs/adr/0019-kenya-to-ghana-transfer.md), [learnings/10](learnings/10_transfer.md)). Both ADRs reviewed and accepted. |
-
-### Liza · step 11: fairness → `notebooks/04_transfer_and_fairness.ipynb`, Part 2
-1. PR-AUC, F1 and selection rates by country, `loan_type`, `lender_id`, tenure (new vs repeat) and loan-size band (brief Part D.2).
-2. **Start from step 10:** the variable `PD` in notebook 04 has Ghanaian probabilities for every option. The step 7 model declines 47% of Ghana (Kenya 19%), including **every first loan and every Type_2 loan** ([learnings/10](learnings/10_transfer.md) §5).
-3. **From step 9:** the amount model over-predicts first loans (about 1.4× in Kenya, 3.4× in Ghana) ([learnings/09](learnings/09_regression.md), `learnings/tables/09_residuals_by_group.csv`).
-4. Proxy analysis, one mitigation tested against the unmitigated model, Model Card, regulatory mapping, Findex access gaps.
-5. Write `learnings/11_fairness.md` and an ADR.
+| **Just finished** | Step 11: fairness audit. Dropped 3 "borrow often" clues; first-timers get a capped starter loan instead of a no; 1,224 scenarios tested ([ADR 0020](docs/adr/0020-fairness-mitigation.md), [learnings/11](learnings/11_fairness.md), [Model Card](docs/model_card.md)) |
 
 ### Joseph · step 12: scoring service
 1. One function: application in → probability, decision, limit, top 3 reasons, with latency documented.
-2. **Default:** step 7 model ([ADR 0016](docs/adr/0016-final-classification.md)) with reasons from `src/reasons.py`. **Limit:** `src/amounts.py` (`final_amount_model(train).limit(X)`), only for approved applicants.
-3. **Country switch ([ADR 0019](docs/adr/0019-kenya-to-ghana-transfer.md)):** Kenya uses the step 7 model at 2.1%. Ghana uses the model without `loan_type` at 3.2%, with first loans, Type_2 and loans over 90 days routed to a starter limit or review.
-4. Write `learnings/12_scorer.md`.
+2. **Default model:** `final_model(train, DEFAULT_CLUES)` for Kenya at 2.1% ([ADR 0020](docs/adr/0020-fairness-mitigation.md)). **Ghana's rules are under review** ([learnings/11](learnings/11_fairness.md) §10): Zindi evidence shows about 13% default; batch 2 settles the model. Reasons from `src/reasons.py`. **Limit:** `src/amounts.py`.
+3. **First-timers above the cut-off:** a starter loan of about 10% of a typical loan (Kenya: only below 24% risk).
+4. Test a new customer, a repeat customer, a Ghanaian applicant, missing fields, an unseen loan type, and timing over 1,000 calls.
+5. Write `learnings/12_scorer.md`.
 
 ## Run it from a fresh clone
 

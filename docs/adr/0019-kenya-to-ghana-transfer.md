@@ -1,6 +1,6 @@
 # 0019 · Using the Kenyan models in Ghana
 
-- **Status:** Accepted (reviewed and rerun from a fresh clone by Joseph, 4 Nov 2026; affects Liza's step 11 and Joseph's step 12)
+- **Status:** Accepted (reviewed and rerun from a fresh clone by Joseph, 4 Nov 2026). **Under review, 6 Nov:** group-level evidence from Zindi shows Ghana defaults about 13%, and that Type_2's high risk is real, not a small-sample accident. Dropping `loan_type` looks costlier than keeping it ([learnings/11](../../learnings/11_fairness.md) §10). [ADR 0020](0020-fairness-mitigation.md) also removes the "borrow often" clues from the Ghana model, after which it declines nobody, and starter loans apply in Kenya too. "Manual review" must be digital (BoG Directive 2.3(1)).
 - **Date:** 4 Nov 2026 · **Owner:** Alice · **Step:** 10
 
 ## Context

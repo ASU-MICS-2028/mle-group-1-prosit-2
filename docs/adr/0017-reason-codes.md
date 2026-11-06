@@ -31,7 +31,7 @@ Full numbers: [learnings/08](../../learnings/08_reason_codes.md), tables `learni
 ## Consequences
 - **Scorer (step 12):** call `final_model` (or load the saved model) and `reasons(model, X, reference(model, train[FEATURES]), known_types=set(train.loan_type))`.
 - **Decline rates on the Zindi test:** Kenya 19%, Ghana 47%. Platt slope is 0.99, so plain logistic regression was already honest.
-- **Fairness (step 11):** the most common reason is "you haven't borrowed recently". The model rewards frequent borrowing, which is a responsible-lending concern.
+- **Fairness (step 11):** "you haven't borrowed recently" was the top reason for 13% of declined Kenyans and appeared in 31% of reason lists. The model rewarded frequent borrowing, a responsible-lending concern. *(Corrected 5 Nov: first written as "the most common reason"; the "first loan" sentence leads at 44%. The clues were removed in [ADR 0020](0020-fairness-mitigation.md).)*
 - **Transfer (step 10):** Ghana's "no record for this kind of loan" reason comes from `Type_3` having no weight. How unseen loan types should be scored needs deciding.
 - **What would change this:** a model that isn't linear (pushes would need SHAP proper), or a regulator's template for adverse-action reasons.
 

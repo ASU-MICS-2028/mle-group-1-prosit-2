@@ -1,0 +1,193 @@
+test,block,clues,starter,costs,change,95% low,95% high
+future loans,all,keep all 13,"first, 10%",main,2.2047995887116025,1.8198570927620203,2.6380608337664446
+future loans,0,keep all 13,"first, 10%",main,0.3675090252707581,,
+future loans,1,keep all 13,"first, 10%",main,0.5932075471698113,,
+future loans,2,keep all 13,"first, 10%",main,0.7607433217189314,,
+future loans,3,keep all 13,"first, 10%",main,7.113417237064842,,
+future loans,all,keep all 13,"first, 10%",measured repeat value,-2.1541229825753265,-2.675740351910075,-1.6492604073424075
+future loans,0,keep all 13,"first, 10%",measured repeat value,-0.7299638989169676,,
+future loans,1,keep all 13,"first, 10%",measured repeat value,-1.278490566037736,,
+future loans,2,keep all 13,"first, 10%",measured repeat value,-1.0104529616724738,,
+future loans,3,keep all 13,"first, 10%",measured repeat value,-5.6193420181055425,,
+future loans,all,keep all 13,"first, 10%",step 4 repeat value,-6.513045553862255,-7.282430355825527,-5.827481839992984
+future loans,0,keep all 13,"first, 10%",step 4 repeat value,-1.8274368231046931,,
+future loans,1,keep all 13,"first, 10%",step 4 repeat value,-3.150188679245283,,
+future loans,2,keep all 13,"first, 10%",step 4 repeat value,-2.7816492450638792,,
+future loans,3,keep all 13,"first, 10%",step 4 repeat value,-18.352101273275924,,
+future loans,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,-0.5875548537539247,-1.987202632297355,0.7515103710393447
+future loans,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,0.6353790613718412,,
+future loans,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,0.5660377358490566,,
+future loans,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,0.48635307781649245,,
+future loans,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,-4.047987046441452,,
+future loans,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,-1.0722876081009125,-2.4846725459382384,0.3438516944905386
+future loans,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,-0.1299638989169675,,
+future loans,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,-2.5584905660377357,,
+future loans,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,-1.95267131242741,,
+future loans,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,0.3091190108191654,,
+future loans,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,-1.5570203624479004,-3.2074218106269052,0.051716856536549845
+future loans,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,-0.8953068592057761,,
+future loans,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,-5.683018867924528,,
+future loans,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,-4.391695702671313,,
+future loans,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,4.6662250680797825,,
+future loans,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,1.5792372803554706,0.11506129852826183,3.0053394694629145
+future loans,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,0.8541516245487365,,
+future loans,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,1.159245283018868,,
+future loans,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,1.2470963995354238,,
+future loans,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,3.0646941929785823,,
+future loans,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,-3.0697904999724583,-4.592378300480833,-1.55151195598736
+future loans,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,-0.22888086642599278,,
+future loans,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,-3.8369811320754716,,
+future loans,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,-2.9631242740998838,,
+future loans,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,-5.325678957827335,,
+future loans,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-7.718818280300387,-9.518559699170279,-5.966330340032634
+future loans,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-1.311913357400722,,
+future loans,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-8.833207547169811,,
+future loans,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-7.173344947735192,,
+future loans,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-13.716052108633253,,
+future loans,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,0.9285202798229991,-0.5051570778206252,2.3580633878234605
+future loans,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,0.6693140794223826,,
+future loans,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,0.7728301886792452,,
+future loans,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,0.8848722415795587,,
+future loans,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,1.3888275557518215,,
+future loans,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-3.3679745882525753,-4.929559673152544,-1.8647280564908297
+future loans,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-0.355956678700361,,
+future loans,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-4.102641509433962,,
+future loans,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-3.0204703832752613,,
+future loans,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-6.0741885625966,,
+future loans,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-7.664469456328149,-9.507019231891787,-5.9506412508629545
+future loans,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-1.3812274368231048,,
+future loans,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-8.97811320754717,,
+future loans,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-6.925813008130081,,
+future loans,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-13.53720468094502,,
+"future loans, new customers",all,keep all 13,"first, 10%",main,14.011668611435239,11.58348125455605,16.834049924469223
+"future loans, new customers",0,keep all 13,"first, 10%",main,2.748380129589633,,
+"future loans, new customers",1,keep all 13,"first, 10%",main,4.943396226415095,,
+"future loans, new customers",2,keep all 13,"first, 10%",main,7.197802197802198,,
+"future loans, new customers",3,keep all 13,"first, 10%",main,26.320806100217865,,
+"future loans, new customers",all,keep all 13,"first, 10%",measured repeat value,-13.689614935822638,-16.611898309018088,-10.594564094236057
+"future loans, new customers",0,keep all 13,"first, 10%",measured repeat value,-5.458963282937365,,
+"future loans, new customers",1,keep all 13,"first, 10%",measured repeat value,-10.654088050314465,,
+"future loans, new customers",2,keep all 13,"first, 10%",measured repeat value,-9.56043956043956,,
+"future loans, new customers",3,keep all 13,"first, 10%",measured repeat value,-20.79248366013072,,
+"future loans, new customers",all,keep all 13,"first, 10%",step 4 repeat value,-41.39089848308051,-45.69972695448024,-37.041164142042234
+"future loans, new customers",0,keep all 13,"first, 10%",step 4 repeat value,-13.666306695464362,,
+"future loans, new customers",1,keep all 13,"first, 10%",step 4 repeat value,-26.251572327044027,,
+"future loans, new customers",2,keep all 13,"first, 10%",step 4 repeat value,-26.318681318681318,,
+"future loans, new customers",3,keep all 13,"first, 10%",step 4 repeat value,-67.9057734204793,,
+"future loans, new customers",all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,-2.602100350058343,-9.354056816302649,3.750735957157081
+"future loans, new customers",0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,7.235421166306695,,
+"future loans, new customers",1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,3.018867924528302,,
+"future loans, new customers",2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,2.2664835164835164,,
+"future loans, new customers",3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,-11.928104575163399,,
+"future loans, new customers",all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,2.0653442240373394,-5.610002300332531,9.255047245460494
+"future loans, new customers",0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,1.4038876889848813,,
+"future loans, new customers",1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,-2.7672955974842766,,
+"future loans, new customers",2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,-6.112637362637362,,
+"future loans, new customers",3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,7.734204793028322,,
+"future loans, new customers",all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,6.732788798133022,-2.2655188271511713,15.485769532049424
+"future loans, new customers",0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,-4.427645788336933,,
+"future loans, new customers",1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,-8.553459119496855,,
+"future loans, new customers",2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,-14.491758241758241,,
+"future loans, new customers",3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,27.396514161220043,,
+"future loans, new customers",all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,11.168028004667445,3.8693271294135694,18.868450685133368
+"future loans, new customers",0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,8.871490280777538,,
+"future loans, new customers",1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,7.962264150943396,,
+"future loans, new customers",2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,9.464285714285714,,
+"future loans, new customers",3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,14.389978213507625,,
+"future loans, new customers",all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,-10.628938156359393,-19.16969771339257,-2.9556624135215013
+"future loans, new customers",0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,0.6641468682505399,,
+"future loans, new customers",1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,-13.421383647798741,,
+"future loans, new customers",2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,-15.673076923076923,,
+"future loans, new customers",3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,-13.115468409586057,,
+"future loans, new customers",all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-32.425904317386234,-43.37072240245791,-22.73198928624974
+"future loans, new customers",0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-7.543196544276458,,
+"future loans, new customers",1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-34.80503144654088,,
+"future loans, new customers",2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-40.81043956043956,,
+"future loans, new customers",3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-40.62091503267974,,
+"future loans, new customers",all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,7.03267211201867,-0.3603805593742934,14.73789615827381
+"future loans, new customers",0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,7.489200863930885,,
+"future loans, new customers",1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,4.7421383647798745,,
+"future loans, new customers",2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,6.037087912087912,,
+"future loans, new customers",3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,8.188997821350762,,
+"future loans, new customers",all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-12.523920653442241,-20.655004686982366,-5.092919308766047
+"future loans, new customers",0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-0.2861771058315335,,
+"future loans, new customers",1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-15.635220125786164,,
+"future loans, new customers",2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-16.21565934065934,,
+"future loans, new customers",3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-15.885076252723312,,
+"future loans, new customers",all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-32.08051341890315,-42.63847914538478,-22.48726356193336
+"future loans, new customers",0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-8.061555075593953,,
+"future loans, new customers",1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-36.0125786163522,,
+"future loans, new customers",2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-38.46840659340659,,
+"future loans, new customers",3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-39.959150326797385,,
+new customers,all,keep all 13,"first, 10%",main,3.2070869362000467,2.7643408876420357,3.608890043534661
+new customers,0,keep all 13,"first, 10%",main,2.97451252464763,,
+new customers,1,keep all 13,"first, 10%",main,2.9365369166727526,,
+new customers,2,keep all 13,"first, 10%",main,3.3167810720023367,,
+new customers,3,keep all 13,"first, 10%",main,3.405638328951212,,
+new customers,4,keep all 13,"first, 10%",main,3.401986561495764,,
+new customers,all,keep all 13,"first, 10%",measured repeat value,-14.11004323440056,-14.680169426677274,-13.550253050714256
+new customers,0,keep all 13,"first, 10%",measured repeat value,-14.435843131527058,,
+new customers,1,keep all 13,"first, 10%",measured repeat value,-14.283940699627546,,
+new customers,2,keep all 13,"first, 10%",measured repeat value,-13.887834087921718,,
+new customers,3,keep all 13,"first, 10%",measured repeat value,-13.932953549517967,,
+new customers,4,keep all 13,"first, 10%",measured repeat value,-14.009640666082383,,
+new customers,all,keep all 13,"first, 10%",step 4 repeat value,-31.42717340500117,-32.38990532583449,-30.437354166849712
+new customers,0,keep all 13,"first, 10%",step 4 repeat value,-31.846198787701745,,
+new customers,1,keep all 13,"first, 10%",step 4 repeat value,-31.504418315927847,,
+new customers,2,keep all 13,"first, 10%",step 4 repeat value,-31.09244924784577,,
+new customers,3,keep all 13,"first, 10%",step 4 repeat value,-31.271545427987146,,
+new customers,4,keep all 13,"first, 10%",step 4 repeat value,-31.42126789366053,,
+new customers,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,-0.3008880579574667,-0.9574230760323598,0.2761777185847893
+new customers,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,0.3578470751478858,,
+new customers,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,0.5477251150222742,,
+new customers,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,-1.1099751716080035,,
+new customers,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,-0.5696757230499562,,
+new customers,4,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,main,-0.7303534910896874,,
+new customers,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,-2.2756485160084132,-3.029326515044974,-1.618655962212157
+new customers,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,-1.6723873512013439,,
+new customers,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,-1.7892353757394288,,
+new customers,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,-3.3299255148240103,,
+new customers,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,-2.395559450774175,,
+new customers,4,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,measured repeat value,-2.1910604732690624,,
+new customers,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,-4.25040897405936,-5.172333225868429,-3.4004051033701383
+new customers,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,-3.7026217775505734,,
+new customers,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,-4.126195866501132,,
+new customers,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,-5.549875858040018,,
+new customers,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,-4.221443178498393,,
+new customers,4,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,no starter loans,step 4 repeat value,-3.651767455448437,,
+new customers,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,2.906052816078523,2.1271913664751367,3.5868837562328766
+new customers,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,3.3323595997955158,,
+new customers,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,3.484262031695027,,
+new customers,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,2.2068059003943334,,
+new customers,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,2.8352322524101665,,
+new customers,4,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",main,2.6716330704060764,,
+new customers,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,-16.388759055854173,-17.408215026549442,-15.495677433858253
+new customers,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,-16.108230482728402,,
+new customers,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,-16.073176075366977,,
+new customers,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,-17.21775960274573,,
+new customers,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,-16.343850423605026,,
+new customers,4,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",measured repeat value,-16.200701139351445,,
+new customers,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-35.68357092778687,-37.09108307365129,-34.33403783165484
+new customers,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-35.54882056525232,,
+new customers,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-35.63061418242898,,
+new customers,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-36.64232510588579,,
+new customers,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-35.52293309962022,,
+new customers,4,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%",step 4 repeat value,-35.07303534910897,,
+new customers,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,1.6616031783126899,0.9263004938979927,2.3163193593418687
+new customers,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,2.5991382458190317,,
+new customers,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,2.1171401445994302,,
+new customers,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,1.1253103548999561,,
+new customers,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,1.6272275781478236,,
+new customers,4,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",main,0.8391761612620509,,
+new customers,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-17.26805328347745,-18.218811525862204,-16.36929258842537
+new customers,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-16.315635726283503,,
+new customers,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-17.250419922588183,,
+new customers,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-18.094786037680738,,
+new customers,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-17.026000584282794,,
+new customers,4,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",measured repeat value,-17.653374233128833,,
+new customers,all,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-36.19770974526759,-37.648829281683355,-34.88483913219182
+new customers,0,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-35.23040969838603,,
+new customers,1,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-36.6179799897758,,
+new customers,2,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-37.31488243026143,,
+new customers,3,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-35.679228746713406,,
+new customers,4,drop n_loans_last_7d + n_loans_last_30d + days_since_last_loan,"first, 10%, below 24% risk",step 4 repeat value,-36.14592462751972,,

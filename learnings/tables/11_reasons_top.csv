@@ -1,0 +1,9 @@
+,"Kenya, 13 clues","Kenya, no 'borrow often'","Ghana, no loan_type","Ghana, no loan_type, no 'borrow often'"
+"This is your first loan with us, so we have no borrowing history to go on.",0.44263994471319973,0.4742687893372825,0.30190571715145437,0.38028169014084506
+Loans of this kind (Type_N) have been repaid less often than others.,0.22322045611610228,0.3076638282117734,0.0,0.0
+You took no loans in the last N days; regular borrowers have repaid more reliably.,0.12612301313061505,0.0,0.2156469408224674,0.0
+"You have only N earlier loan with us, so we know little about how you repay.",0.1216309606081548,0.09477971121806739,0.0,0.0
+The loan is for N days; longer loans are repaid less often.,0.08362128541810643,0.09922251018141429,0.48244734202607825,0.6197183098591549
+Your last loan was N days ago; a long gap gives us less recent information.,0.0024187975120939877,0.0,0.0,0.0
+You did not repay N earlier loan.,0.0003455425017277125,0.0,0.0,0.0
+"You have only N earlier loans with us, so we know little about how you repay.",0.0,0.024065161051462423,0.0,0.0

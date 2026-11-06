@@ -2,7 +2,7 @@
 
 **Date:** 27 October 2026
 **Owner:** Germain
-**Status:** Accepted (model: Germain; cut-off and review: Joseph, 28 Oct). Replaces [0013](0013-provisional-logistic-calibration.md). Not approved for real lending.
+**Status:** Accepted (model: Germain; cut-off and review: Joseph, 28 Oct). Replaces [0013](0013-provisional-logistic-calibration.md). [0020](0020-fairness-mitigation.md) later removed 3 clues from the model. Not approved for real lending.
 
 ## Context
 
