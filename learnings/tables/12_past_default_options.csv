@@ -1,0 +1,15 @@
+option,test,cost,change,low,high,declined,newly_declined,newly_declined_default_rate
+a. leave it to the model,customer folds,42.10387941107736,0.0,0.0,0.0,0.1856157980836644,0.0,
+b. decline any past default,customer folds,42.122867492404765,0.018988081327407258,0.004373134914033529,0.03750698686813169,0.18580567889693853,0.00018988081327412948,0.0
+c. decline 2+ past defaults,customer folds,42.10387941107736,0.0,0.0,0.0,0.1856157980836644,0.0,
+d. decline past default rate 50%+,customer folds,42.10387941107736,0.0,0.0,0.0,0.1856157980836644,0.0,
+e. decline past default rate 25%+,customer folds,42.10387941107736,0.0,0.0,0.0,0.1856157980836644,0.0,
+f. decline 1+ past default in a short record (under 10 loans),customer folds,42.10387941107736,0.0,0.0,0.0,0.1856157980836644,0.0,
+g. chosen: decline 2+ past defaults or past default rate 50%+,customer folds,42.10387941107736,0.0,0.0,0.0,0.1856157980836644,0.0,
+a. leave it to the model,future loans,46.986027211134164,0.0,0.0,0.0,0.10462148614655821,0.0,
+b. decline any past default,future loans,47.0117327359859,0.025705524851737493,0.0054801727806633935,0.04870196666595866,0.10487854139507556,0.000257055248517342,0.0
+c. decline 2+ past defaults,future loans,46.986027211134164,0.0,0.0,0.0,0.10462148614655821,0.0,
+d. decline past default rate 50%+,future loans,46.986027211134164,0.0,0.0,0.0,0.10462148614655821,0.0,
+e. decline past default rate 25%+,future loans,46.986027211134164,0.0,0.0,0.0,0.10462148614655821,0.0,
+f. decline 1+ past default in a short record (under 10 loans),future loans,46.986027211134164,0.0,0.0,0.0,0.10462148614655821,0.0,
+g. chosen: decline 2+ past defaults or past default rate 50%+,future loans,46.986027211134164,0.0,0.0,0.0,0.10462148614655821,0.0,

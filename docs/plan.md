@@ -22,7 +22,7 @@ Work top to bottom. A step can only start when the steps it waits on are ticked.
 | 9 | [x] Task 1: loan-amount model ([write-up](../learnings/09_regression.md), [ADR 0018](adr/0018-loan-amount-model.md)) | Alice | 5 | **Thu 29 Oct** |
 | 10 | [x] Kenya → Ghana transfer study, domain classifier ([write-up](../learnings/10_transfer.md), [ADR 0019](adr/0019-kenya-to-ghana-transfer.md)) | Alice | 5 | **Fri 30 Oct** |
 | 11 | [x] Fairness metrics, proxy analysis, mitigation, Model Card ([write-up](../learnings/11_fairness.md), [ADR 0020](adr/0020-fairness-mitigation.md), [Model Card](model_card.md), [datasheet](datasheet.md), [compliance](compliance.md)) | Joseph (took over) | 7, 9, 10 | **Sat 31 Oct** |
-| 12 | [ ] Scoring service | Joseph | 7, 8, 9 | Sat 31 Oct |
+| 12 | [x] Scoring service ([write-up](../learnings/12_scorer.md), [ADR 0022](adr/0022-scoring-service.md)) | Joseph | 7, 8, 9 | Sat 31 Oct |
 | 13 | [ ] Report, slides, reflections | Everyone | all above | Mon 2 Nov |
 
 When you finish a step: tick it here, update the **Now** box at the top of the README to the next step and its owner, add your `learnings/` write-up, and log it.

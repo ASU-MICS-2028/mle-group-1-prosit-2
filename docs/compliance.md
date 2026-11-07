@@ -58,6 +58,17 @@ The reasons come from `src/reasons.py`. This applicant is made up.
 >
 > Before you accept, we will show you the amount, the due date and the total you must repay. You can ask us to explain or review this decision by replying HELP, and we will answer within 20 days.
 
+**And for a Ghanaian applicant asking for a product we aren't offering yet** ([ADR 0021](adr/0021-ghana-rules.md)):
+
+> **We can't offer this kind of loan (Type_2) in Ghana yet, but you can ask for a starter loan of GHS 300 instead.**
+>
+> This was an automated decision. It is about the product, not about you: about half of loans of this kind have not been repaid in Ghana.
+>
+> **What you can do**
+> - Ask for a Type_3 starter loan. We will show you the amount, the due date and the total you must repay before you accept.
+> - Ask us to explain or review this decision. Reply HELP, and we will answer within 20 days.
+> - Ask to see the information we hold about you, and to correct it. You may complain to the Bank of Ghana.
+
 **Why the first-time letter is a loan, not a no:** our notes warn against "you are a new customer" as the only reason for a decline (Act 726 s.21(1)(p), in spirit). Without the starter loan, that is what first-timers would get. With it, the sentence explains a smaller amount, not a refusal.
 
 **Wording rules:** no blame; no protected traits; never tell someone to borrow more to qualify; never reveal the model's weights (Act 843 s.35(2) allows this).

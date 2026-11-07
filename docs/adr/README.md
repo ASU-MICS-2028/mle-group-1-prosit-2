@@ -25,3 +25,4 @@ Every real decision gets a short record: what we decided, which options we teste
 | [0019](0019-kenya-to-ghana-transfer.md) | Using the Kenyan models in Ghana: no weighting, no auto-decline yet, trust gates | Alice | Accepted; Ghana's default rules replaced by 0021 |
 | [0020](0020-fairness-mitigation.md) | Fairness: sufficiency first; drop 3 "borrow often" clues; capped starter loan for first-timers; 1,224 scenarios | Joseph | Accepted for Kenya; Ghana replaced by 0021 |
 | [0021](0021-ghana-rules.md) | Ghana: decline Type_2, starter loans only for Type_3, no full-size loans yet; 2,916 scenarios | Joseph | Accepted as a capped, unproven pilot |
+| [0022](0022-scoring-service.md) | Scoring service: one bundle and `score()`; decline unseen Kenyan types and repeat defaulters | Joseph | Accepted |

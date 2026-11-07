@@ -1,0 +1,9 @@
+column,weight
+pipeline-1__n_prev_loans,-1.8692893596749902
+pipeline-1__n_finished,1.1419478273063446
+pipeline-1__n_defaults,0.0663628896131715
+pipeline-1__mean_prev_amount,-0.29185231310024257
+pipeline-1__missingindicator_mean_prev_amount,-0.09359697495754656
+pipeline-2__past_default_rate,-0.05918359646783787
+pipeline-2__no_known_history,0.0031854613921364046
+pipeline-2__missingindicator_past_default_rate,0.0031854613921364046

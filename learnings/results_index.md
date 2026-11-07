@@ -64,5 +64,12 @@ Steps 1–4 (audit, cost matrix, data checks) have no tables: their results are 
 - `11c_ghana_all_policies.csv`: the six rules applied to all 729 policies
 - `11c_leaderboard_context.csv`: our scores against the leaderboard
 
+## Step 12: scorer ([learnings/12](12_scorer.md))
+- `12_tests.csv`: every scorer test, pass or fail
+- `12_latency.csv`: timing over 1,000 calls, load time, file size
+- `12_decisions_on_zindi_applicants.csv`, `12_refused_on_zindi_applicants.csv`: all 18,594 applicants through the scorer
+- `12_unseen_loan_type.csv`: hiding each type from training, options compared
+- `12_past_default_groups.csv`, `12_past_default_weights.csv`, `12_past_default_options.csv`, `12_past_default_zindi.csv`: past defaulters, the model's weights, rule options
+
 ## Other documents with results
 `docs/model_card.md`, `docs/datasheet.md`, `docs/compliance.md`, `docs/adr/`.
