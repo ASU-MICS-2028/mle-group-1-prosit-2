@@ -143,6 +143,95 @@ def read_probe(fn=2716, fp=90, n=18594, n_ghana=3525):
     print(t.round(3).to_string()); print(c.round(3).to_string())
 
 
+def exact_counts(f_pub, f_pri, k, N_pub, P_pub, N_pri, P_pri, tol=2e-9):
+    """Group size k and two F1 scores -> (k in public, defaults in public, defaults in private). F1 = 2d / (k_part + P_part), and d must be whole.
+    Returns None if no split fits, so a wrong score can't produce a number. Two fits can occur (H5); the public part is a random 25%, so take the one nearest that."""
+    hits = []
+    for a in range(int(k) + 1):
+        d1, d2 = f_pub * (a + P_pub) / 2, f_pri * (k - a + P_pri) / 2
+        r1, r2 = round(d1), round(d2)
+        if abs(2 * r1 / (a + P_pub) - f_pub) < tol and abs(2 * r2 / (k - a + P_pri) - f_pri) < tol: hits.append((a, r1, r2))
+    return min(hits, key=lambda h: abs(h[0] - k * N_pub / (N_pub + N_pri))) if hits else None
+
+
+def wilson(d, n, z=1.96):
+    p = d / n; c = z * np.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / (1 + z * z / n); m = (p + z * z / (2 * n)) / (1 + z * z / n)
+    return m - c, m + c
+
+
+def read_exact(n=18594, fn=2716, fee=90, typical=3000, recovered=.1, chase=16):
+    """Both batches -> exact default counts per group, then every full / starter / decline policy over Ghana's segments.
+    Ghana has 446 customers, so each group also gets a cautious range that counts customers, not loans. Group totals only."""
+    T = ROOT / "learnings" / "tables"
+    s = pd.concat([pd.read_csv(T / "11b_ghana_probe.csv"), pd.read_csv(T / "11b_ghana_probe_2.csv")])
+    s["group"] = s.file.str.replace(".csv", "").str[3:]; s = s.set_index("group")
+    e_pub, e_pri = s.zindi_public["everyone"], s.zindi_private["everyone"]
+    fits = [(a, round(e_pub * a / (2 - e_pub)), n - a, round(e_pri * (n - a) / (2 - e_pri))) for a in range(1, n)]
+    fits = [x for x in fits if abs(2 * x[1] / (x[0] + x[1]) - e_pub) < 2e-9 and abs(2 * x[3] / (x[2] + x[3]) - e_pri) < 2e-9]
+    # several sizes can fit; the true one is the one that lets every group split into whole numbers
+    fits = [x for x in fits if all(exact_counts(r.zindi_public, r.zindi_private, r.flagged, *x) for g, r in s.iterrows() if g != "everyone")]
+    assert len(fits) == 1, fits
+    N_pub, P_pub, N_pri, P_pri = fits[0]
+    tr, te = build(str(ROOT / "data" / "zindi")); gh = te.country_id == "Ghana"; first = te.n_prev_loans == 0; t3 = gh & (te.loan_type == "Type_3"); t2 = gh & (te.loan_type == "Type_2")
+    p13 = pd.Series(final_model(tr, FEATURES).predict_proba(te[FEATURES])[:, 1], index=te.index)
+    pfin = pd.Series(final_model(tr, GHANA_CLUES).predict_proba(te[FEATURES])[:, 1], index=te.index)
+    edges = p13[t3].quantile([.2, .4, .6, .8]).to_numpy(); band = pd.cut(p13, [-np.inf, *edges, np.inf], labels=False)
+    assert ((t3 & (pfin > .032)) == (t3 & first)).all()  # H0 and H4 are the same loans
+    masks = {"ghana_all": gh, "ghana_first_loans": gh & first, "ghana_earlier_loans": gh & ~first, "ghana_type_3": t3, "ghana_type_2": t2, "type_3_first_loans": t3 & first, "type_2_first_loans": t2 & first}
+    masks.update({f"type_3_risk_band_{b + 1}_of_5": t3 & (band == b) for b in range(4)})
+    masks["ghana_over_90_days"] = gh & (te.duration > 90)
+    rows = []
+    for g, r in s.iterrows():
+        d = (P_pub, P_pri) if g == "everyone" else exact_counts(r.zindi_public, r.zindi_private, r.flagged, N_pub, P_pub, N_pri, P_pri)[1:]
+        cust = te.customer_id[masks[g]].nunique() if g in masks else np.nan
+        lo, hi = wilson(sum(d), r.flagged); row = dict(group=g, loans=int(r.flagged), defaults=sum(d), public=d[0], private=d[1], rate=sum(d) / r.flagged, range_loans_lo=lo, range_loans_hi=hi, customers=cust)
+        if cust == cust: row["range_customers_lo"], row["range_customers_hi"] = wilson(sum(d) / r.flagged * cust, cust)
+        rows.append(row)
+    c = pd.DataFrame(rows).set_index("group"); c.loc["KENYA (everyone minus Ghana)"] = dict(loans=n - 3525, defaults=c.defaults["everyone"] - c.defaults["ghana_all"], public=P_pub - c.public["ghana_all"], private=P_pri - c.private["ghana_all"], rate=(c.defaults["everyone"] - c.defaults["ghana_all"]) / (n - 3525))
+    c.to_csv(T / "11b_ghana_exact.csv")
+    G = c.defaults["ghana_all"]; models = {"approve everyone": (0, 0), "decline everyone": (3525, G)}
+    models.update({x: (c.loans[g], c.defaults[g]) for x, g in {"13 clues": "ghana_13_clues_flagged", "13, unseen types as Type_1": "ghana_unseen_as_type_1_flagged", "no 'borrow often' (Kenya's clues)": "ghana_keep_type_no_often_flagged",
+                   "no loan_type (ADR 0019)": "ghana_no_type_flagged", "no loan_type, no 'borrow often' (ADR 0020)": "ghana_final_flagged"}.items()})
+    pd.DataFrame([dict(policy=x, declined=k / 3525, defaults_caught=d / G, cost_ghs=((G - d) * fn + (k - d) * fee) / 3525) for x, (k, d) in models.items()]).to_csv(T / "11b_ghana_models.csv", index=False)
+    # Segments that don't overlap. Type_3 first loans all sit in the riskiest band, checked here, so the rest of that band is a subtraction.
+    assert (band[t3 & first] == 4).all()
+    get = lambda g: c.loc[g, ["loans", "public", "private"]].to_numpy(float)
+    seg = {"Type_2": get("ghana_type_2"), "Type_3 first loans": get("type_3_first_loans"), "Type_3 earlier, riskiest 10%": None, "Type_3 band 4": get("type_3_risk_band_4_of_5"),
+           "Type_3 bands 1-3": get("type_3_risk_band_1_of_5") + get("type_3_risk_band_2_of_5") + get("type_3_risk_band_3_of_5")}
+    seg["Type_3 earlier, riskiest 10%"] = get("ghana_type_3") - sum(seg[x] for x in ("Type_3 first loans", "Type_3 band 4", "Type_3 bands 1-3"))
+    seg["Other types"] = get("ghana_all") - get("ghana_type_3") - get("ghana_type_2")
+    assert all(v[0] > 0 and v[1] >= 0 and v[2] >= 0 for v in seg.values())
+    names = list(seg); ks = np.array([seg[x][0] for x in names]); share = N_pub / n
+    cost_start = typical * .1 * (1 - recovered) + chase
+    def cost(actions, future):
+        """Actions: F full, S starter, D decline. A good payer declined loses the fee and future business; a starter keeps the future, and 10% of the fee."""
+        out = {}
+        for part, i, w in (("public", 1, share), ("private", 2, 1 - share)):
+            t = 0.
+            for x, a in zip(names, actions):
+                k = seg[x][0] * w; d = seg[x][i]; good = k - d
+                t += d * fn if a == "F" else d * cost_start + good * fee * .9 if a == "S" else good * (fee + future)
+            out[part] = t / (3525 * w)
+        out["all"] = share * out["public"] + (1 - share) * out["private"]
+        return out
+    import itertools
+    rows = []
+    for future in (0, 16, 180, 360):
+        for acts in itertools.product("FSD", repeat=len(names)):
+            cc = cost(acts, future)
+            rows.append(dict(future=future, **dict(zip(names, acts)), cost=cc["all"], public=cc["public"], private=cc["private"], full_share=sum(k for k, a in zip(ks, acts) if a == "F") / 3525, offered_share=sum(k for k, a in zip(ks, acts) if a != "D") / 3525))
+    g = pd.DataFrame(rows); g.to_csv(T / "11b_ghana_policies.csv", index=False)
+    riskiest = t3 & (band == 4) & ~first; low = t3 & band.isin([0, 1, 2])
+    where = {"Type_2": t2, "Type_3 first loans": t3 & first, "Type_3 earlier, riskiest 10%": riskiest, "Type_3 band 4": t3 & (band == 3), "Type_3 bands 1-3": low, "Other types": gh & ~t2 & ~t3}
+    pd.DataFrame([dict(segment=x, loans=seg[x][0], public=seg[x][1], private=seg[x][2], customers=te.customer_id[where[x]].nunique(), mean_amount=te.Total_Amount[where[x]].mean(), median_amount=te.Total_Amount[where[x]].median(), share_public=share) for x in names]).to_csv(T / "11b_ghana_segments.csv", index=False)
+    print(N_pub, P_pub, N_pri, P_pri); print(c.round(3).to_string())
+    print(pd.DataFrame({x: dict(loans=seg[x][0], defaults=seg[x][1] + seg[x][2], rate=(seg[x][1] + seg[x][2]) / seg[x][0]) for x in names}).T.round(3).to_string())
+    for future in (0, 16, 180, 360):
+        b = g[g.future == future].sort_values("cost")
+        print("future", future, "breakeven", round((fee + future) / (fee + future + fn), 3)); print(b.head(3).round(2).to_string(index=False))
+        print(b[(b[names] == "D").all(axis=1) | (b[names] == "F").all(axis=1)].round(2).to_string(index=False))
+
+
 if __name__ == "__main__":
     import sys
-    (ghana_probe if "--ghana-probe" in sys.argv else ghana_probe_2 if "--ghana-probe-2" in sys.argv else read_probe if "--read-probe" in sys.argv else run)()
+    (read_exact if "--read-exact" in sys.argv else ghana_probe if "--ghana-probe" in sys.argv else ghana_probe_2 if "--ghana-probe-2" in sys.argv else read_probe if "--read-probe" in sys.argv else run)()

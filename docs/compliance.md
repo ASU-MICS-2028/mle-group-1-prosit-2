@@ -28,7 +28,7 @@
 | 6 | Keep decision records | Act 843 s.24, s.35; Act 726 s.35 | The scorer returns a result but stores nothing | An append-only log of inputs, version, score, cut-off, reasons, consent |
 | 7 | Single-customer limit | Directive 3.5(5) | BoG's figure isn't published in the Directive; the limit has no cap | A configurable cap, once known |
 | 8 | Avoid over-indebtedness and stacking | Directive 1.3(3), 7.1(2); Act 1052 unverified | Can't see other lenders' loans; no income data | Bureau data; affordability check |
-| 9 | Valid for Ghanaian borrowers | Directive 3.5(1), 4(2) | Never tested on Ghanaian outcomes | Capped pilot; the [ADR 0019](adr/0019-kenya-to-ghana-transfer.md) trust gates |
+| 9 | Valid for Ghanaian borrowers | Directive 3.5(1), 4(2) | Never tested on Ghanaian outcomes | Capped pilot ([ADR 0021](adr/0021-ghana-rules.md)); the [ADR 0019](adr/0019-kenya-to-ghana-transfer.md) trust gates |
 | 10 | Total-cost and no-compounding disclosure | Directive 6(1)(b)–(c), 7.1(3) | Outside the model | The app shows amount, due date and total repayable |
 | 11 | Gender fairness (asked by the brief, not found in these laws) | Brief Part D | No gender in the data | Audit it if collected (Act 726 s.24(2)(f)) |
 

@@ -1,0 +1,6 @@
+entry,public,private,note
+Rank 1 on Zindi's final leaderboard,0.842615012,0.781499202,read from Zindi's page on 7 Nov 2026; competition closed
+Rank 4 on Zindi's final leaderboard,0.800936768,0.766383962,same page
+Our best model (C LightGBM best F1),0.400990099,0.396411092,from 07b_zindi_submissions.csv; submitted before the probe
+Our decision rule (A LR cost cut-off),0.209977661,0.200760456,from 07b_zindi_submissions.csv; chosen for cost not F1
+Best-scoring probe file on public (H3),0.402515723,0.365750528,a group count not a model

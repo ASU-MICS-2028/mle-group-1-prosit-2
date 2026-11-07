@@ -18,8 +18,8 @@ We build one feature set and two models on the African Credit Scoring Challenge 
 
 ### Joseph · step 12: scoring service
 1. One function: application in → probability, decision, limit, top 3 reasons, with latency documented.
-2. **Default model:** `final_model(train, DEFAULT_CLUES)` for Kenya at 2.1% ([ADR 0020](docs/adr/0020-fairness-mitigation.md)). **Ghana's rules are under review** ([learnings/11](learnings/11_fairness.md) §10): Zindi evidence shows about 13% default; batch 2 settles the model. Reasons from `src/reasons.py`. **Limit:** `src/amounts.py`.
-3. **First-timers above the cut-off:** a starter loan of about 10% of a typical loan (Kenya: only below 24% risk).
+2. **Default model:** `final_model(train, DEFAULT_CLUES)` for Kenya at 2.1% ([ADR 0020](docs/adr/0020-fairness-mitigation.md)). **Ghana** ([ADR 0021](docs/adr/0021-ghana-rules.md)): decline Type_2 and other unseen types; Type_3 gets a 300 GHS starter loan and no full-size loans; the probability shown is the group's measured rate. Reasons from `src/reasons.py`. **Limit:** `src/amounts.py`.
+3. **First-timers above the cut-off:** a starter loan of about 10% of a typical loan (Kenya: only below 24% risk; Ghana: see ADR 0021).
 4. Test a new customer, a repeat customer, a Ghanaian applicant, missing fields, an unseen loan type, and timing over 1,000 calls.
 5. Write `learnings/12_scorer.md`.
 

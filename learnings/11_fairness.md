@@ -315,7 +315,34 @@ And a file flagging *everyone* gives all defaults. So each upload reveals one gr
 
 **Batch 2** (`--ghana-probe-2`, files `H0_`–`H9_`): Type_3 first-timers; the clue drop on its own; mapping unseen types to Type_1; and five risk bands inside Type_3, to see whether any safe group exists.
 
-**We must say in the report that we did this.** It reads labels through the leaderboard, at group level only, after the competition closed. I haven't confirmed that Zindi's rules allow it.
+**We must say in the report that we did this.** It reads labels through the leaderboard, at group level only, after the competition closed. Joseph checked that Zindi's rules allow it.
+
+### 10b. The second batch: exact counts, and the proposal
+
+F1 scores are fractions of whole numbers, so they give exact default counts rather than estimates. This also showed Zindi's split: 25% public, 75% private. Every group's public and private parts add up to its size, which is a strong check that the method is right.
+
+- **Ghana:** 447 of 3,525 default (12.7%). **Kenya:** 275 of 15,069 (1.8%), matching training.
+- **Type_3 first loans default 9.8%, not 30%.** The high first-loan rate was mostly Type_2, which is about 50% whether first or repeat.
+- **Keeping `loan_type` is better, and in Ghana the "borrow often" clues do pay:** 105 GHS with all 13 clues, 147 without them. The clue drop that's free in Kenya costs about 43 GHS per applicant here.
+- **Treating unseen types as Type_1 is the worst screening rule** (170 GHS).
+- **No group is safely below the 3.2% break-even.** Type_3's safest 60% default 4.8%, and the model can't rank inside them.
+
+We tested all 729 ways of giving six groups a full loan, a starter or a decline, at 4 repeat values: no full-size loan is in the cheapest policy at any of them. [ADR 0021](../docs/adr/0021-ghana-rules.md) proposes starter loans only for Type_3, declining Type_2 and other unseen types. It costs about 10 GHS per applicant more than declining everyone, and beats it once a good customer is worth more than about 13 GHS later.
+
+**A "good" Zindi score from these files means nothing.** Flagging just Type_2 scores 0.40, the same as our best model. Any model built after this using these counts has seen the test set, so its Zindi score can't be reported as performance.
+
+### 10c. Did the Ghana rule pass its tests?
+
+**Partly.** A stress test tries to break a rule by changing what we assumed. We wrote six pass rules first. The Ghana rule passed four and failed two ([ADR 0021](../docs/adr/0021-ghana-rules.md) has the table).
+
+- **Failed: certainty over full-size loans.** It beats them in 77–87% of simulated worlds, and the rule asked for 95%. In the rest, Type_3's safest 60% are really safe enough for full loans. That group is only 112 customers, so we can't tell.
+- **Failed: all assumptions.** It wins 78% of 2,880 combinations, and the rule asked for 90%. It's weakest if starter loans are large or default 3× as often.
+- **No policy did better.** Of all 729, none passes either failed test, and none passes more than 4 of 6.
+- **It loses money on fees alone:** about 10,000 GHS per 1,000 applicants. Every lending policy does; this one loses least among those that serve most good payers. It only pays if good customers come back.
+
+**Decision (Joseph, 7 Nov):** accepted as a capped, unproven pilot.
+
+**How to say it in the debrief:** "This is the best of the 729 policies we tested and it limits losses, but we haven't proven it works. Only a capped pilot can show that."
 
 ## Decision
 **Kenya:** sufficiency first; drop the 3 "borrow often" clues; a starter loan of about 10% for first-timers below 24% risk; no group cut-offs and no reweighing. **Ghana:** under review (section 10). See [ADR 0020](../docs/adr/0020-fairness-mitigation.md).

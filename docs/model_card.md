@@ -8,7 +8,7 @@
 - **Type:** logistic regression with Platt calibration, fitted on out-of-fold scores from 5 customer-grouped folds ([ADR 0016](adr/0016-final-classification.md), [0017](adr/0017-reason-codes.md)).
 - **Clues:**
   - **Kenya (10):** `loan_type`, `duration`, `New_versus_Repeat`, `n_prev_loans`, `n_finished`, `n_defaults`, `past_default_rate`, `no_known_history`, `mean_prev_amount`, `last_amount`.
-  - **Ghana (9):** the same without `loan_type` ([ADR 0019](adr/0019-kenya-to-ghana-transfer.md)).
+  - **Ghana:** the model doesn't decide anything yet. A rule by loan type does, using group default rates measured from Zindi's scores ([ADR 0021](adr/0021-ghana-rules.md)).
 - **Fairness choices:** none inside the training. Three "borrow often" clues were removed, and first-time applicants above the cut-off get a starter loan ([ADR 0020](adr/0020-fairness-mitigation.md)).
 - **Companion model:** LightGBM on log loan amount, for limits ([ADR 0018](adr/0018-loan-amount-model.md)). Not covered in the tables below.
 - **Licence and contact:** course work; see the repository.
@@ -104,7 +104,7 @@
 | | Full loan | Starter or review | Declined |
 |---|---:|---:|---:|
 | Kenya | 82% | 9% | 9% (3% of first-timers) |
-| Ghana | 78% | 22% | 0% |
+| Ghana ([ADR 0021](adr/0021-ghana-rules.md)) | 0% | 86% | 14% |
 
 ## 8. Ethical considerations
 - **Sensitive data:** financial records. There are no names or ID numbers beyond anonymous customer IDs. Nothing at row level leaves `data/`.
@@ -115,12 +115,13 @@
 - **Harms still open:**
   - a starter loan can still push someone into debt;
   - the limit model offers small borrowers up to 2.8× their usual loan;
-  - Ghanaian repeat borrowers aren't screened at all yet;
+  - in Ghana, Type_3 borrowers aren't screened individually, and half of first-time applicants are refused because they ask for Type_2;
+  - the Ghana pilot loses about 10,000 GHS per 1,000 applicants unless good customers come back;
   - the data covers only people lenders chose to lend to.
 - **Risky uses:** using this model to decline Ghanaians at scale, or to chase repeat borrowing.
 
 ## 9. Caveats and recommendations
-- **Barely validated on Ghana.** Group-level evidence from Zindi's scores puts Ghana's default rate at about 13% and Type_3's at 7%, above the 3.2% break-even ([learnings/11](../learnings/11_fairness.md) §10). The Ghana rules in this card are under review. Trust gates are in [ADR 0019](adr/0019-kenya-to-ghana-transfer.md): about 5,000 labelled loans, recalibration, monthly drift checks, and a capped pilot.
+- **Barely validated on Ghana.** Group-level evidence from Zindi's scores puts Ghana's default rate at about 13% and Type_3's at 7%, above the 3.2% break-even ([learnings/11](../learnings/11_fairness.md) §10). The Ghana rule ([ADR 0021](adr/0021-ghana-rules.md)) passes 4 of 6 stress tests: it's the best of 729 policies tested, not proven. Trust gates are in [ADR 0019](adr/0019-kenya-to-ghana-transfer.md): about 5,000 labelled loans, recalibration, monthly drift checks, and a capped pilot.
 - **Scores drift.** Default rates moved from about 1% (2022) to 9–12% (2023–24). Recalibrate often.
 - **The starter loan is costed, not tested.** Its value rests on repeat business measured at about 200 KES, from Kenyan lending with no limit model. It breaks even at about 50–130 KES. Run it as a controlled pilot, and track outcomes.
 - **Repeat the audit with gender** if NkwaPay collects it for bureau reporting.

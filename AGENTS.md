@@ -33,6 +33,7 @@ ICS553 Prosit 2 (Ashesi University), MLE Group 1: Alice, Germain, Joseph, Liza.
    - replace the "current step in detail" section.
    No history in the README.
 7. **Log every action** as one line in [`docs/log.md`](docs/log.md) (date · who · what · where), and **log AI use** in [`docs/ai_use.md`](docs/ai_use.md). Both feed the report's AI declaration, which is required.
+8. **Save every test result for the report and slides.** Anything a script or notebook prints as a result also goes to `learnings/tables/` or `learnings/figures/`, including tests that failed and options we rejected, and gets a line in [`learnings/results_index.md`](learnings/results_index.md). A number that exists only in a terminal or a chat doesn't count as saved. Scores typed from a website go in a table too. Aggregates only: the data rules below still apply.
 
 ## Data rules (hard rules)
 

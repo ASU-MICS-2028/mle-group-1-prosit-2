@@ -1,6 +1,6 @@
 # 0020 · Fairness: what we measure first, and the two fixes
 
-- **Status:** Accepted for Kenya (Joseph, 6 Nov 2026). **The Ghana parts are under review:** group-level Zindi evidence ([learnings/11](../../learnings/11_fairness.md) §10) contradicts them, and a new ADR will settle them. Changes [0016](0016-final-classification.md) (which clues the default model uses) and adds to [0019](0019-kenya-to-ghana-transfer.md) (first loans in Kenya too).
+- **Status:** Accepted for Kenya (Joseph, 6 Nov 2026). **The Ghana parts are replaced by [ADR 0021](0021-ghana-rules.md).** Changes [0016](0016-final-classification.md) (which clues the default model uses) and adds to [0019](0019-kenya-to-ghana-transfer.md) (first loans in Kenya too).
 - **Date:** 5 Nov 2026 · **Owner:** Joseph (took over step 11 from Liza) · **Step:** 11
 
 ## Context
