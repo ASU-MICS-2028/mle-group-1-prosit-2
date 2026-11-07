@@ -71,5 +71,8 @@ Steps 1–4 (audit, cost matrix, data checks) have no tables: their results are 
 - `12_unseen_loan_type.csv`: hiding each type from training, options compared
 - `12_past_default_groups.csv`, `12_past_default_weights.csv`, `12_past_default_options.csv`, `12_past_default_zindi.csv`: past defaulters, the model's weights, rule options
 
+## Step 13: drafts
+- `report/report.pdf`, `report.docx`, `audit.pdf`, `audit.docx`: rebuilt from their HTML by `report/build.py`
+
 ## Other documents with results
 `docs/model_card.md`, `docs/datasheet.md`, `docs/compliance.md`, `docs/adr/`.

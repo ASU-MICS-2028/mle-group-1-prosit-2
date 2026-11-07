@@ -10,18 +10,19 @@ We build one feature set and two models on the African Credit Scoring Challenge 
 
 | | |
 |---|---|
-| **Stage** | Step 12 of 13 |
-| **Responsible** | **Joseph:** step 12 (scoring service) |
-| **Due** | Was Sat 31 Oct: **overdue, new date to agree** |
-| **Waiting on these** | Everyone (step 13: report, slides, reflections) |
-| **Just finished** | Step 11: fairness audit. Dropped 3 "borrow often" clues; first-timers get a capped starter loan instead of a no; 1,224 scenarios tested ([ADR 0020](docs/adr/0020-fairness-mitigation.md), [learnings/11](learnings/11_fairness.md), [Model Card](docs/model_card.md)) |
+| **Stage** | Step 13 of 13 |
+| **Responsible** | **Everyone:** step 13 (check the drafts, rehearse, write reflections) |
+| **Due** | Debrief was Tue 3 Nov: **confirm the new date** |
+| **Waiting on these** | Steps 1–12 are done |
+| **Just finished** | Step 12: scorer ([ADR 0022](docs/adr/0022-scoring-service.md), [learnings/12](learnings/12_scorer.md)); Ghana rules ([ADR 0021](docs/adr/0021-ghana-rules.md)) |
 
-### Joseph · step 12: scoring service
-1. One function: application in → probability, decision, limit, top 3 reasons, with latency documented.
-2. **Default model:** `final_model(train, DEFAULT_CLUES)` for Kenya at 2.1% ([ADR 0020](docs/adr/0020-fairness-mitigation.md)). **Ghana** ([ADR 0021](docs/adr/0021-ghana-rules.md)): decline Type_2 and other unseen types; Type_3 gets a 300 GHS starter loan and no full-size loans; the probability shown is the group's measured rate. Reasons from `src/reasons.py`. **Limit:** `src/amounts.py`.
-3. **First-timers above the cut-off:** a starter loan of about 10% of a typical loan (Kenya: only below 24% risk; Ghana: see ADR 0021).
-4. Test a new customer, a repeat customer, a Ghanaian applicant, missing fields, an unseen loan type, and timing over 1,000 calls.
-5. Write `learnings/12_scorer.md`.
+### Everyone · step 13: report, slides, reflections
+All drafts were made with AI from our saved results, so **each owner must check them before submitting** (course AI policy).
+1. **Report and audit:** [`report/`](report/) (Word, PDF). Check your sections; Liza edits into one voice. Fix the AI-use statement so it's true.
+2. **Slides:** the group's debrief deck, shared by Joseph. Two rehearsals, then a Q&A drill on parts you didn't build, using `learnings/`.
+3. **Reflections:** write your own one page. They stay out of this repo (`reflections/` is team-only); Joseph has a sheet of facts and prompts to share.
+4. **Scorer demo:** `PYTHONPATH=. .venv/bin/python src/scorer.py --fit`, then practise ([learnings/12](learnings/12_scorer.md)).
+5. **Still to confirm:** quote Zindi's rule on probing; check the Findex rural and education codes; agree the debrief date.
 
 ## Run it from a fresh clone
 
@@ -37,6 +38,6 @@ for nb in notebooks/0*.ipynb; do .venv/bin/jupyter nbconvert --to notebook --exe
 - Rules for people and AI agents: [`AGENTS.md`](AGENTS.md)
 - Plan and tracker: [`docs/plan.md`](docs/plan.md)
 - Decisions: [`docs/adr/`](docs/adr/README.md)
-- What we learned: [`learnings/`](learnings/README.md)
+- What we learned: [`learnings/`](learnings/README.md); every result: [`learnings/results_index.md`](learnings/results_index.md)
 - Course material: [`knowledge/`](knowledge/README.md)
 - Data sources: [`docs/01_data.md`](docs/01_data.md)

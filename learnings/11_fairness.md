@@ -214,7 +214,7 @@ Survey-weighted shares of adults, 2021. 95% ranges in `tables/11_findex.csv`.
 
 **Does our model narrow or widen the gap?** About **93% of Ghanaian adults haven't borrowed from a bank or by mobile money**, so nearly anyone new to NkwaPay is a first-timer.
 - **The model as it stood widens the gap.** It declines every first-time applicant, so it lends only to people who already have a record.
-- **The chosen policy narrows it for people with a phone and a mobile-money account,** because they can now get a first small loan.
+- **The chosen policy narrows it for people with a phone and a mobile-money account who ask for Type_3,** because they can now get a first small loan. Under [ADR 0021](../docs/adr/0021-ghana-rules.md), 55% of Ghanaian first-time applicants are still refused, because they ask for Type_2 or another unseen type.
 - **It can't reach the rest.** 40% of adults have no mobile-money account, and they are more often women, rural, poorer and less schooled. A mobile-money lender can't see them, however fair the model.
 - **This is population context, not a test of our model.** We can't link Findex to loans.
 
