@@ -12,7 +12,6 @@ We build one feature set and two models on the African Credit Scoring Challenge 
 |---|---|
 | **Stage** | Step 13 of 13 |
 | **Responsible** | **Everyone:** step 13 (check the drafts, rehearse, write reflections) |
-| **Due** | Debrief was Tue 3 Nov: **confirm the new date** |
 | **Waiting on these** | Steps 1–12 are done |
 | **Just finished** | Step 12: scorer ([ADR 0022](docs/adr/0022-scoring-service.md), [learnings/12](learnings/12_scorer.md)); Ghana rules ([ADR 0021](docs/adr/0021-ghana-rules.md)) |
 
@@ -22,7 +21,6 @@ All drafts were made with AI from our saved results, so **each owner must check 
 2. **Slides:** the group's debrief deck, shared by Joseph. Two rehearsals, then a Q&A drill on parts you didn't build, using `learnings/`.
 3. **Reflections:** write your own one page. They stay out of this repo (`reflections/` is team-only); Joseph has a sheet of facts and prompts to share.
 4. **Scorer demo:** `PYTHONPATH=. .venv/bin/python src/scorer.py --fit`, then practise ([learnings/12](learnings/12_scorer.md)).
-5. **Still to confirm:** quote Zindi's rule on probing; check the Findex rural and education codes; agree the debrief date.
 
 ## Run it from a fresh clone
 

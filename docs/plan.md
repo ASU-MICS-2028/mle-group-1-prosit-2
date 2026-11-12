@@ -2,8 +2,6 @@
 
 *The plan and the progress tracker live here, in the repo. This replaces the old Google Doc, which is no longer used. The README's **Now** box shows only the current step.*
 
-**Due:** debrief and full portfolio on **Tue 3 Nov 2026**.
-
 ## Progress tracker
 
 Work top to bottom. A step can only start when the steps it waits on are ticked. Tick yours (`[x]`) and push when done.

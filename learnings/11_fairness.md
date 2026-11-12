@@ -12,7 +12,7 @@
 - **The model isn't regressive.** Small loans are approved more often than large ones (93% vs 84%).
 - **The limit runs the other way:** it offers small borrowers 2.8× what they took. That's a debt risk (see limits).
 - **Risk sits with products and lenders.** Lender A has 95% of loans and 71% of defaults. Lender B has 5% of loans, 22% of defaults and a 19% approval rate. `lender_id` isn't a clue, but `loan_type` gives it away (AUC 0.98).
-- **We now have real evidence on Ghana, and it's bad news for our Ghana rules (section 10).** Ghana defaults about **13%**, seven times Kenya. Even Type_3, the common product, defaults about 7%, above the 3.2% break-even. Our proposed Ghana model is the costliest of the three we tested. **The Ghana rules are under review.**
+- **We now have real evidence on Ghana, and it's bad news for our Ghana rules (section 10).** Ghana defaults about **13%**, seven times Kenya. Even Type_3, the common product, defaults about 7%, above the 3.2% break-even. Our proposed Ghana model is the costliest of the three we tested. **So Ghana gets no full-size loans yet: a capped, unproven pilot** (decided 7 Nov, [ADR 0021](../docs/adr/0021-ghana-rules.md)).
 - **We can't test gender.** The loan data has none. Findex shows women are behind men in Ghana on accounts (63% vs 74%).
 
 ## The question
@@ -345,7 +345,7 @@ We tested all 729 ways of giving six groups a full loan, a starter or a decline,
 **How to say it in the debrief:** "This is the best of the 729 policies we tested and it limits losses, but we haven't proven it works. Only a capped pilot can show that."
 
 ## Decision
-**Kenya:** sufficiency first; drop the 3 "borrow often" clues; a starter loan of about 10% for first-timers below 24% risk; no group cut-offs and no reweighing. **Ghana:** under review (section 10). See [ADR 0020](../docs/adr/0020-fairness-mitigation.md).
+**Kenya:** sufficiency first; drop the 3 "borrow often" clues; a starter loan of about 10% for first-timers below 24% risk; no group cut-offs and no reweighing. **Ghana:** a capped, unproven pilot (section 10). See [ADR 0020](../docs/adr/0020-fairness-mitigation.md) and [ADR 0021](../docs/adr/0021-ghana-rules.md).
 
 ## What I'm unsure of / limits
 - **The clue drop has a small price for some groups.** Lender B's good payers go from 80% to 87% wrongly declined, and the no-known-outcome group from 13% to 16%. First loans and small loans improve by about 2 points. See `tables/11_fairness_after.csv`.
