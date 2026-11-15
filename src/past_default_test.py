@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np, pandas as pd
 from src.classification_experiments import final_model
 from src.features import DEFAULT_CLUES, FEATURES, build
-from src.reasons import _parts, _prepared
+from src.reasons import _parts
 
 ROOT = Path(__file__).resolve().parent.parent; T = ROOT / "learnings" / "tables"
 FN, FP, CUT, START_D, START_G = 4700, 100, .021, 650, 90
@@ -19,7 +19,7 @@ def boot(d, f, n=1000, seed=553):
 
 
 def run():
-    tr, te = build(str(ROOT / "data" / "zindi")); out = tr.assign(p=np.nan, p_t=np.nan); y = tr.target.astype(int)
+    tr, te = build(str(ROOT / "data" / "zindi")); out = tr.assign(p=np.nan, p_t=np.nan)
     for f in sorted(tr.fold_customer.unique()):
         m = tr.fold_customer == f; out.loc[m, "p"] = final_model(tr[~m], DEFAULT_CLUES).predict_proba(tr[m][FEATURES])[:, 1]
     print("time blocks", sorted(tr.time_block.unique()))

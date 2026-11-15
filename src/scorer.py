@@ -19,7 +19,7 @@ import numpy as np
 import pandas as pd
 
 from src.features import DEFAULT_CLUES, FEATURES, build
-from src.reasons import MIN_PUSH, THEMES, pushes, reasons, reference
+from src.reasons import MIN_PUSH, pushes, reasons, reference
 
 ROOT = Path(__file__).resolve().parent.parent
 BUNDLE = ROOT / "data" / "models" / "scorer.joblib"

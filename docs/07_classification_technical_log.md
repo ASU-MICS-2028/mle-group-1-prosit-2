@@ -94,16 +94,6 @@ must be evaluated separately.
 
 Neither candidate is approved for deployment.
 
-## Pending
-
-- Chronological validation audit
-- Evaluation sample reconciliation
-- Full notebook execution
-- Assignment requirements verification
-- ADR acceptance
-- Git commit
-
-
 ## Checkpoint 7.6B · Evaluation Population Reconciliation
 
 Germain inspected Joseph's shared `add_folds()` and `splits()`

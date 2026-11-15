@@ -7,9 +7,8 @@ This file is the rulebook. Claude Code (via `CLAUDE.md`), Codex, Cursor, Copilot
 ICS553 Prosit 2 (Ashesi University), MLE Group 1: Alice, Germain, Joseph, Liza.
 - **The client:** NkwaPay, a mobile-money lender with labelled loans from Kenya, moving into Ghana where it has none. About 1 in 50 loans default.
 - **The tool we build:** (Task 2) the chance each applicant defaults; (Task 1) a loan amount; fair, explainable decisions with 3 plain reasons, honest about the Kenya → Ghana gap, and compliant with Ghanaian law.
-- **Due:** debrief **Tue 3 Nov 2026**.
 - **Read before doing anything:**
-  - [`README.md`](README.md): the current step and who owns it;
+  - [`README.md`](README.md): the project overview and how to run it;
   - [`docs/plan.md`](docs/plan.md): all steps and the tracker;
   - [`knowledge/prosit2_brief.md`](knowledge/prosit2_brief.md): the brief;
   - [`docs/adr/`](docs/adr/README.md): decisions already made. **Don't reopen a decision without writing a new ADR.**
@@ -27,11 +26,7 @@ ICS553 Prosit 2 (Ashesi University), MLE Group 1: Alice, Germain, Joseph, Liza.
    - likely Q&A questions.
    Someone who never ran the code must be able to understand and present it.
 5. **Course knowledge lives in `knowledge/`.** Check it before explaining a concept, and cite it (e.g. "see `knowledge/derivations.md` §b"). New useful course material goes in there **in our own words**.
-6. **The README shows only the current stage and its owner.** When a step finishes:
-   - tick it in the [`docs/plan.md`](docs/plan.md#progress-tracker) tracker;
-   - move the README's **Now** box to the next step and owner;
-   - replace the "current step in detail" section.
-   No history in the README.
+6. **When a step finishes,** tick it in the [`docs/plan.md`](docs/plan.md#progress-tracker) tracker. The README is the project overview: what to read and how to run it.
 7. **Log every action** as one line in [`docs/log.md`](docs/log.md) (date · who · what · where), and **log AI use** in [`docs/ai_use.md`](docs/ai_use.md). Both feed the report's AI declaration, which is required.
 8. **Save every test result for the report and slides.** Anything a script or notebook prints as a result also goes to `learnings/tables/` or `learnings/figures/`, including tests that failed and options we rejected, and gets a line in [`learnings/results_index.md`](learnings/results_index.md). A number that exists only in a terminal or a chat doesn't count as saved. Scores typed from a website go in a table too. Aggregates only: the data rules below still apply.
 
@@ -96,4 +91,3 @@ A step is done when:
 - [ ] `learnings/NN_*.md` exists in simple words;
 - [ ] the log and AI-use lines are written;
 - [ ] the tracker is ticked;
-- [ ] the README's Now box has moved to the next step and owner.

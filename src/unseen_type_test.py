@@ -1,7 +1,7 @@
 """Step 12: what should the scorer do with a loan type it has never seen, in Kenya? Hide each type from training, then treat its loans as new.
 Options: trust the model, starter for all, decline all, approve all. Writes learnings/tables/12_unseen_loan_type.csv."""
 from pathlib import Path
-import numpy as np, pandas as pd
+import pandas as pd
 from src.classification_experiments import final_model
 from src.features import DEFAULT_CLUES, FEATURES, build
 
