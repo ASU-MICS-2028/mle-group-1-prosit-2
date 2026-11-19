@@ -12,7 +12,7 @@ GHANA_TYPES = [{"code": "Type_3", "label": "Type 3", "note": "Starter pilot in G
 
 CUSTOMERS = {
     "0712000001": dict(name="Amina", country="Kenya", currency="KES", loan_types=KENYA_TYPES, history=AMINA,
-                       summary=["12 loans with us", "11 repaid", "Last loan 14 days ago"]),
+                       summary=["12 loans with us", "11 repaid", "14 days since your last loan"]),
     "0712000002": dict(name="Brian", country="Kenya", currency="KES", loan_types=KENYA_TYPES, history=FIRST,
                        summary=["This is your first loan with us"]),
     "0712000003": dict(name="Wanjiru", country="Kenya", currency="KES", loan_types=KENYA_TYPES, history=MISSED,

@@ -1,1 +1,146 @@
-<!doctype html><title>NkwaPay</title>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>NkwaPay · Small loans, decided fairly</title>
+  <meta name="description" content="A demo of MLE Group 1's credit scorer: sign in, ask for a loan, see the decision and why.">
+  <meta name="theme-color" content="#9D4444">
+  <link rel="icon" href="/static/img/boa-me.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="strip" aria-hidden="true"></div>
+
+  <main class="app">
+    <!-- 1 · Welcome -->
+    <section id="screen-start" class="screen hero" data-screen="start">
+      <div class="hero-top">
+        <span class="pill pill-light">Demo · made-up customers, no real money</span>
+      </div>
+      <div class="hero-body">
+        <img class="hero-symbol" src="/static/img/boa-me-white.png" alt="">
+        <h1 class="brand">NkwaPay</h1>
+        <p class="tagline">Small loans, decided fairly.</p>
+        <p class="lede">Ask for a loan in under a minute. We tell you our answer and the reasons behind it, in plain words.</p>
+        <button id="start" class="btn btn-gold">Get started</button>
+        <p class="proverb"><strong>Boa me na me boa wo</strong> · “Help me and let me help you”</p>
+      </div>
+      <div class="band" aria-hidden="true"></div>
+    </section>
+
+    <!-- Shared header for the inner screens -->
+    <header class="top" hidden>
+      <button class="back" type="button" aria-label="Go back">&#8592;</button>
+      <div class="logo"><img src="/static/img/boa-me.png" alt=""><span>NkwaPay</span></div>
+      <ol class="steps" aria-label="Progress"><li></li><li></li><li></li><li></li></ol>
+    </header>
+
+    <!-- 2 · Phone -->
+    <section id="screen-phone" class="screen" data-screen="phone" data-step="1" hidden>
+      <h2 tabindex="-1">What's your phone number?</h2>
+      <p class="muted">We use it to find your record with us. No password needed in this demo.</p>
+      <form id="phone-form" novalidate>
+        <label class="field">
+          <span class="label">Phone number</span>
+          <input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0712 000 001" maxlength="20">
+        </label>
+        <p id="phone-error" class="error" role="alert" hidden></p>
+        <button id="phone-next" class="btn btn-primary" type="submit">Continue</button>
+      </form>
+      <div class="demo">
+        <p class="label">Or try a demo customer</p>
+        <div class="chips">
+          <button type="button" class="demo-chip" data-phone="0712000001"><b>Amina</b><span>Kenya · repays on time</span></button>
+          <button type="button" class="demo-chip" data-phone="0712000002"><b>Brian</b><span>Kenya · first loan</span></button>
+          <button type="button" class="demo-chip" data-phone="0712000003"><b>Wanjiru</b><span>Kenya · missed payments</span></button>
+          <button type="button" class="demo-chip" data-phone="0244000004"><b>Kofi</b><span>Ghana · first loan</span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 · Welcome back -->
+    <section id="screen-welcome" class="screen" data-screen="welcome" data-step="2" hidden>
+      <div class="avatar" id="avatar" aria-hidden="true"></div>
+      <h2 id="welcome-name" tabindex="-1"></h2>
+      <p class="muted" id="welcome-country"></p>
+      <div class="stats" id="summary"></div>
+      <button id="welcome-next" class="btn btn-primary">Continue</button>
+    </section>
+
+    <!-- 4 · Your loan -->
+    <section id="screen-loan" class="screen" data-screen="loan" data-step="3" hidden>
+      <h2 tabindex="-1">What would you like?</h2>
+      <fieldset>
+        <legend class="label">Kind of loan</legend>
+        <div class="types" id="types"></div>
+      </fieldset>
+      <fieldset>
+        <legend class="label">Pay back in</legend>
+        <div class="segmented" role="radiogroup">
+          <button type="button" class="length" data-days="7" role="radio">7 days</button>
+          <button type="button" class="length" data-days="14" role="radio">14 days</button>
+          <button type="button" class="length" data-days="30" role="radio">30 days</button>
+        </div>
+      </fieldset>
+      <label class="field">
+        <span class="label">How much?</span>
+        <span class="money"><span class="cur" id="cur"></span><input id="amount" type="text" inputmode="decimal" placeholder="5,000" autocomplete="off"></span>
+      </label>
+      <div class="quick" id="quick"></div>
+      <p id="amount-error" class="error" role="alert" hidden></p>
+      <p class="preview" id="preview"></p>
+      <button id="check" class="btn btn-primary">Check my loan</button>
+    </section>
+
+    <!-- 5 · Checking -->
+    <section id="screen-checking" class="screen center" data-screen="checking" data-step="4" hidden>
+      <img class="spin" src="/static/img/nea-onnim.png" alt="">
+      <h2 tabindex="-1">Checking your loan…</h2>
+      <p class="muted">Looking at your record and this loan.</p>
+    </section>
+
+    <!-- 6 · Decision -->
+    <section id="screen-decision" class="screen" data-screen="decision" data-step="4" hidden>
+      <div id="decision" class="verdict" aria-live="polite">
+        <p class="verdict-kicker" id="verdict-kicker"></p>
+        <h2 id="verdict-title" tabindex="-1"></h2>
+        <p class="verdict-amount" id="verdict-amount"></p>
+        <p class="verdict-sub" id="verdict-sub"></p>
+      </div>
+      <p class="note" id="cap-note" hidden></p>
+      <h3>Why</h3>
+      <ul id="reasons" class="reasons"></ul>
+      <h3>What you can do next</h3>
+      <p id="next-step" class="muted"></p>
+      <details id="how">
+        <summary>How we decided</summary>
+        <div id="how-body"></div>
+      </details>
+      <div class="actions">
+        <button id="accept" class="btn btn-primary">Accept loan</button>
+        <button id="change" class="btn btn-ghost">Change my request</button>
+      </div>
+    </section>
+
+    <!-- 7 · Done -->
+    <section id="screen-done" class="screen center" data-screen="done" data-step="4" hidden>
+      <img class="done-symbol" src="/static/img/akoma-ntoso.png" alt="">
+      <h2 tabindex="-1">Your loan is on its way</h2>
+      <p class="big" id="done-amount"></p>
+      <p class="muted" id="done-repay"></p>
+      <p class="muted small">In a real launch the money would arrive in your mobile-money wallet. This is a demo, so nothing is sent.</p>
+      <button id="restart" class="btn btn-ghost">Start again</button>
+    </section>
+
+    <footer class="foot">
+      <p>A demo by MLE Group 1 (Ashesi University, ICS553 Prosit 2). The customers are made up; the decisions come from our scoring model, trained on the Zindi African Credit Scoring Challenge data.</p>
+      <p>Adinkra symbols: Boa me na me boa wo (public domain), Nea onnim no sua a ohu and Akoma ntoso (CC BY-SA 4.0) by Pablo Busatto; via Wikimedia Commons, recoloured.</p>
+    </footer>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
