@@ -13,3 +13,6 @@ shap==0.54.1
 joblib==1.6.0
 matplotlib==3.11.2
 seaborn==0.13.2
+fastapi==0.165.0
+uvicorn==0.54.0
+httpx==0.28.1
