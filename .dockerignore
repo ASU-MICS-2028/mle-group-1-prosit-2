@@ -1,0 +1,13 @@
+# Send only what the demo needs. Never the Zindi or Findex data.
+*
+!Dockerfile
+!requirements.txt
+!src/
+!app/
+!data/
+data/*
+!data/models/
+data/models/*
+!data/models/scorer.joblib
+app/demo/
+**/__pycache__/
