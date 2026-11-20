@@ -42,6 +42,10 @@ ok(await visible("#screen-done"), "done screen after accept");
 
 // Brian: starter; Wanjiru: decline with reasons; Kofi Type 2: decline
 await signIn("0712000002"); ok(await ask("Type_1", 7, 3000) === "starter", "Brian starter");
+await signIn("0712000002"); await ask("Type_1", 7, 100);
+ok((await page.textContent("#verdict-amount")).startsWith("100 ") && await page.locator("#cap-note").isHidden(), "Brian asking 100 gets 100, no cap note");
+await signIn("712 000 001", { chip: false });
+ok(await visible("#screen-welcome"), "number typed without the leading 0 finds Amina");
 await signIn("0712000003"); ok(await ask("Type_1", 7, 3000) === "decline", "Wanjiru declined");
 ok((await page.locator("#reasons li").count()) > 0, "Wanjiru has reasons");
 await signIn("0244000004"); ok(await ask("Type_2", 7, 1000) === "decline", "Kofi Type 2 declined");
@@ -60,6 +64,8 @@ const before = applies;
 await page.fill("#amount", "0"); await page.click("#check");
 ok(await page.locator("#amount-error").isVisible(), "amount 0 shows an error");
 ok(applies === before, "amount 0 sends no request");
+await page.fill("#amount", "0.4"); await page.click("#check");
+ok(await page.locator("#amount-error").isVisible() && applies === before, "amount 0.4 is stopped too");
 
 // Double click sends one request
 await page.fill("#amount", "4000");

@@ -29,6 +29,15 @@ PYTHONPATH=. .venv/bin/python tests/test_app.py                   # demo API tes
 PYTHONPATH=. .venv/bin/uvicorn app.main:app --port 8080            # demo at http://localhost:8080
 ```
 
+**Redeploy the demo** (Cloud Run, project `agroconnect-highlanders`; needs Docker and the fitted `data/models/scorer.joblib`). The image is built locally because Cloud Build lacks permission in that project:
+
+```sh
+IMG=africa-south1-docker.pkg.dev/agroconnect-highlanders/cloud-run-source-deploy/nkwapay-demo:$(git rev-parse --short HEAD)
+gcloud auth configure-docker africa-south1-docker.pkg.dev
+docker build --platform linux/amd64 -t $IMG . && docker push $IMG
+gcloud run deploy nkwapay-demo --image $IMG --region africa-south1 --allow-unauthenticated --min-instances 0 --max-instances 2 --memory 1Gi --project agroconnect-highlanders
+```
+
 **Where things are:**
 - Plan, roles and who did each step: [`docs/plan.md`](docs/plan.md); action log: [`docs/log.md`](docs/log.md)
 - Rules we worked by (people and AI agents): [`AGENTS.md`](AGENTS.md)

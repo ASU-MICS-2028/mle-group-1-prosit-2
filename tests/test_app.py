@@ -19,6 +19,9 @@ def run():
     assert normalise_phone("+254 712 000 001") == "0712000001"
     assert normalise_phone("0712-000-001") == "0712000001"
     assert normalise_phone("233244000004") == "0244000004"
+    assert normalise_phone("712 000 001") == "0712000001"  # no leading 0, as many people type it
+    assert normalise_phone("+254 0712 000 001") == "0712000001"
+    assert normalise_phone("00254712000001") == "0712000001"
     amina = client.get("/api/customers/0712000001")
     assert amina.json()["name"] == "Amina" and amina.json()["first_loan"] is False
     assert "past_default_rate" not in amina.text  # raw model inputs never leave the server
@@ -34,6 +37,9 @@ def run():
     assert apply("0712000001", "Type_1", 30, 3000)["decision"] == "decline"
     r = apply("0712000002", "Type_1", 7, 3000)
     assert r["decision"] == "starter" and r["offer"] == 500
+    r = apply("0712000002", "Type_1", 7, 100)
+    assert r["decision"] == "starter" and r["offer"] == 100  # never offer more than was asked for
+    apply("0712000001", "Type_1", 7, 0.4, status=422)  # rounds to 0: would be "approved" for nothing
     r = apply("0712000003", "Type_1", 7, 3000)
     assert r["decision"] == "decline" and r["offer"] == 0 and r["reasons"]
     r = apply("0244000004", "Type_3", 7, 1000)

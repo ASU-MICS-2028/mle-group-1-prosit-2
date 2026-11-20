@@ -109,7 +109,7 @@ function syncLoan() {
   $$(".loan-type").forEach(b => b.setAttribute("aria-checked", b.dataset.code === state.type));
   $$(".length").forEach(b => b.setAttribute("aria-checked", Number(b.dataset.days) === state.days));
   const a = amount(), cur = state.customer.currency, due = new Date(Date.now() + state.days * 864e5);
-  $("#preview").textContent = a > 0 && a <= 1e6
+  $("#preview").textContent = a >= 1 && a <= 1e6
     ? `You'd repay ${fmt(Math.round(a * (1 + FEE[cur])))} ${cur} by ${due.toLocaleDateString("en-GB", { day: "numeric", month: "long" })} (fee ${FEE[cur] * 100}%).` : "";
 }
 $$(".length").forEach(b => b.addEventListener("click", () => { state.days = Number(b.dataset.days); syncLoan(); }));
@@ -119,7 +119,7 @@ $("#amount").addEventListener("keydown", e => { if (e.key === "Enter") $("#check
 $("#check").addEventListener("click", async () => {
   if (state.busy) return;
   const a = amount(), err = $("#amount-error"), cur = state.customer.currency;
-  if (!(a > 0)) { err.textContent = "Please enter how much you'd like to borrow."; err.hidden = false; return; }
+  if (!(a >= 1)) { err.textContent = "Please enter how much you'd like to borrow."; err.hidden = false; return; }
   if (a > 1e6) { err.textContent = `That's more than we lend. Please enter up to ${fmt(1e6)} ${cur}.`; err.hidden = false; return; }
   state.busy = true; $("#check").disabled = true;
   $("#decision").removeAttribute("data-decision");
@@ -159,8 +159,7 @@ function renderDecision() {
 
   const cap = $("#cap-note");
   cap.hidden = true;
-  if (d === "approve" && r.offer < r.requested) { cap.textContent = `We can offer up to ${fmt(r.offer)} ${r.currency}, less than the ${fmt(r.requested)} you asked for.`; cap.hidden = false; }
-  if (d === "starter") { cap.textContent = `A starter loan is a small first step. You asked for ${fmt(r.requested)} ${r.currency}.`; cap.hidden = false; }
+  if (r.offer && r.offer < r.requested) { cap.textContent = d === "starter" ? `A starter loan is a small first step: up to ${fmt(r.offer)} ${r.currency}, less than the ${fmt(r.requested)} you asked for.` : `We can offer up to ${fmt(r.offer)} ${r.currency}, less than the ${fmt(r.requested)} you asked for.`; cap.hidden = false; }
 
   $("#reasons").innerHTML = "";
   r.reasons.forEach(t => { const li = document.createElement("li"); li.textContent = t; $("#reasons").append(li); });

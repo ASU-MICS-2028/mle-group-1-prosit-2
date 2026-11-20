@@ -35,7 +35,7 @@ class Application(BaseModel):
     phone: str = Field(max_length=32)
     loan_type: str = Field(max_length=16)
     duration: Literal[7, 14, 30]
-    amount: float = Field(gt=0, le=1_000_000)
+    amount: float = Field(ge=1, le=1_000_000)
 
 
 @app.get("/")
@@ -55,7 +55,7 @@ def apply(a: Application):
     c = customer(a.phone)
     if a.loan_type not in {t["code"] for t in c["loan_types"]}: raise HTTPException(422, "loan type not offered here")
     r = score({**c["history"], "country": c["country"], "loan_type": a.loan_type, "duration": a.duration})
-    offer = {"approve": min(round(a.amount), r["limit"]), "starter": r["limit"]}.get(r["decision"], 0)
+    offer = min(round(a.amount), r["limit"]) if r["decision"] in ("approve", "starter") else 0  # never more than was asked for
     return dict(decision=r["decision"], offer=offer, requested=round(a.amount), limit=r["limit"], currency=r["currency"],
                 repay=round(offer * (1 + FEE[c["country"]])), due_date=(date.today() + timedelta(a.duration)).isoformat(),
                 reasons=r["reasons"], notes=r["notes"], probability=r["probability"], probability_source=r["probability_source"],

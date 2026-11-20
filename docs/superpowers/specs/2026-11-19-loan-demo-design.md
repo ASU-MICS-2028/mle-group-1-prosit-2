@@ -69,7 +69,7 @@ An unknown number gets "We couldn't find that number" plus the demo chips.
 ## Loan request → scorer
 - **Loan types offered:** Kenya: Type 1 and Type 7; Ghana: Type 3 and Type 2. The data has no product names, so cards say "Type 1 · our most common loan" etc. rather than inventing meanings.
 - **Lengths:** 7, 14, 30 days (95% of Kenyan loans are 7 days).
-- **Amount:** the scorer gives a limit, not a yes/no on an amount. Approve: offer `min(requested, limit)`, and say so if it's lower. Starter: offer the starter amount. Decline: no offer.
+- **Amount:** the scorer gives a limit, not a yes/no on an amount. Approve: offer `min(requested, limit)`, and say so if it's lower. Starter: offer `min(requested, starter amount)` (changed after review: never offer more than was asked for). Minimum request 1. Decline: no offer.
 - **Repay amount:** amount × (1 + fee), fee 2% Kenya / 3% Ghana (learnings/04); due date = today + length.
 - The application dict is the customer's history fields + `country`, `loan_type`, `duration`, `New_versus_Repeat`; `score()` validates it as before.
 

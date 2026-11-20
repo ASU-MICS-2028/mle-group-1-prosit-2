@@ -23,6 +23,8 @@ CUSTOMERS = {
 
 
 def normalise_phone(raw: str) -> str:
-    """Keep digits; turn a Kenyan (254) or Ghanaian (233) country code into a leading 0."""
+    """Keep digits; turn a Kenyan (254) or Ghanaian (233) country code, or a missing leading 0, into the local 0 form."""
     d = re.sub(r"\D", "", raw or "")
-    return "0" + d[3:] if d[:3] in ("254", "233") and len(d) == 12 else d
+    d = d[2:] if d.startswith("00") else d  # 00254… international prefix
+    if d[:3] in ("254", "233"): d = d[3:]
+    return d if d.startswith("0") else "0" + d if len(d) == 9 else d
