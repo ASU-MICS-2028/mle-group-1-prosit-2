@@ -14,6 +14,7 @@ Steps 1–4 (audit, cost matrix, data checks) have no tables: their results are 
 
 ## Step 7: classification ([learnings/07](07_classification.md))
 - `07_model_fold_metrics.csv`, `07_validation_comparison.csv`, `07_bootstrap_differences.csv`, `07_noise_floor_comparison.md`: models compared, and whether differences beat noise
+- `07_f1_intervals.csv`: customer-bootstrap 95% ranges on F1 (2.1% cut-off) and PR-AUC, every model and test, plus each model minus logistic regression (`src/f1_intervals.py`, 20 Nov)
 - `07_lr_threshold_sweep.csv`, `07_operating_points.csv`, `07_approval_by_period.csv`, `07_cost_sensitivity_verified.csv`: cut-offs and costs
 - `07_calibration_diagnostic.csv`, `07_reliability_curve.png`, `07_confusion_matrix.png`: calibration and errors
 - `07_model_handover.md`: handover notes

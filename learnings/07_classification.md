@@ -57,6 +57,22 @@ Yes, on future loans. Scored one time block at a time, logistic regression beats
 
 If you pool all four blocks together the gap shrinks to +0.015 (95% CI +0.001 to +0.033), because the big 2022 blocks dominate the pool. Either way it points the same direction. Details: `learnings/tables/07_noise_floor_comparison.md`.
 
+### How sure are we of F1 and PR-AUC? (added 20 Nov)
+
+The brief asks for bootstrap 95% ranges on F1 and PR-AUC. [`src/f1_intervals.py`](../src/f1_intervals.py) resamples whole customers 500 times from the saved predictions. F1 is measured at our 2.1% cut-off. All four future-loan blocks are pooled (54,463 loans).
+
+| Future loans | F1 at 2.1% (95% range) | PR-AUC (95% range) |
+|---|---|---|
+| **Logistic regression** | **0.168 (0.152 to 0.188)** | **0.109 (0.092 to 0.132)** |
+| Random forest | 0.148 (0.132 to 0.165) | 0.094 (0.079 to 0.112) |
+| LightGBM | 0.144 (0.128 to 0.162) | 0.078 (0.067 to 0.094) |
+| Approve everyone | 0 | 0.021 (0.019 to 0.023) |
+
+- **Beats the baseline by far.** Logistic regression's F1 range (0.152 to 0.188) and PR-AUC range (0.092 to 0.132) are both well above approve-everyone's, beyond the ±0.0263 noise floor.
+- **Paired with logistic regression on the same resamples,** random forest's F1 is 0.011 to 0.031 lower and LightGBM's 0.014 to 0.036 lower. Both ranges are below 0.
+- **F1 is low on purpose.** The 2.1% cut-off trades many false alarms for fewer missed defaulters, because one default costs 47 fees.
+- All tests and models: `learnings/tables/07_f1_intervals.csv`.
+
 ### How did the lending threshold behave over time?
 
 The table below combines chronological evaluation rows within each quarter using loan-count weighting.
