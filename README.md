@@ -11,6 +11,7 @@ We build one feature set and two models on the African Credit Scoring Challenge 
 | **Report** | [`report/report.pdf`](report/report.pdf) (Word: [`report.docx`](report/report.docx)) |
 | **Ethics and regulation audit** | [`report/audit.pdf`](report/audit.pdf) |
 | **Model Card and datasheet** | [`docs/model_card.md`](docs/model_card.md), [`docs/datasheet.md`](docs/datasheet.md) |
+| **Live demo** | [nkwapay-demo-148128233281.africa-south1.run.app](https://nkwapay-demo-148128233281.africa-south1.run.app): a borrower signs in, asks for a loan and sees the decision with reasons (made-up customers). Video: `NkwaPay demo.mp4` in the group Drive. Code in [`app/`](app/) |
 | **Scoring service** | [`src/scorer.py`](src/scorer.py), tests in [`tests/test_scorer.py`](tests/test_scorer.py), write-up in [`learnings/12_scorer.md`](learnings/12_scorer.md) |
 | **AI-use declaration** | Report section 11; every use logged in [`docs/ai_use.md`](docs/ai_use.md) |
 
@@ -24,6 +25,8 @@ uv venv --python 3.12 && uv pip install -r requirements.txt     # brew install l
 for nb in notebooks/0*.ipynb; do .venv/bin/jupyter nbconvert --to notebook --execute --inplace "$nb"; done
 PYTHONPATH=. .venv/bin/python src/scorer.py --fit                 # fit and save the scorer
 PYTHONPATH=. .venv/bin/python tests/test_scorer.py                # scorer tests (a few minutes)
+PYTHONPATH=. .venv/bin/python tests/test_app.py                   # demo API tests
+PYTHONPATH=. .venv/bin/uvicorn app.main:app --port 8080            # demo at http://localhost:8080
 ```
 
 **Where things are:**
