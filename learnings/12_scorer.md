@@ -49,7 +49,7 @@ These applicants are made up.
 | Kenya, first-timer | 4.4% | starter | 500 KES | This is your first loan with us, so we have no borrowing history to go on. |
 | Kenya, 3 of 3 defaulted | 1.9% | decline | 0 | You did not repay 3 of your earlier loans. |
 | Kenya, Type_7, 30 days | 17.7% | decline | 0 | Loans of this kind (Type_7) have been repaid less often than others. |
-| Ghana, Type_3 | 7.0% (group) | starter | 300 GHS | We don't yet have enough repayment records in Ghana to offer larger loans. |
+| Ghana, Type_3 | 7.0% (group) | starter | up to 300 GHS (10% of the request) | We don't yet have enough repayment records in Ghana to offer larger loans. |
 | Ghana, Type_2 | 50.3% (group) | decline | 0 | About half of loans of this kind (Type_2) have not been repaid in Ghana. |
 
 In the third row the probability is under the cut-off, but the rule still declines. The model doesn't weigh past defaults much (see below).

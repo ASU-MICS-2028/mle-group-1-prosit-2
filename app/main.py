@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from app.customers import CUSTOMERS, normalise_phone
-from src.scorer import KENYA_CUT, load, score
+from src.scorer import GHANA_SHARE, KENYA_CUT, load, score
 
 STATIC = Path(__file__).parent / "static"
 FEE = {"Kenya": 0.02, "Ghana": 0.03}  # learnings/04_cost_matrix.md
@@ -56,6 +56,7 @@ def apply(a: Application):
     if a.loan_type not in {t["code"] for t in c["loan_types"]}: raise HTTPException(422, "loan type not offered here")
     r = score({**c["history"], "country": c["country"], "loan_type": a.loan_type, "duration": a.duration})
     offer = min(round(a.amount), r["limit"]) if r["decision"] in ("approve", "starter") else 0  # never more than was asked for
+    if c["country"] == "Ghana" and r["decision"] == "starter": offer = max(1, min(round(a.amount * GHANA_SHARE), r["limit"]))  # 10% of the request, capped at the limit
     return dict(decision=r["decision"], offer=offer, requested=round(a.amount), limit=r["limit"], currency=r["currency"],
                 repay=round(offer * (1 + FEE[c["country"]])), due_date=(date.today() + timedelta(a.duration)).isoformat(),
                 reasons=r["reasons"], notes=r["notes"], probability=r["probability"], probability_source=r["probability_source"],

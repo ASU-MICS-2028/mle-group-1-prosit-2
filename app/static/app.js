@@ -185,6 +185,7 @@ function renderDecision() {
     if (d === "decline" && r.probability <= r.cutoff) p("Your score was under the line, but a safety rule overrides it: we don't lend to someone who hasn't repaid two or more earlier loans.");
   } else {
     p(`In Ghana we don't score each person yet: we have no repayment records there. Instead we use how often this kind of loan has not been repaid in Ghana: ${pct(r.probability)}.`);
+    if (d === "starter") p(`A starter loan in Ghana is 10% of what you ask for, up to ${fmt(r.limit)} ${r.currency}.`);
   }
   r.notes.forEach(n => p(n.replace(/\s*\((ADR|learnings)[^)]*\)\.?/g, ".").replace(/\.\.$/, ".")));
   $("#how").open = false;

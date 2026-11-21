@@ -52,7 +52,7 @@ The reasons come from `src/reasons.py`. This applicant is made up.
 
 **And for a first-time applicant,** who gets a smaller loan rather than a no:
 
-> **We can offer you a starter loan of GHS 300 today.**
+> **We can offer you a starter loan of GHS 300 today** (10% of the GHS 3,000 you asked for).
 >
 > This was an automated decision. This is your first loan with us, so we have no borrowing history to go on. Repaying on time helps us offer you more.
 >
@@ -60,7 +60,7 @@ The reasons come from `src/reasons.py`. This applicant is made up.
 
 **And for a Ghanaian applicant asking for a product we aren't offering yet** ([ADR 0021](adr/0021-ghana-rules.md)):
 
-> **We can't offer this kind of loan (Type_2) in Ghana yet, but you can ask for a starter loan of GHS 300 instead.**
+> **We can't offer this kind of loan (Type_2) in Ghana yet, but you can ask for a starter loan of up to GHS 300 instead.**
 >
 > This was an automated decision. It is about the product, not about you: about half of loans of this kind have not been repaid in Ghana.
 >

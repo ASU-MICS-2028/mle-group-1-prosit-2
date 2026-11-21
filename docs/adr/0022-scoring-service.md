@@ -30,7 +30,7 @@ Hidden types default 9.3% against a predicted 12.0%, but single types miss badly
 1. **One function, `score(application)`, and one saved file,** `data/models/scorer.joblib` (ignored by git), built by `python src/scorer.py --fit`.
 2. **It rejects bad input** and lists every problem. Unknown fields are refused too, so sensitive fields can't slip in.
 3. **Kenya, in order:** 2+ past defaults or a rate of 50%+ → decline; unseen loan type → decline; at or below 2.1% → approve with the amount model's limit; first-timer below 24% → 500 KES starter; otherwise decline.
-4. **Ghana:** Type_3 → 300 GHS starter; everything else → decline. The probability is the group's rate and is labelled as such.
+4. **Ghana:** Type_3 → starter of 10% of the request, at most 300 GHS (the scorer returns 300 as the limit; the caller applies the 10%, amended 21 Nov); everything else → decline. The probability is the group's rate and is labelled as such.
 5. **First-timer means `n_prev_loans == 0`,** not the `New_versus_Repeat` label: 1,864 Zindi test loans are labelled "Repeat Loan" with no earlier loan on record.
 
 ## Why

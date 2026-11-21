@@ -42,8 +42,11 @@ def run():
     apply("0712000001", "Type_1", 7, 0.4, status=422)  # rounds to 0: would be "approved" for nothing
     r = apply("0712000003", "Type_1", 7, 3000)
     assert r["decision"] == "decline" and r["offer"] == 0 and r["reasons"]
-    r = apply("0244000004", "Type_3", 7, 1000)
-    assert r["decision"] == "starter" and r["offer"] == 300 and r["cutoff"] is None and r["currency"] == "GHS" and r["repay"] == 309
+    r = apply("0244000004", "Type_3", 7, 1000)  # Ghana starter: 10% of the request, capped at 300 GHS (ADR 0021 amendment, 21 Nov)
+    assert r["decision"] == "starter" and r["offer"] == 100 and r["limit"] == 300 and r["cutoff"] is None and r["currency"] == "GHS" and r["repay"] == 103
+    assert apply("0244000004", "Type_3", 7, 3000)["offer"] == 300  # Kofi's demo request
+    assert apply("0244000004", "Type_3", 7, 50_000)["offer"] == 300  # the cap
+    assert apply("0244000004", "Type_3", 7, 3)["offer"] == 1  # never a starter of 0
     assert apply("0244000004", "Type_2", 7, 1000)["decision"] == "decline"
 
     apply("0712000001", "Type_3", 7, 1000, status=422)  # the other country's loan type

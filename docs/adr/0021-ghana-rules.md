@@ -64,7 +64,7 @@ Type_2 first loans default as often as Type_2 repeat loans (about 50%), so tenur
 
 ## Decision
 1. **Type_2 and other unseen types: decline.** About half of Type_2 loans default, in every tenure group.
-2. **Type_3: starter loan only, 300 GHS, for every applicant,** in a pilot with a cap on total exposure. No full-size loans in Ghana yet.
+2. **Type_3: starter loan only, 10% of the amount asked for and at most 300 GHS, for every applicant,** in a pilot with a cap on total exposure. No full-size loans in Ghana yet. (Amended 21 Nov: was a flat 300 GHS; see below.)
 3. **Probability shown is the group's measured rate** (Type_2 50%, Type_3 7%, other 22%), not the Kenyan model's score, which prices Type_3 at 3.2% on average.
 4. **The Kenyan model doesn't decide anything in Ghana yet.** So the clue question falls away for Ghana.
 5. ADR 0019's trust gates stay: full-size loans only after about 5,000 labelled Ghanaian loans.
@@ -85,6 +85,11 @@ Type_2 first loans default as often as Type_2 repeat loans (about 50%), so tenur
   - Starters are assumed to default as often as the requested loans did; the rate is measured on larger loans.
   - These rates came from the test set. Any later Zindi score of a model built using them is contaminated (the three scores in `07b_zindi_submissions.csv` predate the probe).
 - **Would change our mind:** pilot default on starters far from 7%; Ghanaian repeat value under about 13 GHS; pilot data showing Type_3's safest 60% below the 3.2% break-even, which would make full-size loans for them the better choice.
+
+## Amendment, 21 Nov 2026: 10% of the request, capped at 300 GHS
+In the presentation (20 Nov) we described the Ghana starter as "10% of the loan, capped at 300 GHS". That matches how ADR 0020 sized starters (about 10% of a typical loan), so we made the scorer, the demo and the report say the same thing. A request of 3,000 GHS or more still gets 300 GHS, so Kofi's demo is unchanged; a 1,000 GHS request now gets 100 GHS.
+
+The costs above were all worked out at a flat 300 GHS, the most a starter can now be, so they are the worst case for the starter's size. The stress tests already tried a 150 GHS starter: the rule beats full-size loans in 86% of assumption combinations at 150 GHS, against 81% at 300 and 68% at 600 (`11c_ghana_assumptions_summary.csv`). We did not rerun the money table (`11c_ghana_money.csv`) for request-sized starters: it gives an upper bound on what is lent and lost.
 
 ## Links
 `src/zindi_submissions.py` (`--read-exact`) · `learnings/tables/11b_ghana_{exact,models,policies}.csv` · [learnings/11](../../learnings/11_fairness.md) §10

@@ -7,7 +7,7 @@
            "mean_prev_amount": 4000.0, "last_amount": 5000.0})
 
 Kenya (ADRs 0020, 0022): model at 2.1%; first-timers above it get a 500 KES starter below 24% risk; loan types never seen in Kenya are declined, as is anyone with 2+ past defaults or a past default rate of 50%+.
-Ghana (ADR 0021): a rule by loan type, using rates measured from Zindi's scores; the Kenyan model decides nothing there yet.
+Ghana (ADR 0021): a rule by loan type, using rates measured from Zindi's scores; the Kenyan model decides nothing there yet. A Type_3 starter is 10% of the amount asked for, capped at 300 GHS: `limit` is the cap, and the caller applies the 10%.
 Only load a bundle you made yourself: joblib files can run code when opened.
 """
 import math
@@ -23,7 +23,7 @@ from src.reasons import MIN_PUSH, pushes, reasons, reference
 
 ROOT = Path(__file__).resolve().parent.parent
 BUNDLE = ROOT / "data" / "models" / "scorer.joblib"
-KENYA_CUT, RISK_CAP, KENYA_STARTER, GHANA_STARTER = .021, .24, 500, 300
+KENYA_CUT, RISK_CAP, KENYA_STARTER, GHANA_STARTER, GHANA_SHARE = .021, .24, 500, 300, .10  # Ghana starter: 10% of the request, at most 300 GHS (ADR 0021, 21 Nov)
 GHANA_RATE = {"Type_2": .503, "Type_3": .070}; GHANA_OTHER_RATE = .216  # learnings/tables/11b_ghana_exact.csv, 11b_ghana_segments.csv
 GHANA_NOTE = "Ghana pilot: rate measured for this loan type as a group, not for this person. Not yet checked on real pilot repayments (ADR 0021)."
 COUNTS = ["n_prev_loans", "n_finished", "n_defaults", "n_loans_last_7d", "n_loans_last_30d"]
@@ -81,8 +81,8 @@ def ghana(a):
     if t == "Type_3":
         return result(a, GHANA_RATE[t], "group rate", "starter", GHANA_STARTER, "GHS", ["We don't yet have enough repayment records in Ghana to offer larger loans.", "This starter loan lets you build a record with us."], [GHANA_NOTE])
     if t == "Type_2":
-        return result(a, GHANA_RATE[t], "group rate", "decline", 0, "GHS", ["About half of loans of this kind (Type_2) have not been repaid in Ghana.", "We aren't offering this kind of loan yet. This is about the product, not about you.", "You can ask for a Type_3 starter loan of GHS 300 instead."], [GHANA_NOTE])
-    return result(a, GHANA_OTHER_RATE, "group rate", "decline", 0, "GHS", [f"We have too few repayment records for this kind of loan ({t}) in Ghana.", "We aren't offering this kind of loan yet. This is about the product, not about you.", "You can ask for a Type_3 starter loan of GHS 300 instead."], [GHANA_NOTE])
+        return result(a, GHANA_RATE[t], "group rate", "decline", 0, "GHS", ["About half of loans of this kind (Type_2) have not been repaid in Ghana.", "We aren't offering this kind of loan yet. This is about the product, not about you.", "You can ask for a Type_3 starter loan of up to GHS 300 instead."], [GHANA_NOTE])
+    return result(a, GHANA_OTHER_RATE, "group rate", "decline", 0, "GHS", [f"We have too few repayment records for this kind of loan ({t}) in Ghana.", "We aren't offering this kind of loan yet. This is about the product, not about you.", "You can ask for a Type_3 starter loan of up to GHS 300 instead."], [GHANA_NOTE])
 
 
 def kenya(a, b):

@@ -5,5 +5,6 @@ Amina,Type_1,30,5000,decline,0,KES,0.038,model,0.021,The loan is for 30 days; lo
 Amina,Type_7,7,5000,decline,0,KES,0.0419,model,0.021,Loans of this kind (Type_7) have been repaid less often than others.
 Brian,Type_1,7,3000,starter,500,KES,0.0435,model,0.021,"This is your first loan with us, so we have no borrowing history to go on."
 Wanjiru,Type_1,7,3000,decline,0,KES,0.0193,model,0.021,You did not repay 3 of your earlier loans.
-Kofi,Type_3,7,1000,starter,300,GHS,0.07,group rate,,We don't yet have enough repayment records in Ghana to offer larger loans.
+Kofi,Type_3,7,1000,starter,100,GHS,0.07,group rate,,We don't yet have enough repayment records in Ghana to offer larger loans.
+Kofi,Type_3,7,3000,starter,300,GHS,0.07,group rate,,We don't yet have enough repayment records in Ghana to offer larger loans.
 Kofi,Type_2,7,1000,decline,0,GHS,0.503,group rate,,About half of loans of this kind (Type_2) have not been repaid in Ghana.
