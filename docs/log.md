@@ -68,3 +68,4 @@ Newest at the bottom. One line per action: date · who · what · where.
 | 22 Nov 2026 | Joseph | Redeployed the loan demo with the 10%-capped Ghana starter: image `nkwapay-demo:37d4da9`, Cloud Run revision nkwapay-demo-00003-k2g. Live checks: Kofi Type_3 1,000 GHS → 100, 3,000 → 300, 50,000 → 300; Brian (Kenya) still 500 KES. | app/ |
 | 22 Nov 2026 | Joseph | Removed report/report.pdf from the repo: the report PDF is submitted on Canvas. README, results index and build.py updated. | report/ |
 | 22 Nov 2026 | Joseph | Removed report/report.docx too: reports are never kept in the repo; the Drive version is final and is submitted on Canvas. | report/ |
+| 22 Nov 2026 | Joseph | Removed report/ (the old HTML audit, its Word and PDF exports, and build.py): the audit is now a Word document in the group Drive (`MLE-GROUP-1-PROSIT-2 Audit.docx`), submitted on Canvas with the report. README, plan and results index updated. | report/ |

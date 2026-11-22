@@ -72,8 +72,8 @@ Steps 1–4 (audit, cost matrix, data checks) have no tables: their results are 
 - `12_unseen_loan_type.csv`: hiding each type from training, options compared
 - `12_past_default_groups.csv`, `12_past_default_weights.csv`, `12_past_default_options.csv`, `12_past_default_zindi.csv`: past defaulters, the model's weights, rule options
 
-## Step 13: drafts
-- The final report is not kept in the repo: it lives in the group's Drive and is submitted on Canvas. `report/audit.pdf`, `audit.docx`: rebuilt from `audit.html` by `report/build.py`
+## Step 13: report and audit
+- The final report and the ethical and regulatory audit are not kept in the repo: both are Word documents in the group's Drive, submitted on Canvas.
 
 ## Loan demo (app/)
 - `tables/13_demo_app_decisions.csv`: the decision, offer and risk for each made-up demo customer and request, from `tests/test_app.py`'s API (Amina's 30-day and Type 7 requests are declined; Wanjiru is declined by the past-default rule although her score is under 2.1%)

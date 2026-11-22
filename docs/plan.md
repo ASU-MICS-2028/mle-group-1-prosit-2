@@ -21,7 +21,7 @@ Work top to bottom. A step can only start when the steps it waits on are ticked.
 | 10 | [x] Kenya → Ghana transfer study, domain classifier ([write-up](../learnings/10_transfer.md), [ADR 0019](adr/0019-kenya-to-ghana-transfer.md)) | Alice | 5 | **Fri 30 Oct** |
 | 11 | [x] Fairness metrics, proxy analysis, mitigation, Model Card ([write-up](../learnings/11_fairness.md), [ADR 0020](adr/0020-fairness-mitigation.md), [Model Card](model_card.md), [datasheet](datasheet.md), [compliance](compliance.md)) | Joseph (took over) | 7, 9, 10 | **Sat 31 Oct** |
 | 12 | [x] Scoring service ([write-up](../learnings/12_scorer.md), [ADR 0022](adr/0022-scoring-service.md)) | Joseph | 7, 8, 9 | Sat 31 Oct |
-| 13 | [x] Report, audit, slides, reflections ([report](../report/)) | Everyone | all above | — |
+| 13 | [x] Report, audit, slides, reflections (report and audit in the group Drive) | Everyone | all above | — |
 
 When a step finished, its owner ticked it here, added a `learnings/` write-up, and logged it.
 

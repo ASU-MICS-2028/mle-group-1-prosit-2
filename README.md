@@ -8,7 +8,7 @@ We build one feature set and two models on the African Credit Scoring Challenge 
 
 | | |
 |---|---|
-| **Ethics and regulation audit** | [`report/audit.pdf`](report/audit.pdf) |
+| **Report and ethics audit** | Word documents in the group Drive, submitted on Canvas (not kept in this repo). The audit draws on the Model Card, datasheet and [`docs/compliance.md`](docs/compliance.md) |
 | **Model Card and datasheet** | [`docs/model_card.md`](docs/model_card.md), [`docs/datasheet.md`](docs/datasheet.md) |
 | **Live demo** | [nkwapay-demo-148128233281.africa-south1.run.app](https://nkwapay-demo-148128233281.africa-south1.run.app): a borrower signs in, asks for a loan and sees the decision with reasons (made-up customers). Video: `NkwaPay demo.mp4` in the group Drive. Code in [`app/`](app/) |
 | **Scoring service** | [`src/scorer.py`](src/scorer.py), tests in [`tests/test_scorer.py`](tests/test_scorer.py), write-up in [`learnings/12_scorer.md`](learnings/12_scorer.md) |
