@@ -73,7 +73,7 @@ Steps 1–4 (audit, cost matrix, data checks) have no tables: their results are 
 - `12_past_default_groups.csv`, `12_past_default_weights.csv`, `12_past_default_options.csv`, `12_past_default_zindi.csv`: past defaulters, the model's weights, rule options
 
 ## Step 13: drafts
-- `report/report.pdf`, `report.docx`: the final Word report and its PDF; `audit.pdf`, `audit.docx`: rebuilt from `audit.html` by `report/build.py`
+- `report/report.docx`: the final Word report (its PDF is submitted on Canvas, not kept here); `audit.pdf`, `audit.docx`: rebuilt from `audit.html` by `report/build.py`
 
 ## Loan demo (app/)
 - `tables/13_demo_app_decisions.csv`: the decision, offer and risk for each made-up demo customer and request, from `tests/test_app.py`'s API (Amina's 30-day and Type 7 requests are declined; Wanjiru is declined by the past-default rule although her score is under 2.1%)

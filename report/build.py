@@ -1,5 +1,5 @@
 """Rebuild the audit as PDF and Word from its HTML. Run from the repo root: python3 report/build.py. Needs LibreOffice (soffice).
-The report is no longer built here: report.docx is the final Word version (Ashesi template), and report.pdf is exported from it."""
+The report is no longer built here: report.docx is the final Word version (Ashesi template). Its PDF is submitted on Canvas, not kept in the repo."""
 import base64, re, shutil, subprocess, tempfile
 from pathlib import Path
 

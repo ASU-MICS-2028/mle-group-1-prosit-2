@@ -8,7 +8,7 @@ We build one feature set and two models on the African Credit Scoring Challenge 
 
 | | |
 |---|---|
-| **Report** | [`report/report.pdf`](report/report.pdf) (Word: [`report.docx`](report/report.docx)) |
+| **Report** | [`report/report.docx`](report/report.docx) (the PDF is submitted on Canvas) |
 | **Ethics and regulation audit** | [`report/audit.pdf`](report/audit.pdf) |
 | **Model Card and datasheet** | [`docs/model_card.md`](docs/model_card.md), [`docs/datasheet.md`](docs/datasheet.md) |
 | **Live demo** | [nkwapay-demo-148128233281.africa-south1.run.app](https://nkwapay-demo-148128233281.africa-south1.run.app): a borrower signs in, asks for a loan and sees the decision with reasons (made-up customers). Video: `NkwaPay demo.mp4` in the group Drive. Code in [`app/`](app/) |
